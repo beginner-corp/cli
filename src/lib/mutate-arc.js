@@ -2,6 +2,7 @@
 let updateValues = [ 'arc', 'aws' ]
 let ignored = [ 'newline', 'space', 'comment' ]
 let removeNewlines = ({ type }) => type !== 'newline'
+// Find the last real item in the pragma so we can preserve any trailing line breaks, etc.
 let getLastRealItem = vals => {
   let lastItem = 1
   vals.forEach(({ type }, i) => { !ignored.includes(type) ? lastItem = i + 1 : null })
@@ -56,15 +57,15 @@ function upsert (params) {
         })
         if (!found) {
           let lastItem = getLastRealItem(vals)
+          // Append the new thing
           vals.splice(lastItem, 0, upserting.item)
         }
       })
     }
-    // We're adding new items to the existing pragma
+    // Adding a new item to the existing pragma
     else {
-      // Find the last real item in the pragma so we can preserve any trailing line breaks, etc.
       let lastItem = getLastRealItem(vals)
-      // Splice in the new thing; don't forget to remove its leading newline
+      // Append the new thing; don't forget to remove its leading newline
       vals.splice(lastItem, 0, ...itemAst.values[1].values.slice(1))
     }
 
