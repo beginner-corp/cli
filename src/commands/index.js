@@ -5,10 +5,9 @@ let version = require('./version')
 let commands = [ dev, init, help, version ]
 
 let helper = require('../helper')
-let printer = require('../printer')
 
 module.exports = async function runCommand (params) {
-  let { args } = params
+  let { args, lang, printer } = params
   let { _ } = args
   if (_.includes('help')) {
     let i = _.findIndex(c => c === 'help')
@@ -35,16 +34,16 @@ module.exports = async function runCommand (params) {
     }
     printer.debug(params,
       'command\n' +
-      `  names: ${names ? names.join(', ') : false}\n` +
+      `  names: ${names ? names[lang].join(', ') : false}\n` +
       `  action: ${action ? true : false}\n` +
       `  help: ${help ? Object.keys(help).join(', ') : false}`,
     )
-    if (names.includes(cmd) && args.help && help) {
+    if (names[lang].includes(cmd) && args.help && help) {
       helper(params, help)
       ran = true
       break
     }
-    else if (names.includes(cmd)) {
+    else if (names[lang].includes(cmd)) {
       try {
         let result = await action(params)
         if (result) printer(params, result)
@@ -66,10 +65,7 @@ module.exports = async function runCommand (params) {
     if (cmd) {
       process.exitCode = 1
       let error = `Unknown command: ${cmd}`
-      printer(params, {
-        stderr: error,
-        json: { error }
-      })
+      printer(params, error)
       if (args.json) return
     }
     helper(params)

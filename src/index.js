@@ -3,27 +3,30 @@ let { readFileSync } = require('fs')
 let { join } = require('path')
 let minimist = require('minimist')
 let commands = require('./commands')
+let printer = require('./printer')
 let { DEBUG } = process.env
 
-function begin (a) {
+async function begin (a) {
+  let alias = {
+    debug: [ 'd', 'debug' ],
+    help: [ 'h', 'help' ],
+    quiet: [ 'q', 'quiet' ],
+    verbose: [ 'v', 'verbose' ],
+  }
+  let args = minimist(a, { alias })
+  if (DEBUG || args.debug) args.debug = DEBUG || args.debug
   try {
-    let alias = {
-      debug: [ 'd', 'debug' ],
-      help: [ 'h', 'help' ],
-      quiet: [ 'q', 'quiet' ],
-      verbose: [ 'v', 'verbose' ],
-    }
-    let args = minimist(a, { alias })
     let pkg = join(__dirname, '..', 'package.json')
     let appVersion = JSON.parse(readFileSync(pkg)).version
-    args.debug = DEBUG || args.debug
 
-    let params = { args, appVersion }
-    return commands(params)
+    let lang = 'en' // This should / will be configurable
+    let params = { args, appVersion, lang, printer }
+    await commands(params)
   }
   catch (err) {
-    console.log(err)
     process.exitCode = 1
+    printer({ args }, { stdout: err.message })
+    printer.debug({ args }, err.stack)
   }
 }
 

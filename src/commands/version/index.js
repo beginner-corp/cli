@@ -1,5 +1,5 @@
 module.exports = {
-  names: [ 'version', 'ver', 'v' ],
+  names: { en: [ 'version', 'ver', 'v' ] },
   action: ({ appVersion }) => {
     return {
       stdout: `Begin ${appVersion}`,

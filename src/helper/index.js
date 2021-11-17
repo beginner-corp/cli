@@ -10,10 +10,11 @@ let br = num => Array(num + 1).join('\n')
 let code = str => str.replace(/`[^`]*`/g, f => c.dim(f))
 
 module.exports = function helper (params, cmdHelp) {
-  let { args, appVersion } = params
+  let { args, appVersion, lang } = params
   if (!cmdHelp) {
     cmdHelp = defaultHelp.help
   }
+  cmdHelp = cmdHelp[lang]
   let { usage, description, aliases, examples } = cmdHelp
   if (!args || !usage || !cmdHelp.contents) throw ReferenceError('Helper must receive args + usage + contents')
 

@@ -1,17 +1,17 @@
+let action = require('./action')
+let { backtickify, httpMethods, runtimes } = require('../../../../lib')
+
 module.exports = {
   name: 'http',
   description: 'Create a new HTTP route',
-  action: async function () {
-    // TODO: build me!
-    return { stdout: 'Hi from the @http generator' }
-  },
+  action,
   help: {
     contents: {
       header: 'HTTP parameters',
       items: [
         {
           name: '-m, --method',
-          description: 'HTTP method, one of: `any`, `get`, `post`, `put`, `patch`, `delete`',
+          description: `HTTP method, one of: ${backtickify(httpMethods)}`,
         },
         {
           name: '-p, --path',
@@ -20,6 +20,11 @@ module.exports = {
         {
           name: '-s, --src',
           description: 'Custom path to handler source',
+          optional: true,
+        },
+        {
+          name: '-r, --runtime',
+          description: `Runtime, one of: ${backtickify(runtimes)}`,
           optional: true,
         },
       ],

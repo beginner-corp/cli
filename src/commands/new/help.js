@@ -1,38 +1,43 @@
-let newHelp = {
-  usage: [ 'new <type> <parameters>', '[options]' ],
-  description: 'Create a new HTTP route, async event, or scheduled event',
-  contents: [
-    {
-      header: 'Command arguments',
-      items: [],
-    },
-  ],
-  examples: [],
-}
+let newHelp = () => ({
+  en: {
+    usage: [ 'new <type> <parameters>', '[options]' ],
+    description: 'Create a new HTTP route, async event, or scheduled event',
+    contents: [
+      {
+        header: 'Command arguments',
+        items: [],
+      },
+    ],
+    examples: [],
+  }
+})
 
 module.exports = function generateHelp (subcommands, params) {
-  // Maybe scope help to just a single generator subcommand
+  let { lang } = params
+  let help = newHelp()
+
+  // Try to scope help to just a single generator subcommand
   let type = params.args._[1]
   let isSubcommand = subcommands.includes(type)
   if (isSubcommand) {
     subcommands = [ type ]
-    newHelp.usage[0] = newHelp.usage[0].replace('<type>', type)
+    help[lang].usage[0] = help[lang].usage[0].replace('<type>', type)
   }
 
   for (let subcommand of subcommands) {
     let generator = require(`./generators/${subcommand}`)
-    let { name, description, help } = generator
+    let { name, description } = generator
     if (isSubcommand) {
-      newHelp.contents = []
-      newHelp.description = description
+      help[lang].contents = []
+      help[lang].description = description
     }
     else {
-      newHelp.contents[0].items.push({ name, description })
+      help[lang].contents[0].items.push({ name, description })
     }
-    if (help) {
-      newHelp.contents.push(help.contents)
-      newHelp.examples.push(...help.examples)
+    if (generator.help) {
+      help[lang].contents.push(generator.help.contents)
+      help[lang].examples.push(...generator.help.examples)
     }
   }
-  return newHelp
+  return help
 }
