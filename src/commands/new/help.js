@@ -28,15 +28,15 @@ module.exports = function generateHelp (subcommands, params) {
     let generator = require(`./generators/${subcommand}`)
     let { name, description } = generator
     if (isSubcommand) {
-      help[lang].contents = []
+      help[lang].contents = generator.help[lang].contents
       help[lang].description = description
+      help[lang].examples.push(...generator.help[lang].examples)
+      if (help[lang].contents?.items?.every(({ optional }) => optional)) {
+        help[lang].usage[0] = help[lang].usage[0].replace(' <parameters>', ' [parameters]')
+      }
     }
     else {
       help[lang].contents[0].items.push({ name, description })
-    }
-    if (generator.help) {
-      help[lang].contents.push(generator.help.contents)
-      help[lang].examples.push(...generator.help.examples)
     }
   }
   return help
