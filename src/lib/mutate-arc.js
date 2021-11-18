@@ -65,8 +65,13 @@ function upsert (params) {
     // Adding a new item to the existing pragma
     else {
       let lastItem = getLastRealItem(vals)
-      // Append the new thing; don't forget to remove its leading newline
-      vals.splice(lastItem, 0, ...itemAst.values[1].values.slice(1))
+      // Remove leading newline + include trailing newline if it's a complex type, otherwise spacing gets munged
+      let itemType = itemAst.values[1].values[1].type
+      let isComplex = [ 'array', 'vector', 'map' ].includes(itemType)
+      let from = isComplex ? 1 : 0
+      let to = isComplex ? undefined : getLastRealItem(itemAst.values[1].values)
+      // Append the existing thing
+      vals.splice(lastItem, 0, ...itemAst.values[1].values.slice(from, to))
     }
 
     ast.values[pragmaIndex].values = vals

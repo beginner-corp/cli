@@ -1,5 +1,7 @@
+let events = require('./events')
 let http = require('./http')
 
 module.exports = {
-  http
+  events,
+  http,
 }
