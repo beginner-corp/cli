@@ -1,3 +1,4 @@
+let printer = require('../../../../printer')
 let { backtickify, runtimes } = require('../../../../lib')
 
 module.exports = {
@@ -24,6 +25,10 @@ module.exports = {
     let { writeFileSync } = require('fs')
     let { join } = require('path')
     writeFileSync(join(process.cwd(), 'app.arc'), arc)
+    let messages = require('./messages')
+    printer.verbose(params, messages[lang].created_file('app.arc manifest'))
+
+    // Refresh inventory for Lambda creation
     let _inventory = require('@architect/inventory')
     inventory = await _inventory()
 
@@ -33,7 +38,6 @@ module.exports = {
       // Meta
       args, inventory, lang,
     })
-
   },
   help: {
     en: {
