@@ -1,5 +1,5 @@
-module.exports = async function createHttp (params) {
-  let { method, path, src } = params
+module.exports = async function createHttp (params, args) {
+  let { method, path, src } = args
   let { getRelativeCwd } = require('../../../../lib')
 
   let name = `${method} ${path}`
@@ -14,5 +14,5 @@ module.exports = async function createHttp (params) {
   let handlers = require('./handlers')
   let addItem = require('../add-item')
 
-  return addItem({ ...params, pragma: 'http', name, item, src, handlers })
+  return addItem({ ...params, ...args, pragma: 'http', name, item, src, handlers })
 }

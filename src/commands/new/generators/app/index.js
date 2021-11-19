@@ -23,16 +23,8 @@ module.exports = {
     // Write the new Arc project manifest
     writeFile('app.arc', arc)
 
-    // Refresh inventory for Lambda creation
-    let _inventory = require('@architect/inventory')
-    inventory = await _inventory()
-
-    return create.http({
-      // Function stuff:
-      method: 'get', path: '/*', runtime,
-      // Meta
-      args, inventory, lang,
-    })
+    // Create a basic HTTP function
+    return create.http({ method: 'get', path: '/*', runtime })
   },
   help: {
     en: {

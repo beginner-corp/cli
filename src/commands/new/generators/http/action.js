@@ -2,11 +2,11 @@ let { resolve } = require('path')
 let cwd = process.cwd()
 
 module.exports = async function action (params, utils) {
-  let { args, inventory, lang } = params
+  let { args, lang } = params
   let { create, validate, httpMethods, runtimes } = utils
   let error = require('./errors')
 
-  let invalid = validate.project()
+  let invalid = await validate.project()
   if (invalid) {
     process.exitCode = 1
     return invalid
@@ -47,10 +47,5 @@ module.exports = async function action (params, utils) {
     return error(lang, 'src_must_be_in_project')
   }
 
-  return create.http({
-    // Function stuff:
-    method, path, runtime, src,
-    // Meta
-    args, inventory, lang,
-  })
+  return create.http({ method, path, runtime, src })
 }

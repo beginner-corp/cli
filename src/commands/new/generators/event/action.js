@@ -6,7 +6,7 @@ module.exports = async function action (params, utils) {
   let { create, validate, runtimes } = utils
   let error = require('./errors')
 
-  let invalid = validate.project()
+  let invalid = await validate.project()
   if (invalid) {
     process.exitCode = 1
     return invalid

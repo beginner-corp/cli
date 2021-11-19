@@ -1,5 +1,5 @@
-module.exports = async function createEvent (params) {
-  let { name, src } = params
+module.exports = async function createEvent (params, args) {
+  let { name, src } = args
   let { getRelativeCwd } = require('../../../../lib')
 
   let item = name
@@ -12,5 +12,5 @@ module.exports = async function createEvent (params) {
   let handlers = require('./handlers')
   let addItem = require('../add-item')
 
-  return addItem({ ...params, pragma: 'events', item, src, handlers })
+  return addItem({ ...params, ...args, pragma: 'events', item, src, handlers })
 }

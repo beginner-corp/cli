@@ -1,8 +1,11 @@
 let { parse } = require('path')
 let errors = require('./errors')
 
-function project (inventory, lang) {
-  return function () {
+function project (params) {
+  return async function () {
+    let { lang } = params
+    let _inventory = require('@architect/inventory')
+    let inventory = await _inventory()
     let { inv } = inventory
     if (!inv._project.manifest) return errors(lang, 'no_project')
 
@@ -11,8 +14,8 @@ function project (inventory, lang) {
   }
 }
 
-module.exports = function validate (inventory, lang) {
+module.exports = function validate (params) {
   return {
-    project: project(inventory, lang)
+    project: project(params)
   }
 }
