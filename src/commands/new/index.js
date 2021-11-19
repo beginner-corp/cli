@@ -14,6 +14,7 @@ async function action (params) {
       create: require('./_create'),
       validate: require(`./_validate`)(params.inventory, lang),
       ...lib,
+      writeFile: lib.writeFile(params),
     }
     return generator.action(params, utils)
   }

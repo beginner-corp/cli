@@ -1,4 +1,3 @@
-let printer = require('../../../../printer')
 let { backtickify, runtimes } = require('../../../../lib')
 
 module.exports = {
@@ -6,7 +5,7 @@ module.exports = {
   description: 'Initialize a new app',
   action: async function (params, utils) {
     let { args, inventory, lang } = params
-    let { create, runtimes } = utils
+    let { create, runtimes, writeFile } = utils
     let error = require('./errors')
 
     let invalid = inventory.inv._project.manifest
@@ -22,11 +21,7 @@ module.exports = {
     if (runtime) arc += `\n@aws\nruntime ${runtime}\n`
 
     // Write the new Arc project manifest
-    let { writeFileSync } = require('fs')
-    let { join } = require('path')
-    writeFileSync(join(process.cwd(), 'app.arc'), arc)
-    let messages = require('./messages')
-    printer.verbose(params, messages[lang].created_file('app.arc manifest'))
+    writeFile('app.arc', arc)
 
     // Refresh inventory for Lambda creation
     let _inventory = require('@architect/inventory')

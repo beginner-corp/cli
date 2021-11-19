@@ -1,14 +1,16 @@
 let { runtimes, runtimeVersions } = require('lambda-runtimes')
 
 module.exports = async function addItem (params) {
-  let { inventory, item, lang, name, pragma, runtime, handlers } = params
+  let { item, lang, name, pragma, runtime, handlers } = params
+  let _inventory = require('@architect/inventory')
+  let inventory = await _inventory()
   let { _project } = inventory.inv
 
-  let { mkdirSync, existsSync, writeFileSync } = require('fs')
+  let { mkdirSync, existsSync } = require('fs')
   let { join } = require('path')
-  let _inventory = require('@architect/inventory')
-  let printer = require('../../../../printer')
-  let { getRelativeCwd, mutateArc } = require('../../../../lib')
+  let lib = require('../../../../lib')
+  let { getRelativeCwd, mutateArc } = lib
+  let writeFile = lib.writeFile(params)
   let errors = require('./errors')
 
   // Determine whether the incoming function needs a config.arc to be set
@@ -60,23 +62,17 @@ module.exports = async function addItem (params) {
   }
 
   // Write new Arc file
-  writeFileSync(_project.manifest, arc)
-  let messages = require('./messages')
-  printer.verbose(params, messages[lang].wrote_file('app.arc manifest'))
+  writeFile(_project.manifest, arc)
 
   // Write the function handler
   let handler = handlers[runtime](lang, getRelativeCwd(handlerFile))
   mkdirSync(src, { recursive: true })
-  writeFileSync(handlerFile, handler)
-  let msg = `HTTP function handler at ${getRelativeCwd(handlerFile)}`
-  printer.verbose(params, messages[lang].wrote_file(msg))
+  writeFile(handlerFile, handler)
 
   // If not the default runtime, write a config.arc file
   if (customRuntime) {
     let arcConfig = `@aws\nruntime ${runtime}\n`
     let configFile = join(src, 'config.arc')
-    writeFileSync(configFile, arcConfig)
-    let msg = `function config at ${getRelativeCwd(configFile)}`
-    printer.verbose(params, messages[lang].wrote_file(msg))
+    writeFile(configFile, arcConfig)
   }
 }
