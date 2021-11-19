@@ -4,13 +4,10 @@ let cwd = process.cwd()
 module.exports = async function action (params, utils) {
   let { args, inventory, lang } = params
   let { create, validate, runtimes } = utils
-  let error = require('./errors')
+  let error = require('./errors')(params, utils)
 
   let invalid = await validate.project()
-  if (invalid) {
-    process.exitCode = 1
-    return invalid
-  }
+  if (invalid) return invalid
 
   // Name (required)
   let name = args.n || args.name

@@ -46,14 +46,14 @@ module.exports = async function runCommand (params) {
     else if (names[lang].includes(cmd)) {
       try {
         let result = await action(params)
-        if (result) printer(params, result)
+        printer(params, result)
         ran = true
         break
       }
       catch (err) {
         if (err.message === '__help__' && help) {
-          ran = true
           helper(params, help)
+          ran = true
           break
         }
         else throw err
@@ -63,11 +63,10 @@ module.exports = async function runCommand (params) {
   // Fall back to main help if nothing else ran
   if (!ran) {
     if (cmd) {
-      process.exitCode = 1
-      let error = `Unknown command: ${cmd}`
-      printer(params, error)
-      if (args.json) return
+      printer(params, Error(`Unknown command: ${cmd}`))
     }
-    helper(params)
+    if (!args.json) {
+      helper(params)
+    }
   }
 }

@@ -7,11 +7,9 @@ async function action (params) {
 
   let _inventory = require('@architect/inventory')
   let inventory = await _inventory()
-  let { inv } = inventory
-  if (!inv._project.manifest) {
-    process.exitCode = 1
-    let error = `No Begin project found! To create one, run: ${c.white.bold('begin new app')}`
-    return error
+  if (!inventory.inv._project.manifest) {
+    let message = `No Begin project found! To create one, run: ${c.white.bold('begin new app')}`
+    return Error(message)
   }
 
   let { cli } = require('@architect/sandbox')

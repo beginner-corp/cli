@@ -31,12 +31,8 @@ module.exports = async function addItem (params) {
     inventory = await _inventory({ rawArc: arc })
   }
   catch (err) {
-    process.exitCode = 1
-    let message = err.message
-    if (err.ARC_ERRORS) {
-      message = err.ARC_ERRORS.errors.join(', ')
-    }
-    return message
+    if (err.ARC_ERRORS) err.message += err.ARC_ERRORS.errors.join(', ')
+    return err
   }
 
   // Simulate changing the global runtime to get proper handler file path for the new function

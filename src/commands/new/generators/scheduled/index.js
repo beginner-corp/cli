@@ -3,7 +3,7 @@ module.exports = {
   description: 'Create a new scheduled event',
   action: async function () {
     // TODO: build me!
-    return { stdout: 'Hi from the @scheduled generator' }
+    return 'Hi from the @scheduled generator'
   },
   help: {
     contents: {

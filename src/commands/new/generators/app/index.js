@@ -4,17 +4,17 @@ module.exports = {
   name: 'app',
   description: 'Initialize a new app',
   action: async function (params, utils) {
-    let { args, inventory, lang } = params
+    let { args, inventory } = params
     let { create, runtimes, writeFile } = utils
-    let error = require('./errors')
+    let error = require('./errors')(params, utils)
 
     let invalid = inventory.inv._project.manifest
-    if (invalid) return error(lang, 'app_found')
+    if (invalid) return error('app_found')
 
     // Runtime (optional)
     let runtime = args.r || args.runtime
     if (runtime && !runtimes.includes(runtime?.toLowerCase())) {
-      return error(lang, 'invalid_runtime')
+      return error('invalid_runtime')
     }
 
     let arc = `@app\nbegin-app\n`

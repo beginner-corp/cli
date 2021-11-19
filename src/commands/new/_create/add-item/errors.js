@@ -5,6 +5,6 @@ let errors = {
 }
 
 module.exports = function error (lang, err, meta) {
-  process.exitCode = 1
-  return meta ? errors[lang][err](meta) : errors[lang][err]
+  let message = meta ? errors[lang][err](meta) : errors[lang][err]
+  return Error(message)
 }

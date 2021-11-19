@@ -16,9 +16,9 @@ module.exports = function writeFile (params) {
     let { lang } = params
     let exists = existsSync(path)
     writeFileSync(path, contents)
-    let msg = exists
+    let message = exists
       ? messages[lang].updated_file(getRelativeCwd(path))
       : messages[lang].created_file(getRelativeCwd(path))
-    printer.verbose(params, msg)
+    printer.verbose(params, message)
   }
 }

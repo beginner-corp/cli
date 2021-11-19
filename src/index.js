@@ -24,9 +24,7 @@ async function begin (a) {
     await commands(params)
   }
   catch (err) {
-    process.exitCode = 1
-    printer({ args }, { stdout: err.message })
-    printer.debug({ args }, err.stack)
+    printer({ args }, err)
   }
 }
 
