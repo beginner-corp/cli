@@ -1,5 +1,3 @@
-let { backtickify, runtimes } = require('../../../../lib')
-
 module.exports = {
   name: 'app',
   description: 'Initialize a new app',
@@ -26,28 +24,31 @@ module.exports = {
     // Create a basic HTTP function
     return create.http({ method: 'get', path: '/*', runtime })
   },
-  help: {
-    en: {
-      contents: {
-        header: 'New app parameters',
-        items: [
+  help: function (params, utils) {
+    let { backtickify, runtimes } = utils
+    return {
+      en: {
+        contents: {
+          header: 'New app parameters',
+          items: [
+            {
+              name: '-r, --runtime',
+              description: `Runtime, one of: ${backtickify(runtimes)}`,
+              optional: true,
+            },
+          ],
+        },
+        examples: [
           {
-            name: '-r, --runtime',
-            description: `Runtime, one of: ${backtickify(runtimes)}`,
-            optional: true,
+            name: 'Create a new app (runs Node.js by default)',
+            example: 'begin new app',
           },
-        ],
+          {
+            name: 'Create a new app running Python',
+            example: 'begin new app -r python',
+          },
+        ]
       },
-      examples: [
-        {
-          name: 'Create a new app (runs Node.js by default)',
-          example: 'begin new app',
-        },
-        {
-          name: 'Create a new app running Python',
-          example: 'begin new app -r python',
-        },
-      ]
-    },
+    }
   }
 }

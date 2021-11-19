@@ -1,3 +1,4 @@
+let lib = require('../../lib')
 let newHelp = () => ({
   en: {
     usage: [ 'new <type> <parameters>', '[options]' ],
@@ -12,7 +13,7 @@ let newHelp = () => ({
   }
 })
 
-module.exports = function generateHelp (subcommands, params) {
+module.exports = async function generateHelp (subcommands, params) {
   let { lang } = params
   let help = newHelp()
 
@@ -26,11 +27,14 @@ module.exports = function generateHelp (subcommands, params) {
 
   for (let subcommand of subcommands) {
     let generator = require(`./generators/${subcommand}`)
-    let { name, description } = generator
+    let { name, description, help: genHelp } = generator
+    if (typeof genHelp === 'function') {
+      genHelp = await genHelp(params, lib)
+    }
     if (isSubcommand) {
-      help[lang].contents = generator.help[lang].contents
+      help[lang].contents = genHelp[lang].contents
       help[lang].description = description
-      help[lang].examples.push(...generator.help[lang].examples)
+      help[lang].examples.push(...genHelp[lang].examples)
       if (help[lang].contents?.items?.every(({ optional }) => optional)) {
         help[lang].usage[0] = help[lang].usage[0].replace(' <parameters>', ' [parameters]')
       }

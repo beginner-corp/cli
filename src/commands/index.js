@@ -30,7 +30,7 @@ module.exports = async function runCommand (params) {
     let { names, action, help } = command
     // Some help output is generated dynamically
     if (typeof help === 'function') {
-      help = help(params)
+      help = await help(params)
     }
     printer.debug(params,
       'command\n' +
