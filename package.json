@@ -18,9 +18,9 @@
     "build": "node bin/binary-config.js && npx pkg bin"
   },
   "dependencies": {
-    "@architect/inventory": "~2.2.0",
+    "@architect/inventory": "~2.2.1",
     "@architect/parser": "5.0.2",
-    "@architect/sandbox": "~4.4.0",
+    "@architect/sandbox": "~4.4.1",
     "chalk": "4.1.2",
     "lambda-runtimes": "~1.1.1",
     "minimist": "1.2.5",
@@ -29,7 +29,7 @@
   "devDependencies": {
     "@architect/eslint-config": "^2.0.1",
     "cross-env": "^7.0.3",
-    "eslint": "^8.2.0",
+    "eslint": "^8.3.0",
     "nyc": "^15.1.0",
     "pkg": "^5.4.1",
     "tap-spec": "^5.0.0",
