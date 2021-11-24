@@ -2,7 +2,7 @@ let { resolve } = require('path')
 let cwd = process.cwd()
 
 module.exports = async function action (params, utils) {
-  let { args, inventory, lang } = params
+  let { args, lang } = params
   let { create, validate, runtimes } = utils
   let error = require('./errors')(params, utils)
 
@@ -30,10 +30,5 @@ module.exports = async function action (params, utils) {
     return error(lang, 'src_must_be_in_project')
   }
 
-  return create.events({
-    // Function stuff:
-    name, runtime, src,
-    // Meta
-    args, inventory, lang,
-  })
+  return create.events({ name, runtime, src })
 }

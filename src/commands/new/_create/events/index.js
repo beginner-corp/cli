@@ -9,8 +9,9 @@ module.exports = async function createEvent (params, args) {
   src ${src}`
   }
 
-  let handlers = require('./handlers')
+  let defaultHandlers = require('./handlers')
   let addItem = require('../add-item')
+  let handlers = { ...defaultHandlers, ...args.handlers }
 
   return addItem({ ...params, ...args, pragma: 'events', item, src, handlers })
 }

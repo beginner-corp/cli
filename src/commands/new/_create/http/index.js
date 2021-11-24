@@ -11,8 +11,9 @@ module.exports = async function createHttp (params, args) {
   src ${src}`
   }
 
-  let handlers = require('./handlers')
+  let defaultHandlers = require('./handlers')
   let addItem = require('../add-item')
+  let handlers = { ...defaultHandlers, ...args.handlers }
 
   return addItem({ ...params, ...args, pragma: 'http', name, item, src, handlers })
 }

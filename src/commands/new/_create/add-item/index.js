@@ -61,7 +61,9 @@ module.exports = async function addItem (params) {
   writeFile(_project.manifest, arc)
 
   // Write the function handler
-  let handler = handlers[runtime](lang, getRelativeCwd(handlerFile))
+  let handler = typeof handlers[runtime] === 'function'
+    ? handlers[runtime](lang, getRelativeCwd(handlerFile))
+    : handlers[runtime]
   mkdirSync(src, { recursive: true })
   writeFile(handlerFile, handler)
 
