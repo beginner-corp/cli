@@ -1,6 +1,7 @@
 let { writeFileSync } = require('fs')
+let { execSync } = require('child_process')
 let { join } = require('path')
-let { BUILD_ALL } = process.env
+let { DEV_RELEASE, BUILD_ALL } = process.env
 let os = process.platform
 
 /**
@@ -27,8 +28,18 @@ let config = {
       '../package.json',
     ],
     targets: [],
-    outputPath: 'bin'
+    outputPath: 'build',
   }
+}
+
+if (DEV_RELEASE) {
+  let cmd = 'git rev-parse HEAD'
+  let sha = execSync(cmd)
+  let appVersion = `main-${sha.toString().substr(0, 7)}`
+  let file = join(__dirname, '..', 'commit')
+  writeFileSync(file, appVersion)
+  config.bin.cli = '../src/_main.js'
+  config.pkg.assets.push('../commit')
 }
 
 let nodeVer = `node14`

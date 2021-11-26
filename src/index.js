@@ -6,19 +6,20 @@ let commands = require('./commands')
 let printer = require('./printer')
 let { DEBUG } = process.env
 
-async function begin (a) {
+async function begin (appVersion) {
   let alias = {
     debug: [ 'd', 'debug' ],
     help: [ 'h', 'help' ],
     quiet: [ 'q', 'quiet' ],
     verbose: [ 'v', 'verbose' ],
   }
-  let args = minimist(a, { alias })
+  let args = minimist(process.argv.slice(2), { alias })
   if (DEBUG || args.debug) args.debug = DEBUG || args.debug
   try {
-    let pkg = join(__dirname, '..', 'package.json')
-    let appVersion = JSON.parse(readFileSync(pkg)).version
-
+    if (!appVersion) {
+      let pkg = join(__dirname, '..', 'package.json')
+      appVersion = JSON.parse(readFileSync(pkg)).version
+    }
     let lang = 'en' // This should / will be configurable
     let params = { args, appVersion, lang, printer }
     await commands(params)
@@ -30,7 +31,7 @@ async function begin (a) {
 
 // Invoke to start if not running in module (test) mode
 if (require.main === module) {
-  begin(process.argv.slice(2))
+  begin()
 }
 
 module.exports = begin

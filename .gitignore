@@ -1,6 +1,8 @@
 .nyc_output/
 bin/begin*
 bin/package.json
+build
+commit
 coverage/
 node_modules/
 scratch/
