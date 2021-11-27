@@ -1,8 +1,9 @@
 let dev = require('./dev')
 let init = require('./new')
 let help = require('./help')
+let update = require('./update')
 let version = require('./version')
-let commands = [ dev, init, help, version ]
+let commands = [ dev, init, help, update, version ]
 
 let helper = require('../helper')
 

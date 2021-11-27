@@ -18,6 +18,10 @@ let help = {
           description: 'Display help',
         },
         {
+          name: 'update',
+          description: 'Update Begin to the latest version',
+        },
+        {
           name: 'version',
           description: 'Output app version',
         },
