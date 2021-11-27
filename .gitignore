@@ -1,6 +1,5 @@
 .nyc_output/
-bin/begin*
-bin/package.json
+scripts/package.json
 build
 commit
 coverage/
