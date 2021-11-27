@@ -14,16 +14,15 @@
     "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-spec",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
-    "rc": "npm version prerelease --preid RC",
     "build": "scripts/binary-config && npx pkg scripts && rm -f commit",
     "deploy": "BUILD_ALL=true npm run build && scripts/deploy"
   },
   "dependencies": {
-    "@architect/inventory": "~2.2.1",
+    "@architect/inventory": "2.2.1",
     "@architect/parser": "5.0.2",
-    "@architect/sandbox": "~4.4.1",
+    "@architect/sandbox": "4.4.1",
     "chalk": "4.1.2",
-    "lambda-runtimes": "~1.1.1",
+    "lambda-runtimes": "1.1.1",
     "minimist": "1.2.5",
     "strip-ansi": "6.0.1"
   },
