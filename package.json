@@ -17,6 +17,7 @@
     "build": "scripts/binary-config && npx pkg scripts && rm -f commit",
     "deploy": "BUILD_ALL=true npm run build && scripts/deploy"
   },
+  "license": "Apache-2.0",
   "dependencies": {
     "@architect/inventory": "2.2.1",
     "@architect/parser": "5.0.2",

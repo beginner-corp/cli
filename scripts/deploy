@@ -108,7 +108,7 @@ let kb = buf => Math.floor(buf.length / 1000)
     for (let [ key, Value ] of Object.entries(data)) {
       // Update env vars
       let params = {
-        Name: `/begin-download/production/${key}`,
+        Name: `/begin-install/production/${key}`,
         Value,
         Type: 'SecureString',
         Overwrite: true
