@@ -68,8 +68,7 @@ async function action (params) {
           if (!isWin) {
             await chmod(filename, exe)
           }
-          let ver = channel === 'main' ? `main-${version}` : version
-          console.error(`Upgrading Begin to ${ver}`)
+          console.error(`Upgrading Begin to ${version}`)
           console.error(`Updated ${filename}`)
           resolve('Successfully upgraded Begin!')
         }
