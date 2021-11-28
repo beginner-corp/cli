@@ -6,14 +6,16 @@ let { join } = require('path')
 let admZip = require('adm-zip')
 let aws = require('aws-sdk')
 
-let { DEPLOY, S3_BUCKET: Bucket, LATEST_API: FunctionName } = process.env
+let { DEPLOY, CF_DISTRO: DistributionId, S3_BUCKET: Bucket, LATEST_API: FunctionName } = process.env
 if (!Bucket) throw ReferenceError('Missing S3_BUCKET config!')
 if (!DEPLOY) throw ReferenceError('Missing DEPLOY config!')
+if (!DistributionId) throw ReferenceError('Missing CF_DISTRO config!')
 if (!FunctionName) throw ReferenceError('Missing LATEST_API config!')
 let valid = [ 'prod', 'main' ]
 if (!valid.includes(DEPLOY)) throw ReferenceError(`DEPLOY must be one of: ${valid.join(', ')}`)
 
 let region = 'us-west-2'
+let cf = new aws.CloudFront()
 let lambda = new aws.Lambda({ region })
 let s3 = new aws.S3({ region })
 let ssm = new aws.SSM({ region })
@@ -50,8 +52,7 @@ let kb = buf => Math.floor(buf.length / 1000)
     }
     let channel = isProd ? 'latest' : 'main'
     let ACL = 'public-read'
-    // TODO: increase to 24 hours, clear cache on publish
-    let CacheControl = 'max-age=500'
+    let CacheControl = 's-maxage=3600, max-age=3600, must-revalidate' // 1 hour
 
     for (let [ local, { name, zip } ] of Object.entries(files)) {
       let path = join(__dirname, '..', 'build', local)
@@ -74,6 +75,17 @@ let kb = buf => Math.floor(buf.length / 1000)
         }
       }
     }
+
+    // Flush CDN release channel
+    let releasePath = `/releases/${channel}/*`
+    await cf.createInvalidation({
+      DistributionId,
+      InvalidationBatch: {
+        CallerReference: `${channel}-${new Date().toISOString()}`,
+        Paths: { Quantity: 1, Items: [ releasePath ] }
+      }
+    }).promise()
+    console.log(`Invalidated ${releasePath}`)
 
     let uri = ext => `https://dl.begin.com/releases/${channel}/begin-x64-${ext}`
     let data = {
@@ -105,7 +117,7 @@ let kb = buf => Math.floor(buf.length / 1000)
       console.log(`Updated ${key}`)
     }
 
-    // Fetch Lambda config
+    // Update `dl.begin.com/versions` config
     let config = await lambda.getFunctionConfiguration({ FunctionName }).promise()
     let Environment = { Variables: { ...config.Environment.Variables, ...data } }
     await lambda.updateFunctionConfiguration({ FunctionName, Environment }).promise()

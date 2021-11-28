@@ -83,9 +83,10 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         run: npm run deploy
         env:
+          DEPLOY: prod
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DEPLOY: prod
+          CF_DISTRO: ${{ secrets.CF_DISTRO }}
           LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
@@ -93,9 +94,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: npm run deploy
         env:
+          DEPLOY: main
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DEPLOY: main
+          CF_DISTRO: ${{ secrets.CF_DISTRO }}
           LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
