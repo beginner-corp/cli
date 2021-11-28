@@ -86,6 +86,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOY: prod
+          LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
       - name: Deploy 'main' build
@@ -95,6 +96,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DEPLOY: main
+          LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
       - name: Notify

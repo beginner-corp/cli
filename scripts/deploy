@@ -1,41 +1,54 @@
 #! /usr/bin/env node
 let { existsSync } = require('fs')
 let { readFile } = require('fs/promises')
+let { execSync } = require('child_process')
 let { join } = require('path')
 let admZip = require('adm-zip')
 let aws = require('aws-sdk')
 
-let { DEPLOY, S3_BUCKET: Bucket } = process.env
-if (!Bucket) throw ReferenceError('Missing Bucket config!')
+let { DEPLOY, S3_BUCKET: Bucket, LATEST_API: FunctionName } = process.env
+if (!Bucket) throw ReferenceError('Missing S3_BUCKET config!')
+if (!DEPLOY) throw ReferenceError('Missing DEPLOY config!')
+if (!FunctionName) throw ReferenceError('Missing LATEST_API config!')
+let valid = [ 'prod', 'main' ]
+if (!valid.includes(DEPLOY)) throw ReferenceError(`DEPLOY must be one of: ${valid.join(', ')}`)
 
-let s3 = new aws.S3({ region: 'us-west-2' })
+let region = 'us-west-2'
+let lambda = new aws.Lambda({ region })
+let s3 = new aws.S3({ region })
+let ssm = new aws.SSM({ region })
 let kb = buf => Math.floor(buf.length / 1000)
 
 ;(async () => {
   try {
-    console.log(`Deploying Begin... (DEPLOY: ${DEPLOY})`)
     let isProd = DEPLOY === 'prod'
-    let ver
+    let version
     if (isProd) {
       let pkg = join(__dirname, '..', 'package.json')
-      ver = JSON.parse(await readFile(pkg)).version
-      if (!ver.match(/^\d+.\d+.\d+$/)) {
-        let msg = `Only production major, minor, or patch releases can be shipped (got: ${ver})`
+      version = JSON.parse(await readFile(pkg)).version
+      if (!version.match(/^\d+.\d+.\d+$/)) {
+        let msg = `Only production major, minor, or patch releases can be shipped (got: ${version})`
         throw ReferenceError(msg)
       }
     }
+    else {
+      let cmd = 'git rev-parse HEAD'
+      let sha = execSync(cmd)
+      version = `main-${sha.toString().substr(0, 7)}`
+    }
+    console.log(`Deploying Begin... (version: ${version}, DEPLOY: ${DEPLOY})`)
     let name = 'begin'
     let files = {
-      'begin-linux':    { name, zip: 'begin-x86_64-linux.zip' },
-      'begin-macos':    { name, zip: 'begin-x86_64-darwin.zip' },
-      'begin-win.exe':  { name: 'begin.exe', zip: 'begin-x86_64-windows.zip' },
+      'begin-linux':    { name, zip: 'begin-x64-linux.zip' },
+      'begin-macos':    { name, zip: 'begin-x64-darwin.zip' },
+      'begin-win.exe':  { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
       // Coming soon:
-      // 'begin-linux-x64': { name, 'begin-x86_64-linux.zip' },
-      // 'begin-macos-x64': { name, 'begin-x86_64-macos.zip' },
-      // 'begin-macos-arm64': { name, 'begin-aarch64-darwin-macos.zip' },
-      // 'begin-win-x64.exe': { name: 'begin.exe', 'begin-x86_64-win.zip' },
+      // 'begin-linux-x64': { name, zip: 'begin-x64-linux.zip' },
+      // 'begin-macos-x64': { name, zip: 'begin-x64-darwin.zip' },
+      // 'begin-macos-arm64': { name, zip: 'begin-arm64-darwin.zip' },
+      // 'begin-win-x64.exe': { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
     }
-    let dir = isProd ? 'latest' : 'main'
+    let channel = isProd ? 'latest' : 'main'
     let ACL = 'public-read'
     // TODO: increase to 24 hours, clear cache on publish
     let CacheControl = 'max-age=500'
@@ -47,20 +60,56 @@ let kb = buf => Math.floor(buf.length / 1000)
         let buf = await readFile(path)
         Zip.addFile(name, buf)
         let Body = Zip.toBuffer()
-        let Key = `releases/${dir}/${zip}`
+        let Key = `releases/${channel}/${zip}`
 
         console.log(`Loaded ${path}: ${kb(buf)} KB uncompresed`)
         await s3.putObject({ ACL, Body, Bucket, Key, CacheControl }).promise()
         console.log(`Uploaded ${path} to ${Key} (${kb(Body)} KB compressed)`)
 
         if (isProd) {
-          let CopySource = `${Bucket}/releases/${dir}/${zip}`
-          let Key = `releases/${ver}/${zip}`
+          let CopySource = `${Bucket}/releases/${channel}/${zip}`
+          let Key = `releases/${version}/${zip}`
           await s3.copyObject({ ACL, CopySource, Key, Bucket }).promise()
           console.log(`Copied ${CopySource} to ${Key}`)
         }
       }
     }
+
+    let uri = ext => `https://dl.begin.com/releases/${channel}/begin-x64-${ext}`
+    let data = {
+      [`ver_${channel}`.toUpperCase()]: version,
+      [`releases_${channel}`.toUpperCase()]: JSON.stringify({
+        darwin: {
+          arm64: null,
+          x64: uri('darwin.zip'),
+        },
+        linux: {
+          arm64: null,
+          x64: uri('linux.zip'),
+        },
+        windows: {
+          arm64: null,
+          x64: uri('windows.zip'),
+        }
+      })
+    }
+    for (let [ key, Value ] of Object.entries(data)) {
+      // Update env vars
+      let params = {
+        Name: `/begin-download/production/${key}`,
+        Value,
+        Type: 'SecureString',
+        Overwrite: true
+      }
+      await ssm.putParameter(params).promise()
+      console.log(`Updated ${key}`)
+    }
+
+    // Fetch Lambda config
+    let config = await lambda.getFunctionConfiguration({ FunctionName }).promise()
+    let Environment = { Variables: { ...config.Environment.Variables, ...data } }
+    await lambda.updateFunctionConfiguration({ FunctionName, Environment }).promise()
+    console.log(`Updated dl.begin.com/latest`)
   }
   catch (err) {
     console.log('Deploy failed!', err)
