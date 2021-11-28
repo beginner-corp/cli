@@ -40,7 +40,7 @@ module.exports = function helper (params, cmdHelp) {
   help += br(2) + `${c.dim('Global options:')}\n${globalOptions}`
 
   // Examples
-  if (examples.length) {
+  if (examples?.length) {
     let exampleItems = examples.map(({ name, example }) => {
       return `${indent}${name}\n${indent}${c.green('$ ' + example)}`
     }).join(br(2))

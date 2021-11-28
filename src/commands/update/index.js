@@ -1,4 +1,5 @@
 let names = { en: [ 'update', 'upgrade' ] }
+let help = require('./help')
 
 async function action (params) {
   let { appVersion, args } = params
@@ -117,4 +118,5 @@ async function getVersions () {
 module.exports = {
   names,
   action,
+  help,
 }

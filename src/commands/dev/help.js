@@ -8,14 +8,17 @@ module.exports = {
         {
           name: '-p, --port',
           description: `Configure the dev server's HTTP port`,
+          optional: true,
         },
         {
           name: '-v, --verbose',
           description: 'Enable verbose output',
+          optional: true,
         },
         {
           name: '--disable-symlinks',
           description: '[Advanced] Disable shared code symlinking',
+          optional: true,
         },
       ],
     },
