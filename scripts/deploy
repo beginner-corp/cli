@@ -43,7 +43,7 @@ let kb = buf => Math.floor(buf.length / 1000)
     let files = {
       'begin-linux':    { name, zip: 'begin-x64-linux.zip' },
       'begin-macos':    { name, zip: 'begin-x64-darwin.zip' },
-      'begin-win.exe':  { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
+      'begin-win.exe':  { name: 'b.exe', zip: 'begin-x64-windows.zip' },
       // Coming soon:
       // 'begin-linux-x64': { name, zip: 'begin-x64-linux.zip' },
       // 'begin-macos-x64': { name, zip: 'begin-x64-darwin.zip' },
