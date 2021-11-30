@@ -26,13 +26,10 @@ module.exports = async function runCommand (params) {
     `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows`
   )
 
-  let ran = false
   for (let command of commands) {
     let { names, action, help } = command
     // Some help output is generated dynamically
-    if (typeof help === 'function') {
-      help = await help(params)
-    }
+    let getHelp = async () => typeof help === 'function' ? help(params) : help
     printer.debug(params,
       'command\n' +
       `  names: ${names ? names[lang].join(', ') : false}\n` +
@@ -40,34 +37,33 @@ module.exports = async function runCommand (params) {
       `  help: ${help ? Object.keys(help).join(', ') : false}`,
     )
     if (names[lang].includes(cmd) && args.help && help) {
+      help = await getHelp()
       helper(params, help)
-      ran = true
-      break
+      return
     }
     else if (names[lang].includes(cmd)) {
       try {
         let result = await action(params)
         printer(params, result)
-        ran = true
-        break
+        return
       }
       catch (err) {
         if (err.message === '__help__' && help) {
+          help = await getHelp()
           helper(params, help)
-          ran = true
-          break
+          return
         }
         else throw err
       }
     }
   }
   // Fall back to main help if nothing else ran
-  if (!ran) {
-    if (cmd) {
-      printer(params, Error(`Unknown command: ${cmd}`))
-    }
-    if (!args.json) {
-      helper(params)
-    }
+  if (cmd) {
+    printer(params, Error(`Unknown command: ${cmd}`))
+    return
+  }
+  if (!args.json) {
+    helper(params)
+    return
   }
 }

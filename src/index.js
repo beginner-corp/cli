@@ -22,7 +22,7 @@ async function begin (appVersion) {
     }
     let lang = 'en' // This should / will be configurable
     let params = { args, appVersion, lang, printer }
-    await commands(params)
+    commands(params)
   }
   catch (err) {
     printer({ args }, err)
