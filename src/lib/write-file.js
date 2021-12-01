@@ -1,7 +1,6 @@
 let { existsSync, writeFileSync } = require('fs')
 let { join } = require('path')
 let getRelativeCwd = require('./get-relative-cwd')
-let printer = require('../printer')
 
 let messages = {
   en: {
@@ -13,12 +12,12 @@ let messages = {
 module.exports = function writeFile (params) {
   return function (path, contents) {
     if (!path.startsWith(process.cwd())) path = join(process.cwd(), path)
-    let { lang } = params
+    let { lang, printer } = params
     let exists = existsSync(path)
     writeFileSync(path, contents)
     let message = exists
       ? messages[lang].updated_file(getRelativeCwd(path))
       : messages[lang].created_file(getRelativeCwd(path))
-    printer.verbose(params, message)
+    printer.verbose(message)
   }
 }

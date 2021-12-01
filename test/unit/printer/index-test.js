@@ -24,9 +24,11 @@ function reset () {
   process.stdout.isTTY = false
   process.env = env
 }
-function run (method, params = { args: {} }, out) {
+function run (method, args, out) {
   setup()
-  method(params, out)
+  let _printer = printer(args)
+  let print = method === 'normal' ? _printer : _printer[method]
+  print(out)
   // Trim for easier assertion
   stdout = stdout.trim()
   stderr = stderr.trim()
@@ -45,12 +47,12 @@ test('Basic output', t => {
   let out
 
   out = 'hi there'
-  run(printer, { args: {} }, out)
+  run('normal', {}, out)
   t.equal(stdout, out, `Printed normal output to stdout (normal mode): ${out}`)
   t.notOk(stderr, `Did not print to stderr`)
 
   out = { string: 'hi there' }
-  run(printer, { args: {} }, out)
+  run('normal', {}, out)
   t.equal(stdout, out.string, `Printed normal output to stdout (normal mode): ${out.string}`)
   t.notOk(stderr, `Did not print to stderr`)
 })
@@ -62,26 +64,26 @@ test('JSON output', t => {
 
   out = {}
   let def = json({ ok: true })
-  run(printer, { args: { json: true } }, out)
+  run('normal', { json: true }, out)
   t.equal(stdout, def, `Printed default JSON output to stdout (JSON mode): ${def}`)
   t.notOk(stderr, `Did not print to stderr`)
 
   out = { json: { message: 'hi there' } }
-  run(printer, { args: { json: true } }, out)
+  run('normal', { json: true }, out)
   t.equal(stdout, json(out.json), `Printed JSON output to stdout (JSON mode): ${json(out.json)}`)
   t.notOk(stderr, `Did not print to stderr`)
 
-  run(printer.verbose, { args: { verbose: true, json: true } }, out)
+  run('verbose', { verbose: true, json: true }, out)
   t.notOk(stdout || stderr, `Verbose method did not print`)
 
-  run(printer.debug, { args: { debug: true, json: true } }, out)
+  run('debug', { debug: true, json: true }, out)
   t.notOk(stdout || stderr, `Debug method did not print`)
 })
 
 test('Quiet', t => {
   t.plan(1)
   let out = 'hi there'
-  run(printer, { args: { quiet: true } }, out)
+  run('normal', { quiet: true }, out)
   t.notOk(stdout || stderr, `Verbose method did not print`)
 })
 
@@ -94,21 +96,21 @@ test('Modes: normal, verbose, debug', t => {
    */
   // As string
   out = 'hi there'
-  run(printer, { args: { verbose: true } }, out)
+  run('normal', { verbose: true }, out)
   t.equal(stdout, out, `Printed normal output to stdout (verbose mode): ${out}`)
   t.notOk(stderr, `Did not print to stderr`)
 
-  run(printer, { args: { debug: true } }, out)
+  run('normal', { debug: true }, out)
   t.equal(stdout, out, `Printed normal output to stdout (debug mode): ${out}`)
   t.notOk(stderr, `Did not print to stderr`)
 
   // As object
   out = { string: 'hi there' }
-  run(printer, { args: { verbose: true } }, out)
+  run('normal', { verbose: true }, out)
   t.equal(stdout, out.string, `Printed normal output to stdout (verbose mode): ${out}`)
   t.notOk(stderr, `Did not print to stderr`)
 
-  run(printer, { args: { debug: true } }, out)
+  run('normal', { debug: true }, out)
   t.equal(stdout, out.string, `Printed normal output to stdout (debug mode): ${out}`)
   t.notOk(stderr, `Did not print to stderr`)
 
@@ -117,20 +119,20 @@ test('Modes: normal, verbose, debug', t => {
    */
   // As string
   out = 'verbose hi there'
-  run(printer.verbose, { args: { verbose: true } }, out)
+  run('verbose', { verbose: true }, out)
   t.equal(stderr, out, `Printed verbose output to stderr (verbose mode): ${out}`)
   t.notOk(stdout, `Verbose method did not print to stdout`)
 
-  run(printer.verbose, { args: {} }, out)
+  run('verbose', {}, out)
   t.notOk(stdout || stderr, `Verbose method did not print (verbose not set)`)
 
   // As object
   out = { string: 'verbose hi there' }
-  run(printer.verbose, { args: { verbose: true } }, out)
+  run('verbose', { verbose: true }, out)
   t.equal(stderr, out.string, `Printed verbose output to stderr (verbose mode): ${out}`)
   t.notOk(stdout, `Verbose method did not print to stdout`)
 
-  run(printer.verbose, { args: {} }, out)
+  run('verbose', {}, out)
   t.notOk(stdout || stderr, `Verbose method did not print (verbose not set)`)
 
   /**
@@ -138,20 +140,20 @@ test('Modes: normal, verbose, debug', t => {
    */
   // As string
   out = 'debug hi there'
-  run(printer.debug, { args: { debug: true } }, out)
+  run('debug', { debug: true }, out)
   t.equal(stderr, out, `Printed debug output to stderr (debug mode): ${out}`)
   t.notOk(stdout, `Debug method did not print to stdout`)
 
-  run(printer.debug, { args: {} }, out)
+  run('debug', {}, out)
   t.notOk(stdout || stderr, `Debug method did not print (normal mode)`)
 
   // As object
   out = { string: 'debug hi there' }
-  run(printer.debug, { args: { debug: true } }, out)
+  run('debug', { debug: true }, out)
   t.equal(stderr, out.string, `Printed debug output to stderr (debug mode): ${out}`)
   t.notOk(stdout, `Debug method did not print to stdout`)
 
-  run(printer.debug, { args: {} }, out)
+  run('debug', {}, out)
   t.notOk(stdout || stderr, `Debug method did not print (normal mode)`)
 })
 
@@ -164,25 +166,25 @@ test('Errors', t => {
   let err = Error(msg)
 
   // Normal
-  run(printer, { args: {} }, err)
+  run('normal', {}, err)
   t.match(stderr, re(msg), `Printed error output to stderr: ${stderr}`)
   t.notOk(stderr.includes(err.stack.split('\n').slice(1)), `Did not print stack`)
   t.notOk(stdout, `Did not print to stdout`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
 
-  run(printer, { args: { debug: true } }, err)
+  run('normal', { debug: true }, err)
   t.match(stderr, re(msg), `Printed error output to stderr (debug mode): ${stderr}`)
   t.ok(stderr.includes(err.stack), `Printed error stack to stderr (debug mode)`)
   t.notOk(stdout, `Did not print to stdout`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
 
   // JSON
-  run(printer, { args: { json: true } }, err)
+  run('normal', { json: true }, err)
   t.equal(stderr, json({ error: msg }), `Printed error output to stderr (JSON mode): ${stderr}`)
   t.notOk(stdout, `Did not print to stdout`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
 
-  run(printer, { args: { json: true, debug: true } }, err)
+  run('normal', { json: true, debug: true }, err)
   t.equal(stderr, json({ error: msg, stack: trimStack(err) }), `Printed error output to stderr (JSON mode): ${stderr}`)
   t.notOk(stdout, `Did not print to stdout`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
@@ -196,30 +198,30 @@ test('No color', t => {
   let color = '\x1B[1m\x1B[31mhi there\x1B[39m\x1B[22m'
 
   process.stdout.isTTY = true
-  run(printer, { args: {} }, color)
+  run('normal', {}, color)
   t.equal(stdout, color, `Printed with color (normal)`)
   delete process.env.FORCE_COLOR
 
   process.stdout.isTTY = false
-  run(printer, { args: {} }, color)
+  run('normal', {}, color)
   t.equal(stdout, msg, `Printed without color (!isTTY)`)
 
   process.env.BEGIN_NO_COLOR = true
-  run(printer, { args: {} }, color)
+  run('normal', {}, color)
   t.equal(msg, stdout, `Printed without color (BEGIN_NO_COLOR)`)
 
   process.env.NO_COLOR = true
-  run(printer, { args: {} }, color)
+  run('normal', {}, color)
   t.equal(msg, stdout, `Printed without color (NO_COLOR)`)
 
   process.env.TERM = 'dumb'
-  run(printer, { args: {} }, color)
+  run('normal', {}, color)
   t.equal(msg, stdout, `Printed without color (TERM)`)
 })
 
 test('Nothing passed back to print', t => {
   t.plan(1)
-  run(printer, { args: {} })
+  run('normal', {})
   t.notOk(stdout || stderr, `Did not print`)
 })
 

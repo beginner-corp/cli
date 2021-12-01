@@ -1,7 +1,6 @@
 let globals = require('./global-options')
 let formatItems = require('./format-items')
 let defaultHelp = require('../commands/help')
-let printer = require('../printer')
 let c = require('chalk')
 
 let indentSize = 2
@@ -10,7 +9,7 @@ let br = num => Array(num + 1).join('\n')
 let code = str => str.replace(/`[^`]*`/g, f => c.dim(f))
 
 module.exports = function helper (params, cmdHelp) {
-  let { args, appVersion, lang } = params
+  let { args, appVersion, lang, printer } = params
   if (!cmdHelp) {
     cmdHelp = defaultHelp.help
   }
@@ -50,5 +49,5 @@ module.exports = function helper (params, cmdHelp) {
   // Version
   help += br(2) + c.dim(`Begin version: ${appVersion}`)
 
-  printer(params, code(help))
+  printer(code(help))
 }

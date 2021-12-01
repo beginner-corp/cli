@@ -18,7 +18,7 @@ module.exports = async function runCommand (params) {
   let cmd = params.cmd = _[0]
 
   let { isTTY, columns, rows } = process.stdout
-  printer.debug(params,
+  printer.debug(
     `invocation\n` +
     `  which: ${process.argv[0]}\n` +
     `  args: ${JSON.stringify(args)}\n` +
@@ -30,7 +30,7 @@ module.exports = async function runCommand (params) {
     let { names, action, help } = command
     // Some help output is generated dynamically
     let getHelp = async () => typeof help === 'function' ? help(params) : help
-    printer.debug(params,
+    printer.debug(
       'command\n' +
       `  names: ${names ? names[lang].join(', ') : false}\n` +
       `  action: ${action ? true : false}\n` +
@@ -44,7 +44,7 @@ module.exports = async function runCommand (params) {
     else if (names[lang].includes(cmd)) {
       try {
         let result = await action(params)
-        printer(params, result)
+        printer(result)
         return
       }
       catch (err) {
@@ -59,7 +59,7 @@ module.exports = async function runCommand (params) {
   }
   // Fall back to main help if nothing else ran
   if (cmd) {
-    printer(params, Error(`Unknown command: ${cmd}`))
+    printer(Error(`Unknown command: ${cmd}`))
     return
   }
   if (!args.json) {
