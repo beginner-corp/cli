@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 14.x ]
+        node-version: [ 14.x, 16.x ]
         os: [ windows-latest, ubuntu-latest, macOS-latest ]
 
     # Go
@@ -47,7 +47,6 @@ jobs:
 
     - name: Notify
       uses: homoluctus/slatify@master
-      # Only fire alert once; may need `&& matrix.node-version == '10.x' && matrix.os == 'ubuntu-latest'` later
       if: github.ref == 'refs/heads/main' && failure()
       with:
         type: ${{ job.status }}
