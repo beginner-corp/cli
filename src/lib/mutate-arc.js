@@ -40,6 +40,9 @@ function upsert (params) {
           let { type, name, values } = item
           if (type === 'array') return { name: values[0].value, item }
           if (type === 'vector' || type === 'map') return { name, item }
+          let pragmas = updateValues.map(p => `@${p}`).join(', ')
+          let msg = `Invalid item: ${pragmas} pragmas only accept arrays, vectors, or maps`
+          throw Error(msg)
         })
 
       // Compare the names/values with those in the pragma
