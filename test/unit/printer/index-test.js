@@ -1,26 +1,21 @@
 let { join } = require('path')
 let test = require('tape')
+let lib = join(process.cwd(), 'test', 'lib')
+let { capture } = require(lib)
 let sut = join(process.cwd(), 'src', 'printer')
 let printer = require(sut)
 
 let isTTY = process.stdout.isTTY
 let { env } = process
-let log = console.log
-let err = console.err
 
-let stdout = ''
-let stderr = ''
-
+let stdout
+let stderr
 function setup () {
-  console.log = out => stdout += out + '\n'
-  console.error = out => stderr += out + '\n'
-  stdout = ''
-  stderr = ''
+  capture.start()
   if (process.exitCode) process.exitCode = 0
 }
 function reset () {
-  console.log = log
-  console.err = err
+  capture.stop()
   process.stdout.isTTY = false
   process.env = env
 }
@@ -30,8 +25,8 @@ function run (method, args, out) {
   let print = method === 'normal' ? _printer : _printer[method]
   print(out)
   // Trim for easier assertion
-  stdout = stdout.trim()
-  stderr = stderr.trim()
+  stdout = capture.stdout.trim()
+  stderr = capture.stderr.trim()
   reset()
 }
 let json = str => JSON.stringify(str, null, 2)
