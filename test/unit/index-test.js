@@ -84,10 +84,11 @@ test('Print error if something blows up', async t => {
   capture.start()
   await begin()
   capture.stop()
-  t.ok(capture.stderr.includes(msg), `Errored at top leve.: ${capture.stderr}`)
+  t.ok(capture.stderr.includes(msg), `Errored at top level: ${capture.stderr}`)
 
   t.teardown(() => {
     capture.reset()
+    process.exitCode = 0
     error = false
   })
 })
