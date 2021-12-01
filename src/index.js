@@ -7,10 +7,10 @@ let _printer = require('./printer')
 
 async function begin (appVersion) {
   let alias = {
-    debug: [ 'd', 'debug' ],
-    help: [ 'h', 'help' ],
-    quiet: [ 'q', 'quiet' ],
-    verbose: [ 'v', 'verbose' ],
+    debug: 'd',
+    help: 'h',
+    quiet: 'q',
+    verbose: 'v',
   }
   let args = minimist(process.argv.slice(2), { alias })
   if (process.env.DEBUG) args.debug = true
@@ -25,7 +25,7 @@ async function begin (appVersion) {
     commands(params)
   }
   catch (err) {
-    _printer(args, err)
+    _printer(args)(err)
   }
 }
 
