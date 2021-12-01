@@ -8,6 +8,7 @@ function printer (args) {
   function print (out = '', verbosity) {
     let isError = out instanceof Error
     if (isError) process.exitCode = 1
+    let errored = process.exitCode === 1
 
     // TODO: this should probably be more nuanced based on stdout vs stderr, TTY state, etc.
     if (args.quiet) return
@@ -45,7 +46,7 @@ function printer (args) {
         }
       }
       else {
-        let log = verbosity ? console.error : console.log
+        let log = verbosity || errored ? console.error : console.log
         log(format(out.string || out))
       }
     }

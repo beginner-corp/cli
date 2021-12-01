@@ -32,7 +32,7 @@ module.exports = async function runCommand (params) {
     let getHelp = async () => typeof help === 'function' ? help(params) : help
     printer.debug(
       'command\n' +
-      `  names: ${names ? names[lang].join(', ') : false}\n` +
+      `  names: ${names[lang]?.join(', ')}\n` +
       `  action: ${action ? true : false}\n` +
       `  help: ${help ? Object.keys(help).join(', ') : false}`,
     )
@@ -49,6 +49,8 @@ module.exports = async function runCommand (params) {
       }
       catch (err) {
         if (err.message === '__help__' && help) {
+          err.message = `Invalid parameter: ${args._[1]}`
+          printer(err)
           help = await getHelp()
           helper(params, help)
           return
@@ -60,10 +62,8 @@ module.exports = async function runCommand (params) {
   // Fall back to main help if nothing else ran
   if (cmd) {
     printer(Error(`Unknown command: ${cmd}`))
-    return
   }
   if (!args.json) {
     helper(params)
-    return
   }
 }
