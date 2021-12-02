@@ -6,7 +6,7 @@ module.exports = async function addItem (params) {
   let inventory = await _inventory()
   let { _project } = inventory.inv
 
-  let { mkdirSync, existsSync } = require('fs')
+  let { existsSync } = require('fs')
   let { join } = require('path')
   let lib = require('../../../../lib')
   let { getRelativeCwd, mutateArc } = lib
@@ -64,7 +64,6 @@ module.exports = async function addItem (params) {
   let handler = typeof handlers[runtime] === 'function'
     ? handlers[runtime](lang, getRelativeCwd(handlerFile))
     : handlers[runtime]
-  mkdirSync(src, { recursive: true })
   writeFile(handlerFile, handler)
 
   // If not the default runtime, write a config.arc file

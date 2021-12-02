@@ -5,3 +5,4 @@ commit
 coverage/
 node_modules/
 scratch/
+test/tmp/

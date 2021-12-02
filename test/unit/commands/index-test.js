@@ -58,6 +58,14 @@ test('Show help on a known command', async t => {
   t.teardown(reset)
 })
 
+test('Show help on a known subcommand', async t => {
+  t.plan(1)
+  let args = getArgs('new app help')
+  await commands({ args, lang, printer })
+  t.ok(printed[0].includes('begin new app'), 'Ran help')
+  t.teardown(reset)
+})
+
 test('Show help on an unknown command', async t => {
   t.plan(3)
   let bad = 'trolololo'
