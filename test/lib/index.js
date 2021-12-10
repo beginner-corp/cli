@@ -1,23 +1,24 @@
-let log = console.log
-let err = console.err
+let { existsSync } = require('fs')
+let { join } = require('path')
 
-let capture = {
-  start: () => {
-    console.log = out => capture.stdout += out + '\n'
-    console.error = out => capture.stderr += out + '\n'
-    capture.reset()
-  },
-  stop: () => {
-    console.log = log
-    console.err = err
-  },
-  stdout: '',
-  stderr: '',
-  reset: () => {
-    capture.stdout = capture.stderr = ''
-  },
+let begin = require('./_begin')
+let capture = require('./_capture')
+let tmp = require('./_tmp-dir')
+
+// Integration test runner
+let bin = join(process.cwd(), 'build', `begin${process.platform.startsWith('win') ? '.exe' : ''}`)
+let run = async (runTests, t) => {
+  if (!process.env.BINARY_ONLY) {
+    await runTests('module', t)
+  }
+  if (!process.env.MODULE_ONLY && existsSync(bin)) {
+    await runTests('binary', t)
+  }
 }
 
 module.exports = {
-  capture
+  begin,
+  capture,
+  run,
+  tmp,
 }

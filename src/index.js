@@ -5,7 +5,8 @@ let minimist = require('minimist')
 let commands = require('./commands')
 let _printer = require('./printer')
 
-async function begin (appVersion) {
+async function begin (params = {}) {
+  let { version } = params
   let alias = {
     debug: 'd',
     help: 'h',
@@ -15,14 +16,14 @@ async function begin (appVersion) {
   let args = minimist(process.argv.slice(2), { alias })
   if (process.env.DEBUG) args.debug = true
   try {
-    if (!appVersion) {
+    if (!version) {
       let pkg = join(__dirname, '..', 'package.json')
-      appVersion = JSON.parse(readFileSync(pkg)).version
+      version = JSON.parse(readFileSync(pkg)).version
     }
     let lang = 'en' // This should / will be configurable
     let printer = _printer(args)
-    let params = { args, appVersion, lang, printer }
-    commands(params)
+    let params = { args, appVersion: version, lang, printer }
+    await commands(params)
   }
   catch (err) {
     _printer(args)(err)
