@@ -67,13 +67,13 @@ test('Args', async t => {
 test('Version', async t => {
   t.plan(2)
   reset()
-  let ver = 'henlo'
-  await begin(ver)
-  t.equal(params.appVersion, ver, `Passed through app version: ${ver}`)
+  let version = 'henlo'
+  await begin({ version })
+  t.equal(params.appVersion, version, `Passed through app version: ${version}`)
 
   reset()
   await begin()
-  t.ok(params.appVersion && (params.appVersion !== ver), `Got a default app version: ${params.appVersion}`)
+  t.ok(params.appVersion && (params.appVersion !== version), `Got a default app version: ${params.appVersion}`)
 })
 
 test('Print error if something blows up', async t => {

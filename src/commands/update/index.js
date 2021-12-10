@@ -10,7 +10,7 @@ async function action (params) {
   let _http = require('http')
   let _https = require('https')
   let { join } = require('path')
-  let { chmod, writeFile } = require('fs/promises')
+  let { chmod, mkdir, writeFile } = require('fs/promises')
   let zip = require('adm-zip')
 
   let { homedir } = require('os')
@@ -59,11 +59,15 @@ async function action (params) {
         body = Buffer.concat(body)
         process.stderr.write(`Got ${mib(body.length)} MiB of ${target} MiB (${percent()}%)\n`)
 
+        let dest = join(homedir(), '.begin')
+        if (BEGIN_INSTALL) {
+          dest = BEGIN_INSTALL
+          await mkdir(dest, { recursive: true })
+        }
         let exe = 0o755 // -rwxr-xr-x
         let Zip = new zip(body)
         for (let file of Zip.getEntries()) {
           let decompressed = Zip.readFile(file)
-          let dest = BEGIN_INSTALL || join(homedir(), '.begin')
           let filename = join(dest, file.entryName)
           await writeFile(filename, decompressed)
           if (!isWin) {
@@ -85,10 +89,12 @@ async function action (params) {
 async function getVersions () {
   let _http = require('http')
   let _https = require('https')
+  let { __BEGIN_TEST_URL__ } = process.env
   return new Promise((resolve, reject) => {
-    let url = 'https://dl.begin.com/versions'
+    let url = __BEGIN_TEST_URL__
+      ? __BEGIN_TEST_URL__
+      : 'https://dl.begin.com/versions'
     let https = url.startsWith('https://') ? _https : _http
-
     console.error('Checking for latest version')
     let failed = 'Failed to check latest version'
     https.get(url, res => {
@@ -108,7 +114,7 @@ async function getVersions () {
         }
       })
       res.on('err', err => {
-        err.message = reject
+        err.message = failed
         reject(err)
       })
     })
