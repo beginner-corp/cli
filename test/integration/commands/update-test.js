@@ -8,7 +8,14 @@ let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
 let { begin: _begin, run, tmp } = require(lib)
 let install = join(tmp, 'install')
-let filePath = join(install, 'hi.txt')
+let newFolder = t => {
+  // Unlike *nix systems, Windows mysteriously kept file handles open (EBUSY) after completing fs mutations
+  // So for these tests, we'll just have to use random folders
+  let folder = install + '-' + `${Date.now()}`.substr(5)
+  if (existsSync(folder)) t.fail(`Found existing tmp folder: ${folder}`)
+  return folder
+}
+let filePath = folder => join(folder, 'hi.txt')
 
 test('Run update tests', async t => {
   await run(runTests, t)
@@ -27,35 +34,43 @@ async function runTests (runType, t) {
   t.test(`${mode} Start Sandbox`, async t => {
     t.plan(1)
     await sandbox.start({ cwd: mock, quiet: true })
-    process.env.BEGIN_INSTALL = install
     t.pass('Started Sandbox')
   })
 
   t.test(`${mode} Normal`, async t => {
     t.plan(11)
-    let r, file
+    let file, folder, path, r
 
+    folder = newFolder(t)
+    path = filePath(folder)
+    process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-upgrade'
     r = await begin('update')
-    if (!existsSync(filePath)) t.fail(`Did not find unzipped / installed file at ${filePath}`)
-    file = await readFile(filePath)
-    await isExecutable(t, filePath)
+    if (!existsSync(path)) t.fail(`Did not find unzipped / installed file at ${path}`)
+    file = await readFile(path)
+    await isExecutable(t, path)
     t.equal(file.toString(), contents, 'File unzipped into correct location')
     t.equal(r.stdout, upgraded, 'Got upgrade confirmation')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
-    t.ok(r.stderr.includes(filePath), 'Printed destination filepath to stderr')
+    t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.status, 0, 'Exited 0')
 
+    folder = newFolder(t)
+    path = filePath(folder)
+    process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-ok'
     r = await begin('update')
-    if (existsSync(filePath)) t.fail(`Found unzipped / installed file at ${filePath}`)
+    if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     t.equal(r.stdout, didNotUpgrade, `Got confirmation that upgrade wasn't necessary`)
     t.ok(r.stderr, 'Printed update info stderr')
     t.equal(r.status, 0, 'Exited 0')
 
+    folder = newFolder(t)
+    path = filePath(folder)
+    process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/lolidk'
     r = await begin('update')
-    if (existsSync(filePath)) t.fail(`Found unzipped / installed file at ${filePath}`)
+    if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.ok(r.stderr, 'Printed error to stderr')
     t.equal(r.status, 1, 'Exited 1')
@@ -63,23 +78,29 @@ async function runTests (runType, t) {
 
   t.test(`${mode} JSON`, async t => {
     t.plan(8)
-    let r, file, json
+    let file, folder, json, path, r
 
+    folder = newFolder(t)
+    path = filePath(folder)
+    process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-upgrade'
     r = await begin('update --json')
-    if (!existsSync(filePath)) t.fail(`Did not find unzipped / installed file at ${filePath}`)
-    file = await readFile(filePath)
+    if (!existsSync(path)) t.fail(`Did not find unzipped / installed file at ${path}`)
+    file = await readFile(path)
     json = JSON.parse(r.stdout)
-    await isExecutable(t, filePath)
+    await isExecutable(t, path)
     t.equal(file.toString(), contents, 'File unzipped into correct location')
     t.equal(json.ok, true, 'Got { ok: true } for upgrade confirmation')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
-    t.ok(r.stderr.includes(filePath), 'Printed destination filepath to stderr')
+    t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.status, 0, 'Exited 0')
 
+    folder = newFolder(t)
+    path = filePath(folder)
+    process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-ok'
     r = await begin('update --json')
-    if (existsSync(filePath)) t.fail(`Found unzipped / installed file at ${filePath}`)
+    if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got { ok: true } for upgrade confirmation')
     t.ok(r.stderr, 'Printed update info stderr')
