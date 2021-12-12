@@ -10,7 +10,7 @@ async function action (params) {
   let _http = require('http')
   let _https = require('https')
   let { join } = require('path')
-  let { chmod, mkdir, writeFile } = require('fs/promises')
+  let { chmodSync, mkdirSync, writeFileSync } = require('fs')
   let zip = require('adm-zip')
 
   let { homedir } = require('os')
@@ -54,7 +54,7 @@ async function action (params) {
           process.stderr.cursorTo(0)
         }
       })
-      res.on('end', async data => {
+      res.on('end', data => {
         if (data) body.push(data)
         body = Buffer.concat(body)
         process.stderr.write(`Got ${mib(body.length)} MiB of ${target} MiB (${percent()}%)\n`)
@@ -62,16 +62,16 @@ async function action (params) {
         let dest = join(homedir(), '.begin')
         if (BEGIN_INSTALL) {
           dest = BEGIN_INSTALL
-          await mkdir(dest, { recursive: true })
+          mkdirSync(dest, { recursive: true })
         }
         let exe = 0o755 // -rwxr-xr-x
         let Zip = new zip(body)
         for (let file of Zip.getEntries()) {
           let decompressed = Zip.readFile(file)
           let filename = join(dest, file.entryName)
-          await writeFile(filename, decompressed)
+          writeFileSync(filename, decompressed)
           if (!isWin) {
-            await chmod(filename, exe)
+            chmodSync(filename, exe)
           }
           console.error(`Upgrading Begin to ${version}`)
           console.error(`Updated ${filename}`)

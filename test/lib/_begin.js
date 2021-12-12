@@ -1,4 +1,4 @@
-let { existsSync, mkdirSync } = require('fs')
+let { existsSync, mkdirSync, rmSync } = require('fs')
 let { join } = require('path')
 let { exec: _exec } = require('child_process')
 let { promisify } = require('util')
@@ -6,7 +6,6 @@ let exec = promisify(_exec)
 
 let capture = require('./_capture')
 let tmp = require('./_tmp-dir')
-let resetTmp = require('./_reset-tmp')
 
 let cwd = process.cwd()
 let isWin = process.platform.startsWith('win')
@@ -20,7 +19,7 @@ let getArgs = str => [ ...str.split(' ').filter(Boolean) ]
 
 function setup (t) {
   process.exitCode = 0
-  resetTmp(t)
+  rmSync(tmp, { recursive: true, force: true })
   mkdirSync(tmp, { recursive: true })
   if (!existsSync(tmp)) t.fail(`Failed to create ${tmp}`)
 }
