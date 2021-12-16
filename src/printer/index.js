@@ -1,5 +1,4 @@
 let stripAnsi = require('strip-ansi')
-let stripEntries = (([ k, v ]) => [ stripAnsi(k), stripAnsi(v) ])
 let getStack = err => err.stack.split('\n').slice(1).join('\n')
 
 // Per clig.dev: stdout is for piping to other apps; stderr is for userland
@@ -24,16 +23,18 @@ function printer (args) {
 
     // JSON output is assumed to be for machines, not for userland (read: stderr)
     if (args.json && !verbosity) {
-      let output
+      let output = { ok: true }
       if (isError) {
-        output = { error: stripAnsi(out.message) }
+        output = { ok: false, error: stripAnsi(out.message) }
         if (args.debug) output.stack = stripAnsi(getStack(out))
       }
-      else output = out.json
-        ? Object.fromEntries(Object.entries(out.json).map(stripEntries))
-        : { ok: true }
-      let log = isError ? console.error : console.log
-      log(JSON.stringify(output, null, 2))
+      else if (out.json) {
+        Object.entries(out.json).forEach(([ k, v ]) => output[stripAnsi(k)] = stripAnsi(v))
+      }
+      else {
+        output.message = stripAnsi(out)
+      }
+      console.log(JSON.stringify(output, null, 2))
     }
     else if (!args.json && out) {
       let format = output => (noColor || args['no-color']) ? stripAnsi(output) : output
