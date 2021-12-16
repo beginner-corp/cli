@@ -85,14 +85,15 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} JSON`, async t => {
-    t.plan(11)
+    t.plan(12)
     let errCmd = /ohnoes/
     let stack = /src[\/\\]{1,2}index.js/
     let r, json
 
     r = await begin('help --json')
     json = JSON.parse(r.stdout)
-    t.equal(json.ok, true, 'Got { ok: true } for help')
+    t.equal(json.ok, true, 'Got ok: true for help')
+    t.ok(json.message, 'Got message for help')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.status, 0, 'Exited 0')
 
