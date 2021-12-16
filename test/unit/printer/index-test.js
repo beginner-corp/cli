@@ -55,17 +55,17 @@ test('Basic output', t => {
 test('JSON output', t => {
   // FYI: JSON x errors are tested in the 'errors' test block
   t.plan(6)
-  let out
+  let def, out, ok = true
 
-  out = {}
-  let def = json({ ok: true })
+  def = json({ ok, message: '' })
   run('normal', { json: true }, out)
   t.equal(stdout, def, `Printed default JSON output to stdout (JSON mode): ${def}`)
   t.notOk(stderr, `Did not print to stderr`)
 
-  out = { json: { message: 'hi there' } }
+  out = { json: { ok, message: 'hi there' } }
+  def = json(out.json)
   run('normal', { json: true }, out)
-  t.equal(stdout, json(out.json), `Printed JSON output to stdout (JSON mode): ${json(out.json)}`)
+  t.equal(stdout, def, `Printed JSON output to stdout (JSON mode): ${def}`)
   t.notOk(stderr, `Did not print to stderr`)
 
   run('verbose', { verbose: true, json: true }, out)
@@ -159,6 +159,7 @@ test('Errors', t => {
 
   let msg = 'oh noes'
   let err = Error(msg)
+  let ok = false
 
   // Normal
   run('normal', {}, err)
@@ -175,13 +176,13 @@ test('Errors', t => {
 
   // JSON
   run('normal', { json: true }, err)
-  t.equal(stderr, json({ error: msg }), `Printed error output to stderr (JSON mode): ${stderr}`)
-  t.notOk(stdout, `Did not print to stdout`)
+  t.equal(stdout, json({ ok, error: msg }), `Printed error output to stdout (JSON mode): ${stdout}`)
+  t.notOk(stderr, `Did not print to stderr`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
 
   run('normal', { json: true, debug: true }, err)
-  t.equal(stderr, json({ error: msg, stack: trimStack(err) }), `Printed error output to stderr (JSON mode): ${stderr}`)
-  t.notOk(stdout, `Did not print to stdout`)
+  t.equal(stdout, json({ ok, error: msg, stack: trimStack(err) }), `Printed error output to stdout (JSON mode): ${stdout}`)
+  t.notOk(stderr, `Did not print to stderr`)
   t.equal(process.exitCode, 1, `Printer set process.exitCode: ${process.exitCode}`)
 
   t.teardown(() => process.exitCode = 0)

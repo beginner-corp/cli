@@ -97,17 +97,17 @@ async function runTests (runType, t) {
     t.equal(r.status, 0, 'Exited 0')
 
     r = await begin('ohnoes --json')
-    json = JSON.parse(r.stderr)
+    json = JSON.parse(r.stdout)
     t.match(json.error, errCmd, 'Got error for unknown command')
     t.notOk(json.stack, 'Did not get stack trace in !debug mode')
-    t.notOk(r.stdout, 'Did not print to stdout')
+    t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.status, 1, 'Exited 1')
 
     r = await begin('ohnoes --json --debug')
-    json = JSON.parse(r.stderr)
+    json = JSON.parse(r.stdout)
     t.match(json.error, errCmd, 'Got error for unknown command')
     t.match(json.stack, stack, 'Got stack trace in debug mode')
-    t.notOk(r.stdout, 'Did not print to stdout')
+    t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.status, 1, 'Exited 1')
   })
 }
