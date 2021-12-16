@@ -77,7 +77,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} JSON`, async t => {
-    t.plan(8)
+    t.plan(10)
     let file, folder, json, path, r
 
     folder = newFolder(t)
@@ -90,7 +90,8 @@ async function runTests (runType, t) {
     json = JSON.parse(r.stdout)
     await isExecutable(t, path)
     t.equal(file.toString(), contents, 'File unzipped into correct location')
-    t.equal(json.ok, true, 'Got { ok: true } for upgrade confirmation')
+    t.equal(json.ok, true, 'Got ok: true for upgrade confirmation')
+    t.ok(json.message, 'Got message for upgrade confirmation')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.status, 0, 'Exited 0')
@@ -102,7 +103,8 @@ async function runTests (runType, t) {
     r = await begin('update --json')
     if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     json = JSON.parse(r.stdout)
-    t.equal(json.ok, true, 'Got { ok: true } for upgrade confirmation')
+    t.equal(json.ok, true, 'Got ok: true for upgrade confirmation')
+    t.ok(json.message, 'Got message for upgrade confirmation')
     t.ok(r.stderr, 'Printed update info stderr')
     t.equal(r.status, 0, 'Exited 0')
 
