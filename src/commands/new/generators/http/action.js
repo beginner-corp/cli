@@ -2,46 +2,46 @@ let { resolve } = require('path')
 let cwd = process.cwd()
 
 module.exports = async function action (params, utils) {
-  let { args, lang } = params
+  let { args } = params
   let { create, validate, httpMethods, runtimes } = utils
   let error = require('./errors')(params, utils)
 
   let invalid = await validate.project()
-  if (invalid) invalid
+  if (invalid) return invalid
 
   // Method (required)
   let method = args.m || args.method
   if (!method || method === true) {
-    return error(lang, 'no_method')
+    return error('no_method')
   }
   if (typeof method !== 'string' ||
       !httpMethods.includes(method.toLowerCase())) {
-    return error(lang, 'invalid_method')
+    return error('invalid_method')
   }
   method = method.toLowerCase()
 
   // Path (required)
   let path = args.p || args.path
   if (!path || path === true) {
-    return error(lang, 'no_path')
+    return error('no_path')
   }
   if (typeof path !== 'string') {
-    return error(lang, 'invalid_path')
+    return error('invalid_path')
   }
   if (!path.startsWith('/')) {
-    return error(lang, 'path_starts_with_slash')
+    return error('path_starts_with_slash')
   }
 
   // Runtime (optional)
   let runtime = args.r || args.runtime
   if (runtime && !runtimes.includes(runtime?.toLowerCase())) {
-    return error(lang, 'invalid_runtime')
+    return error('invalid_runtime')
   }
 
   // Source dir (optional)
   let src = args.s || args.src
   if (src && !resolve(src).startsWith(cwd)) {
-    return error(lang, 'src_must_be_in_project')
+    return error('src_must_be_in_project')
   }
 
   return create.http({ method, path, runtime, src })

@@ -15,7 +15,7 @@ async function runTests (runType, t) {
   let ver = /^\d+\.\d+\.\d+$/
 
   t.test(`${mode} Normal`, async t => {
-    t.plan(7)
+    t.plan(9)
     let r
 
     r = await begin('version')
@@ -26,14 +26,16 @@ async function runTests (runType, t) {
     r = await begin('ver')
     t.match(r.stdout, fullVer, 'Got version')
     t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.status, 0, 'Exited 0')
 
     r = await begin('v')
     t.match(r.stdout, fullVer, 'Got version')
     t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.status, 0, 'Exited 0')
   })
 
   t.test(`${mode} JSON`, async t => {
-    t.plan(13)
+    t.plan(15)
     let r, json
 
     r = await begin('version --json')
@@ -50,6 +52,7 @@ async function runTests (runType, t) {
     t.match(json.version, ver, 'Got version')
     t.match(json.message, fullVer, 'Got version message')
     t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.status, 0, 'Exited 0')
 
     r = await begin('v --json')
     json = JSON.parse(r.stdout)
@@ -57,5 +60,6 @@ async function runTests (runType, t) {
     t.match(json.version, ver, 'Got version')
     t.match(json.message, fullVer, 'Got version message')
     t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.status, 0, 'Exited 0')
   })
 }

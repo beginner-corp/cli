@@ -17,7 +17,12 @@ async function action (params) {
     }
     return generator.action(params, utils)
   }
-  else throw Error('__help__')
+  else {
+    let err = Error('Please specify a resource type to create')
+    if (subcommand) err = Error(`Invalid resource type: ${subcommand}`)
+    err.type = '__help__'
+    throw err
+  }
 }
 
 module.exports = {

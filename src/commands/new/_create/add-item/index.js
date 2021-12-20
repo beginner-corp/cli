@@ -31,7 +31,6 @@ module.exports = async function addItem (params) {
     inventory = await _inventory({ rawArc: arc })
   }
   catch (err) {
-    if (err.ARC_ERRORS) err.message += err.ARC_ERRORS.errors.join(', ')
     return err
   }
 
