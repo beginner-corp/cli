@@ -6,7 +6,7 @@ module.exports = function error (params, utils) {
       en: {
         no_method: 'HTTP method not found, please run with -m or --method',
         invalid_method: `Invalid HTTP method, must be one of: ${backtickify(httpMethods)}`,
-        no_path: 'HTTP path is required',
+        no_path: 'HTTP path not found, please run with -p or --path',
         invalid_path: 'HTTP path must be a string',
         path_starts_with_slash: 'HTTP path must begin with `/`',
         invalid_runtime: `Function runtime must be one of: ${backtickify(runtimes)}`,

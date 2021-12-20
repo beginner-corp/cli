@@ -6,15 +6,7 @@ let sandbox = require('@architect/sandbox')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, run, tmp } = require(lib)
-let install = join(tmp, 'install')
-let newFolder = t => {
-  // Unlike *nix systems, Windows mysteriously kept file handles open (EBUSY) after completing fs mutations
-  // So for these tests, we'll just have to use random folders
-  let folder = install + '-' + `${Date.now()}`.substr(5)
-  if (existsSync(folder)) t.fail(`Found existing tmp folder: ${folder}`)
-  return folder
-}
+let { begin: _begin, newFolder, run } = require(lib)
 let filePath = folder => join(folder, 'hi.txt')
 
 test('Run update tests', async t => {
@@ -30,6 +22,7 @@ async function runTests (runType, t) {
   let upgradeVer = /10000\.0\.0/
   let didNotUpgrade = 'Begin already running the latest version, nice!'
   let contents = 'henlo!\n'
+  let failed = /Failed to check latest version/
 
   t.test(`${mode} Start Sandbox`, async t => {
     t.plan(1)
@@ -38,10 +31,10 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} Normal`, async t => {
-    t.plan(11)
+    t.plan(8)
     let file, folder, path, r
 
-    folder = newFolder(t)
+    folder = newFolder('install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-upgrade'
@@ -55,7 +48,7 @@ async function runTests (runType, t) {
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.status, 0, 'Exited 0')
 
-    folder = newFolder(t)
+    folder = newFolder('install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-ok'
@@ -64,8 +57,13 @@ async function runTests (runType, t) {
     t.equal(r.stdout, didNotUpgrade, `Got confirmation that upgrade wasn't necessary`)
     t.ok(r.stderr, 'Printed update info stderr')
     t.equal(r.status, 0, 'Exited 0')
+  })
 
-    folder = newFolder(t)
+  t.test(`${mode} Errors`, async t => {
+    t.plan(3)
+    let folder, path, r
+
+    folder = newFolder('install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/lolidk'
@@ -80,7 +78,7 @@ async function runTests (runType, t) {
     t.plan(10)
     let file, folder, json, path, r
 
-    folder = newFolder(t)
+    folder = newFolder('install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-upgrade'
@@ -96,7 +94,7 @@ async function runTests (runType, t) {
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.status, 0, 'Exited 0')
 
-    folder = newFolder(t)
+    folder = newFolder('install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-ok'
@@ -108,8 +106,20 @@ async function runTests (runType, t) {
     t.ok(r.stderr, 'Printed update info stderr')
     t.equal(r.status, 0, 'Exited 0')
 
-    // TODO fix/test error state; currently stderr stream is polluted by !json output in update
-    // process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/lolidk'
+    // TODO test --use flag
+  })
+
+  t.test(`${mode} Errors (JSON)`, async t => {
+    t.plan(4)
+    let json, r
+
+    process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/lolidk'
+    r = await begin('update --json')
+    json = JSON.parse(r.stdout)
+    t.equal(json.ok, false, 'Got ok: false')
+    t.match(json.error, failed, 'Errored on upgrade')
+    t.ok(r.stderr, 'Printed update info stderr')
+    t.equal(r.status, 1, 'Exited 1')
   })
 
   t.test(`${mode} Shut down sandbox`, async t => {

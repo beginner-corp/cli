@@ -48,9 +48,9 @@ module.exports = async function runCommand (params) {
         return
       }
       catch (err) {
-        if (err.message === '__help__' && help) {
-          err.message = `Invalid parameter: ${args._[1]}`
+        if (err.type === '__help__' && help) {
           printer(err)
+          if (args.json) return
           help = await getHelp()
           helper(params, help)
           return

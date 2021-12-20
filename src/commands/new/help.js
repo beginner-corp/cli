@@ -2,10 +2,10 @@ let lib = require('../../lib')
 let newHelp = () => ({
   en: {
     usage: [ 'new <type> <parameters>', '[options]' ],
-    description: 'Create a new HTTP route, async event, or scheduled event',
+    description: 'Create a new app, or resources for an existing app (such as an HTTP route)',
     contents: [
       {
-        header: 'Command arguments',
+        header: 'Types of resources',
         items: [],
       },
     ],
