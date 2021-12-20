@@ -16,11 +16,6 @@ function printer (args) {
     if (verbosity === 'verbose' && !(verbose || debug)) return
     if (verbosity === 'debug' && !debug) return
 
-    // Look for color-disabling env vars
-    let { BEGIN_NO_COLOR, NO_COLOR, TERM } = process.env
-    let isTTY = !!(process.stdout.isTTY)
-    let noColor = BEGIN_NO_COLOR || NO_COLOR || !isTTY || TERM === 'dumb'
-
     // JSON output is assumed to be for machines, not for userland (read: stderr)
     if (args.json && !verbosity) {
       let output = { ok: true }
@@ -37,7 +32,12 @@ function printer (args) {
       console.log(JSON.stringify(output, null, 2))
     }
     else if (!args.json && out) {
-      let format = output => (noColor || args['no-color']) ? stripAnsi(output) : output
+      // Look for color-disabling env vars, TTY state, flags, etc.
+      let { BEGIN_NO_COLOR, NO_COLOR, TERM } = process.env
+      let isTTY = !!(process.stdout.isTTY)
+      let noColor = BEGIN_NO_COLOR || NO_COLOR || !isTTY || TERM === 'dumb' || args['no-color']
+      let format = output => noColor ? stripAnsi(output) : output
+
       if (isError) {
         let c = require('chalk')
         console.error(format(`${c.bold.red('Error:')} ${out.message}`))
