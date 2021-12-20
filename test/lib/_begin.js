@@ -56,28 +56,28 @@ module.exports = {
       type: 'module',
       stdout: stdout.trim(),
       stderr: stderr.trim(),
-      status: process.exitCode
+      code: process.exitCode
     }
   },
   binary: async (t, args, dir, reuse) => {
     setup(t, dir, reuse)
     let opts = { cwd: dir || tmp, shell: true }
     let cmd = `${bin} ${args}`
-    let result, status
+    let result, code
     try {
       result = await exec(cmd, opts)
-      status = result.error?.code
+      code = result.error?.code
     }
     catch (error) {
       result = error
-      status = error?.code
+      code = error?.code
     }
     reset(t)
     return {
       type: 'binary',
       stdout: result.stdout?.toString()?.trim(),
       stderr: result.stderr?.toString()?.trim(),
-      status: status || 0,
+      code: code || 0,
     }
   },
 }

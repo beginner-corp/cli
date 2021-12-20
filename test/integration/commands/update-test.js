@@ -46,7 +46,7 @@ async function runTests (runType, t) {
     t.equal(r.stdout, upgraded, 'Got upgrade confirmation')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     folder = newFolder('install')
     path = filePath(folder)
@@ -56,7 +56,7 @@ async function runTests (runType, t) {
     if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     t.equal(r.stdout, didNotUpgrade, `Got confirmation that upgrade wasn't necessary`)
     t.ok(r.stderr, 'Printed update info stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} Errors`, async t => {
@@ -71,7 +71,7 @@ async function runTests (runType, t) {
     if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.ok(r.stderr, 'Printed error to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 
   t.test(`${mode} JSON`, async t => {
@@ -92,7 +92,7 @@ async function runTests (runType, t) {
     t.ok(json.message, 'Got message for upgrade confirmation')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     folder = newFolder('install')
     path = filePath(folder)
@@ -104,7 +104,7 @@ async function runTests (runType, t) {
     t.equal(json.ok, true, 'Got ok: true for upgrade confirmation')
     t.ok(json.message, 'Got message for upgrade confirmation')
     t.ok(r.stderr, 'Printed update info stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     // TODO test --use flag
   })
@@ -119,7 +119,7 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, failed, 'Errored on upgrade')
     t.ok(r.stderr, 'Printed update info stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 
   t.test(`${mode} Shut down sandbox`, async t => {

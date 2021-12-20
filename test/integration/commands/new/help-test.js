@@ -25,13 +25,13 @@ async function runTests (runType, t) {
     r = await begin('new help')
     t.match(r.stdout, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('new app help')
     t.match(r.stdout, newApp, 'Got subcommand help')
     t.match(r.stdout, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new help (errors)`, async t => {
@@ -42,13 +42,13 @@ async function runTests (runType, t) {
     t.match(r.stderr, noType, 'Did not find resource type arg')
     t.match(r.stderr, globalOptions, 'Got help')
     t.notOk(r.stdout, 'Did not print to stdout')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new foo')
     t.match(r.stderr, invalidType, 'Errored on invalid resource type arg')
     t.match(r.stderr, globalOptions, 'Got help')
     t.notOk(r.stdout, 'Did not print to stdout')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 
   t.test(`${mode} new help (JSON)`, async t => {
@@ -60,7 +60,7 @@ async function runTests (runType, t) {
     t.equal(json.ok, true, 'Got ok: true for help')
     t.match(json.message, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('new app help --json')
     json = JSON.parse(r.stdout)
@@ -68,7 +68,7 @@ async function runTests (runType, t) {
     t.match(json.message, newApp, 'Got subcommand help')
     t.match(json.message, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new help (errors / JSON)`, async t => {
@@ -80,13 +80,13 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, noType, 'Did not find resource type arg')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new foo --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidType, 'Errored on invalid resource type arg')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 }
