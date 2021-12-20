@@ -31,7 +31,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.js'), 'Lambda handler is JavaScript')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
     r = await begin('new app --runtime python', cwd)
@@ -45,7 +45,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new app (errors)`, async t => {
@@ -61,7 +61,7 @@ async function runTests (runType, t) {
     r = await begin('new app', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, appFound, 'Errored upon finding existing app in cwd')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 
   t.test(`${mode} new app (JSON)`, async t => {
@@ -80,7 +80,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.js'), 'Lambda handler is JavaScript')
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
     r = await begin('new app --runtime python --json', cwd)
@@ -94,7 +94,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new app (errors / JSON)`, async t => {
@@ -112,6 +112,6 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, appFound, 'Errored upon finding existing app in cwd')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 }

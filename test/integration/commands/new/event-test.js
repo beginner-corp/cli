@@ -40,7 +40,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.js'), 'Lambda handler is JavaScript')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('new event -n py --runtime python', cwd, true)
     i = await getInv(t, cwd)
@@ -51,7 +51,7 @@ async function runTests (runType, t) {
     t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new event (errors)`, async t => {
@@ -63,34 +63,34 @@ async function runTests (runType, t) {
     r = await begin('new event', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n 1', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameInvalid, 'Errored on invalid name')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n foo -r whatev', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidRuntime, 'Errored on invalid runtime')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin(`new event -n foo --src ${oob}`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     await begin('new app', cwd)
     await begin(`new event -n foo`, cwd, true)
     r = await begin(`new event -n foo`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, duplicateEvent, 'Errored on duplicate event')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 
   t.test(`${mode} new event (JSON)`, async t => {
@@ -113,7 +113,7 @@ async function runTests (runType, t) {
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('new event -n py --runtime python --json', cwd, true)
     i = await getInv(t, cwd)
@@ -125,7 +125,7 @@ async function runTests (runType, t) {
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new event (errors / JSON)`, async t => {
@@ -139,35 +139,35 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n 1 --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameInvalid, 'Errored on invalid name')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new event -n foo -r whatev --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidRuntime, 'Errored on invalid runtime')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     r = await begin(`new event -n foo --src ${oob} --json`, cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidSrcPath, 'Errored on invalid src path')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
 
     await begin('new app', cwd)
     await begin(`new event -n foo`, cwd, true)
@@ -176,6 +176,6 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, duplicateEvent, 'Errored on duplicate event')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 1, 'Exited 1')
+    t.equal(r.code, 1, 'Exited 1')
   })
 }

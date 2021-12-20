@@ -21,17 +21,17 @@ async function runTests (runType, t) {
     r = await begin('version')
     t.match(r.stdout, fullVer, 'Got version')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('ver')
     t.match(r.stdout, fullVer, 'Got version')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('v')
     t.match(r.stdout, fullVer, 'Got version')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} JSON`, async t => {
@@ -44,7 +44,7 @@ async function runTests (runType, t) {
     t.match(json.version, ver, 'Got version')
     t.match(json.message, fullVer, 'Got version message')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('ver --json')
     json = JSON.parse(r.stdout)
@@ -52,7 +52,7 @@ async function runTests (runType, t) {
     t.match(json.version, ver, 'Got version')
     t.match(json.message, fullVer, 'Got version message')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('v --json')
     json = JSON.parse(r.stdout)
@@ -60,6 +60,6 @@ async function runTests (runType, t) {
     t.match(json.version, ver, 'Got version')
     t.match(json.message, fullVer, 'Got version message')
     t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.status, 0, 'Exited 0')
+    t.equal(r.code, 0, 'Exited 0')
   })
 }
