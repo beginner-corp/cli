@@ -11,6 +11,7 @@ async function action (params) {
   let _https = require('https')
   let { join } = require('path')
   let { chmodSync, mkdirSync, writeFileSync } = require('fs')
+  let semver = require('semver')
   let zip = require('adm-zip')
 
   let { homedir } = require('os')
@@ -31,7 +32,9 @@ async function action (params) {
     let url = release.releases[platform].x64 // TODO: check for arm64 here
     let https = url.startsWith('https://') ? _https : _http
 
-    if (appVersion === version) {
+    let doNotUpdate = (channel === 'main' && appVersion === version) ||
+                      (channel === 'latest' && semver.gte(appVersion, version))
+    if (doNotUpdate) {
       return resolve('Begin already running the latest version, nice!')
     }
 
