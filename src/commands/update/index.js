@@ -2,8 +2,7 @@ let names = { en: [ 'update', 'upgrade' ] }
 let help = require('./help')
 
 async function action (params) {
-  let { appVersion, args } = params
-  let { BEGIN_INSTALL } = process.env
+  let { appVersion, args, cliDir } = params
   let plat = process.platform
   let isWin = plat.startsWith('win')
 
@@ -14,7 +13,6 @@ async function action (params) {
   let semver = require('semver')
   let zip = require('adm-zip')
 
-  let { homedir } = require('os')
   // TODO: add process.arch checks for arm64
 
   let versions = await getVersions()
@@ -62,16 +60,12 @@ async function action (params) {
         body = Buffer.concat(body)
         process.stderr.write(`Got ${mib(body.length)} MiB of ${target} MiB (${percent()}%)\n`)
 
-        let dest = join(homedir(), '.begin')
-        if (BEGIN_INSTALL) {
-          dest = BEGIN_INSTALL
-          mkdirSync(dest, { recursive: true })
-        }
+        mkdirSync(cliDir, { recursive: true })
         let exe = 0o755 // -rwxr-xr-x
         let Zip = new zip(body)
         for (let file of Zip.getEntries()) {
           let decompressed = Zip.readFile(file)
-          let filename = join(dest, file.entryName)
+          let filename = join(cliDir, file.entryName)
           writeFileSync(filename, decompressed)
           if (!isWin) {
             chmodSync(filename, exe)

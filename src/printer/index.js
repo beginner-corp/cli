@@ -39,8 +39,8 @@ function printer (args) {
       let format = output => noColor ? stripAnsi(output) : output
 
       if (isError) {
-        let c = require('chalk')
-        console.error(format(`${c.bold.red('Error:')} ${out.message}`))
+        let c = require('picocolors')
+        console.error(format(`${c.bold(c.red('Error:'))} ${out.message}`))
         if (args.debug) {
           let stack = getStack(out)
           console.error(format(stack))

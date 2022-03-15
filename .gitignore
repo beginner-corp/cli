@@ -1,8 +1,10 @@
 .nyc_output/
-scripts/package.json
 build
 commit
+client-id
+config.json
 coverage/
 node_modules/
 scratch/
+scripts/package.json
 test/tmp/

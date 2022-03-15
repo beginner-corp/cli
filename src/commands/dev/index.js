@@ -1,6 +1,6 @@
 let names = { en: [ 'dev', 'sandbox', 'start' ] }
 let help = require('./help')
-let c = require('chalk')
+let c = require('picocolors')
 
 async function action (params) {
   let { appVersion, args } = params
@@ -8,7 +8,7 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   let inventory = await _inventory()
   if (!inventory.inv._project.manifest) {
-    let message = `No Begin project found! To create one, run: ${c.white.bold('begin new app')}`
+    let message = `No Begin project found! To create one, run: ${c.white(c.bold('begin new app'))}`
     return Error(message)
   }
 
@@ -16,7 +16,7 @@ async function action (params) {
   let { debug, quiet, verbose } = args
   // TODO: output Sandbox start via printer
   let logLevel = debug ? 'debug' : undefined || verbose ? 'verbose' : undefined
-  console.error(c.blue.bold(`Begin dev server (${appVersion})`) + '\n')
+  console.error(c.blue(c.bold(`Begin dev server (${appVersion})`) + '\n'))
   await cli({
     disableBanner: true,
     inventory,
