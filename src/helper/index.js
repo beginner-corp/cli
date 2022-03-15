@@ -1,7 +1,7 @@
 let globals = require('./global-options')
 let formatItems = require('./format-items')
 let defaultHelp = require('../commands/help')
-let c = require('chalk')
+let c = require('picocolors')
 
 let indentSize = 2
 let indent = Array(indentSize + 1).join(' ')
@@ -15,24 +15,26 @@ module.exports = function helper (params, cmdHelp) {
   }
   cmdHelp = cmdHelp[lang]
   let { usage, description, aliases, examples } = cmdHelp
-  if (!args || !usage || !cmdHelp.contents) throw ReferenceError('Helper must receive args + usage + contents')
+  if (!args || !usage) throw ReferenceError('Helper must receive args + usage')
 
   // Command header
   // First array string is bold, everything else is normal
-  let help = br(1) + `${c.white.bold('begin ' + usage[0])} ${usage[1] ? usage[1] : ''}`
+  let help = br(1) + `${c.white(c.bold('begin ' + usage[0]))} ${usage[1] ? usage[1] : ''}`
   if (description) {
     help += br(1) + indent + description
   }
   if (aliases) {
-    help += br(1) + indent + `Alias: ${c.white.dim(aliases.join(', '))}`
+    help += br(1) + indent + `Alias: ${c.white(c.dim(aliases.join(', ')))}`
   }
 
   // Command options
-  let contents = Array.isArray(cmdHelp.contents) ? cmdHelp.contents : [ cmdHelp.contents ]
-  contents.forEach(block => {
-    let contentItems = formatItems(block.items, indent)
-    help += br(2) + `${c.dim(block.header + ':')}\n${contentItems}`
-  })
+  if (cmdHelp.contents) {
+    let contents = Array.isArray(cmdHelp.contents) ? cmdHelp.contents : [ cmdHelp.contents ]
+    contents.forEach(block => {
+      let contentItems = formatItems(block.items, indent)
+      help += br(2) + `${c.dim(block.header + ':')}\n${contentItems}`
+    })
+  }
 
   // Global options
   let globalOptions = formatItems(globals, indent)

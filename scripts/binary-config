@@ -38,10 +38,14 @@ if (DEPLOY === 'main') {
   let cmd = 'git rev-parse HEAD'
   let sha = execSync(cmd)
   let appVersion = `main-${sha.toString().substr(0, 7)}`
-  let file = join(__dirname, '..', 'commit')
-  writeFileSync(file, appVersion)
+  let commitFile = join(__dirname, '..', 'commit')
+  writeFileSync(commitFile, appVersion)
+  let clientID = process.env.BEGIN_CLI_CLIENT_ID
+  let clientIDFile = join(__dirname, '..', 'client-id')
+  writeFileSync(clientIDFile, clientID)
   config.bin.cli = '../src/_main.js'
   config.pkg.assets.push('../commit')
+  config.pkg.assets.push('../client-id')
 }
 
 let nodeVer = `node14`
