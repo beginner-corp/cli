@@ -18,6 +18,10 @@ let help = {
           description: 'Display help',
         },
         {
+          name: 'login',
+          description: 'Log in to Begin',
+        },
+        {
           name: 'update',
           description: 'Update Begin to the latest version',
         },
