@@ -1,13 +1,13 @@
 module.exports = {
-  name: 'app',
-  description: 'Initialize a new app',
+  name: 'project',
+  description: 'Initialize a new project',
   action: async function (params, utils) {
     let { args, inventory } = params
     let { create, runtimes, writeFile } = utils
     let error = require('./errors')(params, utils)
 
     let invalid = inventory.inv._project.manifest
-    if (invalid) return error('app_found')
+    if (invalid) return error('project_found')
 
     // Runtime (optional)
     let runtime = args.r || args.runtime
@@ -29,7 +29,7 @@ module.exports = {
     return {
       en: {
         contents: {
-          header: 'New app parameters',
+          header: 'New project parameters',
           items: [
             {
               name: '-r, --runtime',
@@ -40,12 +40,12 @@ module.exports = {
         },
         examples: [
           {
-            name: 'Create a new app (runs Node.js by default)',
-            example: 'begin new app',
+            name: 'Create a new project (runs Node.js by default)',
+            example: 'begin new project',
           },
           {
-            name: 'Create a new app running Python',
-            example: 'begin new app -r python',
+            name: 'Create a new project running Python',
+            example: 'begin new project -r python',
           },
         ]
       },

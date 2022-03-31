@@ -12,16 +12,16 @@ module.exports = {
 async function action (params) {
   let { appVersion, cliDir, clientID, printer } = params
   let { join } = require('path')
-  let { existsSync, readFileSync, writeFileSync } = require('fs')
+  let { existsSync, readFileSync } = require('fs')
+  let writeFile = require('../../lib').writeFile(params)
   let configFile = join(cliDir, 'config.json')
   let now = new Date().toISOString()
-  let domain = process.env.__BEGIN_TEST__ ? 'http://localhost:3333' : 'https://api.begin.com'
   let headers = { 'content-type': 'application/x-www-form-urlencoded' }
 
   let config
   function writeConfig () {
     if (!config) return
-    writeFileSync(configFile, JSON.stringify(config, null, 2))
+    writeFile(configFile, JSON.stringify(config, null, 2))
   }
 
   if (!existsSync(configFile)) {
@@ -36,6 +36,9 @@ async function action (params) {
   else {
     config = JSON.parse(readFileSync(configFile))
   }
+  let domain = process.env.__BEGIN_TEST__
+    ? 'http://localhost:3333'
+    : `https://${config.stagingAPI ? 'staging-' : ''}api.begin.com`
   let { access_token, device_code } = config
 
   // User is logged in

@@ -16,12 +16,12 @@ async function runTests (runType, t) {
   let newAppDir = 'new-app'
   let appFound = /Existing Begin app already found in this directory/
 
-  t.test(`${mode} new app - normal`, async t => {
+  t.test(`${mode} new project - normal`, async t => {
     t.plan(17)
     let cwd, i, lambda, r
 
     cwd = newFolder(newAppDir)
-    r = await begin('new app', cwd)
+    r = await begin('new project', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -34,7 +34,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
-    r = await begin('new app --runtime python', cwd)
+    r = await begin('new project --runtime python', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -54,11 +54,11 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new app', cwd)
+    r = await begin('new project', cwd)
     await getInv(t, cwd)
     t.pass('Project is valid')
     // Now error
-    r = await begin('new app', cwd, true)
+    r = await begin('new project', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, appFound, 'Errored upon finding existing app in cwd')
     t.equal(r.code, 1, 'Exited 1')
@@ -69,7 +69,7 @@ async function runTests (runType, t) {
     let cwd, i, json, lambda, r
 
     cwd = newFolder(newAppDir)
-    r = await begin('new app --json', cwd)
+    r = await begin('new project --json', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     json = JSON.parse(r.stdout)
@@ -83,7 +83,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
-    r = await begin('new app --runtime python --json', cwd)
+    r = await begin('new project --runtime python --json', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -103,11 +103,11 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new app', cwd)
+    r = await begin('new project', cwd)
     await getInv(t, cwd)
     t.pass('Project is valid')
     // Now error
-    r = await begin('new app --json', cwd, true)
+    r = await begin('new project --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, appFound, 'Errored upon finding existing app in cwd')

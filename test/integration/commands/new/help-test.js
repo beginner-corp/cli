@@ -15,7 +15,7 @@ async function runTests (runType, t) {
   let globalOptions = /Global options\:/
   let noType = /Please specify a resource type to create/
   let invalidType = /Invalid resource type: foo/
-  let newApp = /begin new app \[parameters\]/
+  let newApp = /begin new project \[parameters\]/
 
   // `new` is unusual in Begin commands in that it has subcommands, so test the subcommand help
   t.test(`${mode} new help`, async t => {
@@ -27,7 +27,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new app help')
+    r = await begin('new project help')
     t.match(r.stdout, newApp, 'Got subcommand help')
     t.match(r.stdout, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
@@ -62,7 +62,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new app help --json')
+    r = await begin('new project help --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true for help')
     t.match(json.message, newApp, 'Got subcommand help')

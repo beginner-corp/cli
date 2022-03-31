@@ -1,5 +1,5 @@
 let names = { en: [ 'new', 'gen', 'init' ] }
-let subcommands = [ 'app', 'http', 'event', 'scheduled' ]
+let subcommands = [ 'project', 'http', 'event', 'scheduled' ]
 let help = require('./help').bind({}, subcommands)
 
 async function action (params) {
