@@ -78,7 +78,7 @@ jobs:
       - name: Install
         run: npm i
 
-      - name: Deploy 'prod' build
+      - name: Deploy 'latest' (aka production) build
         if: startsWith(github.ref, 'refs/tags/v')
         run: npm run deploy
         env:
@@ -90,7 +90,7 @@ jobs:
           LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
-      - name: Deploy 'main' build
+      - name: Deploy 'main' (aka canary) build
         if: github.ref == 'refs/heads/main'
         run: npm run deploy
         env:
