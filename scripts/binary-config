@@ -20,6 +20,7 @@ let config = {
     // Don't manually include runtimes/deno.js in scripts, as it fails on pkg#997
     scripts: [
       // Begin stuff
+      '../src/commands/app/**/*.js',
       '../src/commands/new/generators/**/*.js',
       // Arc stuff
       '../node_modules/@architect/inventory/**/*.js',
