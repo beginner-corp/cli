@@ -1,8 +1,7 @@
-let lib = require('../../lib')
 let newHelp = () => ({
   en: {
     usage: [ 'new <type> <parameters>', '[options]' ],
-    description: 'Create a new app, or resources for an existing app (such as an HTTP route)',
+    description: 'Locally create a new project, or resources for an existing project (such as an HTTP route)',
     contents: [
       {
         header: 'Types of resources',
@@ -14,6 +13,7 @@ let newHelp = () => ({
 })
 
 module.exports = async function generateHelp (subcommands, params) {
+  let lib = require('../../lib')
   let { lang } = params
   let help = newHelp()
 

@@ -4,7 +4,7 @@ module.exports = function error (params, utils) {
     let { backtickify, runtimes } = utils
     let errors = {
       en: {
-        app_found: 'Existing Begin app already found in this directory',
+        project_found: 'Existing Begin app already found in this directory',
         invalid_runtime: `Function runtime must be one of: ${backtickify(runtimes)}`,
       }
     }

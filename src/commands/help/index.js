@@ -6,12 +6,16 @@ let help = {
       header: 'Commands',
       items: [
         {
+          name: 'app',
+          description: 'Manage and deploy Begin apps',
+        },
+        {
           name: 'dev',
           description: 'Start the local development server',
         },
         {
           name: 'new',
-          description: 'Create a new project or resource',
+          description: 'Locally create a new project or resource',
         },
         {
           name: 'help',
@@ -19,7 +23,7 @@ let help = {
         },
         {
           name: 'login',
-          description: 'Log in to Begin',
+          description: 'Log into Begin',
         },
         {
           name: 'update',

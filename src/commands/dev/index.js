@@ -4,15 +4,14 @@ let c = require('picocolors')
 
 async function action (params) {
   let { appVersion, args } = params
+  let { checkManifest } = require('../../lib')
 
   let _inventory = require('@architect/inventory')
   let inventory = await _inventory()
-  if (!inventory.inv._project.manifest) {
-    let message = `No Begin project found! To create one, run: ${c.white(c.bold('begin new app'))}`
-    return Error(message)
-  }
+  let manifestErr = checkManifest(inventory)
+  if (manifestErr) return manifestErr
 
-  let { cli } = require('@architect/sandbox')
+  let cli = require('@architect/sandbox/src/cli')
   let { debug, quiet, verbose } = args
   // TODO: output Sandbox start via printer
   let logLevel = debug ? 'debug' : undefined || verbose ? 'verbose' : undefined

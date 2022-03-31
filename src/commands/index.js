@@ -1,10 +1,11 @@
+let app = require('./app')
 let dev = require('./dev')
 let init = require('./new')
 let help = require('./help')
 let login = require('./login')
 let update = require('./update')
 let version = require('./version')
-let commands = [ dev, init, help, login, update, version ]
+let commands = [ app, dev, init, help, login, update, version ]
 
 let helper = require('../helper')
 
@@ -27,22 +28,21 @@ module.exports = async function runCommand (params) {
     `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows`
   )
 
+  let getHelp = async help => typeof help === 'function' ? help(params) : help
   for (let command of commands) {
     let { names, action, help } = command
     // Some help output is generated dynamically
-    let getHelp = async () => typeof help === 'function' ? help(params) : help
-    printer.debug(
-      'command\n' +
-      `  names: ${names[lang]?.join(', ')}\n` +
-      `  action: ${action ? true : false}\n` +
-      `  help: ${help ? Object.keys(help).join(', ') : false}`,
-    )
-    if (names[lang].includes(cmd) && args.help && help) {
-      help = await getHelp()
-      helper(params, help)
-      return
-    }
-    else if (names[lang].includes(cmd)) {
+    if (names[lang].includes(cmd)) {
+      printer.debug(
+        'command\n' +
+        `  names: ${names[lang]?.join(', ')}\n` +
+        `  action: ${action ? true : false}\n` +
+        `  help: ${help ? Object.keys(help).join(', ') : false}`,
+      )
+      if (args.help && help) {
+        helper(params, await getHelp(help))
+        return
+      }
       try {
         let result = await action(params)
         printer(result)
@@ -52,8 +52,7 @@ module.exports = async function runCommand (params) {
         if (err.type === '__help__' && help) {
           printer(err)
           if (args.json) return
-          help = await getHelp()
-          helper(params, help)
+          helper(params, await getHelp(help))
           return
         }
         else throw err

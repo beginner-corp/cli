@@ -60,9 +60,9 @@ test('Show help on a known command', async t => {
 
 test('Show help on a known subcommand', async t => {
   t.plan(1)
-  let args = getArgs('new app help')
+  let args = getArgs('new project help')
   await commands({ args, lang, printer })
-  t.ok(printed[0].includes('begin new app'), 'Ran help')
+  t.ok(printed[0].includes('begin new project'), 'Ran help')
   t.teardown(reset)
 })
 

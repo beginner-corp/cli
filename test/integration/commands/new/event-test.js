@@ -25,7 +25,7 @@ async function runTests (runType, t) {
     // t.plan(17)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new app', cwd)
+    await begin('new project', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -58,7 +58,7 @@ async function runTests (runType, t) {
     t.plan(18)
     let r
     let cwd = newFolder(newAppDir)
-    await begin('new app', cwd)
+    await begin('new project', cwd)
 
     r = await begin('new event', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -85,7 +85,7 @@ async function runTests (runType, t) {
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new app', cwd)
+    await begin('new project', cwd)
     await begin(`new event -n foo`, cwd, true)
     r = await begin(`new event -n foo`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -97,7 +97,7 @@ async function runTests (runType, t) {
     t.plan(17)
     let i, json, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new app', cwd)
+    await begin('new project', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -132,7 +132,7 @@ async function runTests (runType, t) {
     t.plan(24)
     let json, r
     let cwd = newFolder(newAppDir)
-    await begin('new app', cwd)
+    await begin('new project', cwd)
 
     r = await begin('new event --json', cwd, true)
     json = JSON.parse(r.stdout)
@@ -169,7 +169,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new app', cwd)
+    await begin('new project', cwd)
     await begin(`new event -n foo`, cwd, true)
     r = await begin(`new event -n foo --json`, cwd, true)
     json = JSON.parse(r.stdout)
