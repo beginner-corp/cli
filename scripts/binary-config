@@ -37,12 +37,19 @@ let config = {
 
 if (DEPLOY === 'main') {
   let cmd = 'git rev-parse HEAD'
-  let sha = execSync(cmd)
-  let appVersion = `main-${sha.toString().substr(0, 7)}`
+  let result = execSync(cmd)
+  if (!result) {
+    throw ReferenceError('Missing build sha')
+  }
+  let sha = result.toString().substr(0, 7)
+  let appVersion = `main-${sha}`
   let commitFile = join(__dirname, '..', 'commit')
   writeFileSync(commitFile, appVersion)
   let staging = process.env.BEGIN_CLI_CLIENT_ID_STAGING
   let production = process.env.BEGIN_CLI_CLIENT_ID_PRODUCTION
+  if (!staging || !production) {
+    throw ReferenceError('Missing staging and/or production client ID')
+  }
   let clientIDs = JSON.stringify({ staging, production })
   let clientIDFile = join(__dirname, '..', 'client-ids.json')
   writeFileSync(clientIDFile, clientIDs)

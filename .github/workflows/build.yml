@@ -85,7 +85,8 @@ jobs:
           DEPLOY: prod
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BEGIN_CLI_CLIENT_ID: ${{ secrets.BEGIN_CLI_CLIENT_ID }}
+          BEGIN_CLI_CLIENT_ID_STAGING: ${{ secrets.BEGIN_CLI_CLIENT_ID_STAGING }}
+          BEGIN_CLI_CLIENT_ID_PRODUCTION: ${{ secrets.BEGIN_CLI_CLIENT_ID_PRODUCTION }}
           CF_DISTRO: ${{ secrets.CF_DISTRO }}
           LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
@@ -97,7 +98,8 @@ jobs:
           DEPLOY: main
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          BEGIN_CLI_CLIENT_ID: ${{ secrets.BEGIN_CLI_CLIENT_ID }}
+          BEGIN_CLI_CLIENT_ID_STAGING: ${{ secrets.BEGIN_CLI_CLIENT_ID_STAGING }}
+          BEGIN_CLI_CLIENT_ID_PRODUCTION: ${{ secrets.BEGIN_CLI_CLIENT_ID_PRODUCTION }}
           CF_DISTRO: ${{ secrets.CF_DISTRO }}
           LATEST_API: ${{ secrets.LATEST_API }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
