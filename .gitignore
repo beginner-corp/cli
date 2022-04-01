@@ -1,7 +1,7 @@
 .nyc_output/
 build
 commit
-client-id
+client-ids.json
 config.json
 coverage/
 node_modules/

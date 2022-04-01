@@ -10,7 +10,7 @@ module.exports = {
 }
 
 async function action (params) {
-  let { appVersion, cliDir, clientID, printer } = params
+  let { appVersion, cliDir, clientIDs, printer } = params
   let { join } = require('path')
   let { existsSync, readFileSync } = require('fs')
   let writeFile = require('../../lib').writeFile(params)
@@ -36,6 +36,7 @@ async function action (params) {
   else {
     config = JSON.parse(readFileSync(configFile))
   }
+  let clientID = config.stagingAPI ? clientIDs.staging : clientIDs.production
   let domain = process.env.__BEGIN_TEST__
     ? 'http://localhost:3333'
     : `https://${config.stagingAPI ? 'staging-' : ''}api.begin.com`

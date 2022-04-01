@@ -7,7 +7,7 @@ let commands = require('./commands')
 let _printer = require('./printer')
 
 async function begin (params = {}) {
-  let { clientID, version } = params
+  let { clientIDs, version } = params
   let alias = {
     debug: 'd',
     help: 'h',
@@ -17,9 +17,9 @@ async function begin (params = {}) {
   let args = minimist(process.argv.slice(2), { alias })
   if (process.env.DEBUG) args.debug = true
   try {
-    if (!clientID) {
-      let clientIDFile = join(__dirname, '..', 'client-id')
-      if (existsSync(clientIDFile)) clientID = readFileSync(clientIDFile).toString().trim()
+    if (!clientIDs) {
+      let clientIDFile = join(__dirname, '..', 'client-ids.json')
+      if (existsSync(clientIDFile)) clientIDs = JSON.parse(readFileSync(clientIDFile))
     }
     if (!version) {
       let pkg = join(__dirname, '..', 'package.json')
@@ -29,7 +29,7 @@ async function begin (params = {}) {
     let lang = 'en' // This should / will be configurable
     let printer = _printer(args)
     let cliDir = process.env.BEGIN_INSTALL || join(homedir(), '.begin')
-    let params = { args, appVersion: version, cliDir, clientID, lang, printer }
+    let params = { args, appVersion: version, cliDir, clientIDs, lang, printer }
     await commands(params)
   }
   catch (err) {
