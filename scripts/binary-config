@@ -27,7 +27,7 @@ let config = {
       '../node_modules/dynalite/**/*.js',
     ],
     assets: [
-      '../node_modules/@architect/sandbox/src/invoke-lambda/runtimes/*',
+      '../node_modules/@architect/sandbox/src/invoke-lambda/exec/runtimes/*',
       '../package.json',
     ],
     targets: [],
