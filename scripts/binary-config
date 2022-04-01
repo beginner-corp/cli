@@ -48,7 +48,7 @@ if (DEPLOY === 'main') {
   writeFileSync(clientIDFile, clientIDs)
   config.bin.cli = '../src/_main.js'
   config.pkg.assets.push('../commit')
-  config.pkg.assets.push('../client-id')
+  config.pkg.assets.push('../client-ids.json')
 }
 
 let nodeVer = `node14`
