@@ -10,7 +10,7 @@ module.exports = {
 }
 
 async function action (params) {
-  let { appVersion, cliDir, clientIDs, printer } = params
+  let { appVersion, cliDir, clientIDs = {}, printer } = params
   let { join } = require('path')
   let { existsSync, readFileSync } = require('fs')
   let writeFile = require('../../lib').writeFile(params)
