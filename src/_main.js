@@ -6,8 +6,8 @@ let { join } = require('path')
 let commitFile = join(__dirname, '..', 'commit')
 let version = readFileSync(commitFile).toString()
 
-let clientIDFile = join(__dirname, '..', 'client-id')
-let clientID = readFileSync(clientIDFile).toString()
+let clientIDFile = join(__dirname, '..', 'client-ids.json')
+let clientIDs = JSON.parse(readFileSync(clientIDFile))
 
 let begin = require('./')
-begin({ version, clientID })
+begin({ version, clientIDs })

@@ -41,9 +41,11 @@ if (DEPLOY === 'main') {
   let appVersion = `main-${sha.toString().substr(0, 7)}`
   let commitFile = join(__dirname, '..', 'commit')
   writeFileSync(commitFile, appVersion)
-  let clientID = process.env.BEGIN_CLI_CLIENT_ID
-  let clientIDFile = join(__dirname, '..', 'client-id')
-  writeFileSync(clientIDFile, clientID)
+  let staging = process.env.BEGIN_CLI_CLIENT_ID_STAGING
+  let production = process.env.BEGIN_CLI_CLIENT_ID_PRODUCTION
+  let clientIDs = JSON.stringify({ staging, production })
+  let clientIDFile = join(__dirname, '..', 'client-ids.json')
+  writeFileSync(clientIDFile, clientIDs)
   config.bin.cli = '../src/_main.js'
   config.pkg.assets.push('../commit')
   config.pkg.assets.push('../client-id')
