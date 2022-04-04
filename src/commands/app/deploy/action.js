@@ -21,7 +21,7 @@ module.exports = async function action (params, utils) {
   // Rely on the passed environment name
   if (envName) {
     env = envs.find(({ name }) => name === envName)
-    if (!env) return ReferenceError(`Environment name ${envName} not found`)
+    if (!env) return ReferenceError(`Environment name ${envName} not found. You can create it by running: \`begin app create --env ${envName}\``)
   }
   // Manually select the environment to deploy
   else if (envs.length > 1) {
