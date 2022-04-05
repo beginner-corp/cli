@@ -14,6 +14,11 @@ module.exports = {
             description: `Environment name to deploy`,
             optional: true,
           },
+          {
+            name: '--status',
+            description: `Get the status of your last build`,
+            optional: true,
+          },
         ],
       },
       examples: [

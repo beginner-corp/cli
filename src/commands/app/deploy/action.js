@@ -1,5 +1,5 @@
 module.exports = async function action (params, utils) {
-  let { appID, envName, token } = params
+  let { args, appID, envName, token } = params
   let { createApp, promptOptions } = require('../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
@@ -41,8 +41,66 @@ module.exports = async function action (params, utils) {
   else env = envs[0]
 
   let { name, envID, url } = env
-  await client.env.deploy({ token, appID, envID, verbose: true })
 
-  // TODO get CF event ID and poll for deployment status
-  return `Deploying '${name}' to: ${url}`
+  // Just return the status of the latest build
+  if (args.status) {
+    let builds = await client.env.builds({ token, appID, envID })
+    if (!builds.length) return Error('No builds found for this environment')
+    return `Latest build status: ${builds[0].buildStatus}`
+  }
+
+  let build = await client.env.deploy({ token, appID, envID, verbose: true })
+  if (!build?.buildID) return ReferenceError('Deployment failed, did not receive buildID')
+
+  console.error(`Deploying '${name}'`)
+  console.error(`(You can now exit this process and check in on its status with \`begin app deploy --status\`)`)
+  await getUpdates({ token, appID, envID, buildID: build.buildID })
+  console.error(`Deployed '${name}' to: ${url}`)
 }
+
+// Recursive update getter
+async function getUpdates (params) {
+  let client = require('@begin/api')
+  return new Promise((resolve, reject) => {
+    let lastPrinted = false
+
+    async function check () {
+      let build = await client.env.build(params)
+      if (!build) {
+        reject('Build not found!')
+        return
+      }
+      let { buildStatus, error, timeout } = build
+      let updates = build.updates.sort(sortBuilds)
+      if (updates.length) {
+        let update = lastPrinted ? concatMsgs(updates.filter(({ ts }) => ts >= lastPrinted)) : concatMsgs(updates)
+        if (update) {
+          lastPrinted = new Date().toISOString()
+          process.stderr.write('\n' + update.trim())
+        }
+      }
+
+      // When resolving/rejecting, make sure to end with a trailing newline to reset the cursor position
+      if ([ 'building', 'deploying' ].includes(buildStatus)) {
+        setTimeout(check, 3000)
+      }
+      else if (error) {
+        let msg = Buffer.from(error.msg, 'base64').toString()
+        process.stderr.write('\n')
+        reject(Error(msg))
+      }
+      else if (timeout) {
+        process.stderr.write('\n')
+        reject('Build timed out')
+      }
+      else if ([ 'success', 'failed' ].includes(buildStatus)) {
+        process.stderr.write('\n')
+        resolve()
+      }
+    }
+    check()
+  })
+}
+
+let sortBuilds = ({ ts: ts1 }, { ts: ts2 }) => ts1 - ts2
+let concatMsgs = arr => arr.map(({ msg }) => Buffer.from(msg, 'base64').toString()).join('')
