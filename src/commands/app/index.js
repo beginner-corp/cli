@@ -1,5 +1,5 @@
-let names = { en: [ 'app' ] }
-let subcommands = [ 'create', 'deploy', 'destroy' ]
+let names = { en: [ 'app', 'apps' ] }
+let subcommands = [ 'create', 'deploy', 'destroy', 'list' ]
 let help = require('./help').bind({}, subcommands)
 
 async function action (params) {
@@ -19,7 +19,7 @@ async function action (params) {
     }
 
     let manifestErr = checkManifest(params.inventory)
-    if (manifestErr) return manifestErr
+    if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
 
     // See if the project manifest contains an app ID
     let { begin } = params.inventory.inv._project.arc
