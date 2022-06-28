@@ -35,7 +35,8 @@ const crud = {
     // Delete
     { src: './crud/index.js', target: 'src/http/post-<ROUTE_NAME>-000id-delete/index.mjs' },
     { src: './crud/delete-json.js', target: 'src/http/post-<ROUTE_NAME>-000id-delete/json.mjs' },
-    { src: './crud/delete-html.js', target: 'src/http/post-<ROUTE_NAME>-000id-delete/html.mjs' }, ],
+    { src: './crud/delete-html.js', target: 'src/http/post-<ROUTE_NAME>-000id-delete/html.mjs' },
+  ],
   dependencies: [
     '@architect/functions',
     'nanoid',

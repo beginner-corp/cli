@@ -1,13 +1,13 @@
 module.exports = {
   en: {
     usage: [ 'generate', '[options]' ],
-    description: 'Generates scaffolding code',
+    description: 'Generate new code',
     contents: {
       header: 'Generate options',
       items: [
         {
-          name: '--use',
-          description: 'Switch between `latest` (stable) and `main` (canary) channels',
+          name: 'scaffold',
+          description: 'Sets up a MVC for CRUD apps',
           optional: true,
         },
       ],

@@ -1,8 +1,8 @@
 let action = require('./action')
 
 module.exports = {
-  name: 'http',
-  description: 'Create a new HTTP route',
+  name: 'scaffold',
+  description: 'Create MVC code for CRUD apps',
   action,
   help: () => {
     let { backtickify, httpMethods, runtimes } = require('../../../../lib')

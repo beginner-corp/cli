@@ -1,11 +1,10 @@
-let names = { en: [ 'gen', 'generate', 'scaffold' ] }
+let names = { en: [ 'gen', 'generate' ] }
 let subcommands = [ 'scaffold' ]
 let help = require('./help')
 
 async function action (params) {
   let subcommand = params.args._[1]
   if (subcommands.includes(subcommand)) {
-    console.log(subcommand)
     let generator = require(`./generators/${subcommand}`)
     let _inventory = require('@architect/inventory')
     params.inventory = await _inventory()
