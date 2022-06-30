@@ -5,36 +5,29 @@ module.exports = {
   description: 'Create MVC code for CRUD apps',
   action,
   help: () => {
-    let { backtickify, httpMethods, runtimes } = require('../../../../lib')
     return {
       en: {
         contents: {
-          header: 'HTTP parameters',
+          header: 'JSON Schema parameters',
           items: [
             {
-              name: '-m, --method',
-              description: `HTTP method, one of: ${backtickify(httpMethods)}`,
+              name: '[model] [properties]',
+              description: `JSON Schema model name and properties`,
             },
             {
-              name: '-p, --path',
-              description: 'URI path, must start with `/`, can include catchalls and URL params',
-            },
-            {
-              name: '-s, --src',
-              description: 'Custom path to handler source',
-              optional: true,
-            },
-            {
-              name: '-r, --runtime',
-              description: `Runtime, one of: ${backtickify(runtimes)}`,
-              optional: true,
-            },
+              name: '-f, --file',
+              description: `Path to a JSON Schema file`,
+            }
           ],
         },
         examples: [
           {
-            name: 'Create a new HTTP route',
-            example: 'begin new http --method get --path /',
+            name: 'Scaffold a CRUD app',
+            example: 'begin generate scaffold Books title:string author:string publication_year:integer',
+          },
+          {
+            name: 'Scaffold a CRUD app from JSON Schema file',
+            example: 'begin generate scaffold --file person.schema.json',
           }
         ]
       },
