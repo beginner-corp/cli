@@ -3,7 +3,7 @@ let backtickify = a => a.map(s => '`' + s + '`').join(', ')
 function checkManifest (inventory) {
   let c = require('picocolors')
   if (!inventory.inv._project.manifest) {
-    let message = `No Begin project found! To create one, run: ${c.white(c.bold('begin new app'))}`
+    let message = `No Begin project found! To create one, run: ${c.white(c.bold('begin new project'))}`
     return Error(message)
   }
   let { parse } = require('path')
