@@ -3,10 +3,11 @@ let dev = require('./dev')
 let init = require('./new')
 let generate = require('./generate')
 let help = require('./help')
+let list = require('./list')
 let login = require('./login')
 let update = require('./update')
 let version = require('./version')
-let commands = [ app, dev, init, generate, help, login, update, version ]
+let commands = [ app, dev, init, generate, help, list, login, update, version ]
 
 let helper = require('../helper')
 
