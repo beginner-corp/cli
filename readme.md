@@ -18,6 +18,15 @@ By default Begin installs to `~/.begin/` (Mac, Linux) / `$Home\.begin\` (Windows
 
 Alternatively, you can install Begin with npm: `npm i -g @begin/cli`.
 
+## Running locally
+
+Before running `npm run build` to create a local binary be sure to set the following environment variables:
+
+```
+export DEPLOY=main
+export BEGIN_CLI_CLIENT_ID_STAGING=<your staging ID>
+export BEGIN_CLI_CLIENT_ID_PRODUCTION=<your production ID>
+```
 
 ## Usage
 
