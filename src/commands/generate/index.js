@@ -15,7 +15,6 @@ async function action (params) {
       ...lib,
       writeFile: lib.writeFile(params),
     }
-    console.log(generator.help())
     return generator.action(params, utils)
   }
   else {

@@ -11,15 +11,17 @@ function executeCmd (cmd) {
       console.log(`stderr: ${stderr}`)
       return
     }
-    console.log(`stdout: ${stdout}`)
+    // console.log(`stdout: ${stdout}`)
   })
 }
 
 function installDependencies (dependencies) {
-  const packageJson = JSON.parse(readFileSync('./package.json'))
-  const installedDeps = Object.keys(packageJson.dependencies)
-  const deps = dependencies.filter(dep => !installedDeps.includes(dep)).join(' ')
-  executeCmd(`npm i ${deps}`)
+  if (process.env.NODE_ENV !== 'testing') {
+    const packageJson = JSON.parse(readFileSync('./package.json'))
+    const installedDeps = Object.keys(packageJson.dependencies)
+    const deps = dependencies.filter(dep => !installedDeps.includes(dep)).join(' ')
+    executeCmd(`npm i ${deps} --silent`)
+  }
 }
 
 module.exports = {

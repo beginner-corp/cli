@@ -39,6 +39,11 @@ module.exports = async function action (params, utils) {
   const modelName = createModelName(id)
   const routeName = modelName.plural
 
+  if (params.inventory.get.http(`get /${routeName}`) !== undefined) {
+    let msg = `${routeName} already exist in the project`
+    throw Error(msg)
+  }
+
   // write JSON Schema file
   writeJsonSchema(modelName, schema)
 

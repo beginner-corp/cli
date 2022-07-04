@@ -11,7 +11,7 @@
   "scripts": {
     "test": "npm run lint && npm run coverage && npm run test:integration",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
-    "test:integration": "cross-env tape 'test/integration/**/*-test.js' | tap-arc",
+    "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
     "build": "cross-env scripts/binary-config && npx pkg scripts && rm -f commit",
