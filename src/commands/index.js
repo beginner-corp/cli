@@ -1,5 +1,6 @@
 let app = require('./app')
 let create = require('./create')
+let deploy = require('./deploy')
 let dev = require('./dev')
 let init = require('./new')
 let generate = require('./generate')
@@ -8,7 +9,7 @@ let list = require('./list')
 let login = require('./login')
 let update = require('./update')
 let version = require('./version')
-let commands = [ app, create, dev, init, generate, help, list, login, update, version ]
+let commands = [ app, create, deploy, dev, init, generate, help, list, login, update, version ]
 
 let helper = require('../helper')
 
