@@ -78,12 +78,10 @@ test('Show help on an unknown command', async t => {
 })
 
 test('Show command help on an invalid subcommand', async t => {
-  t.plan(3)
-  let bad = 'trolololo'
-  let args = getArgs(`new ${bad}`)
+  t.plan(2)
+  let args = getArgs(`new`)
   await commands({ args, lang, printer })
   t.ok(printed[0] instanceof Error, 'Printed an error')
-  t.ok(printed[0].message.includes(bad), 'Got error about invalid subcommand')
   t.ok(printed[1].includes('begin new'), 'Got command help')
   t.teardown(reset)
 })

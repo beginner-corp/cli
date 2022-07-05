@@ -14,7 +14,6 @@ async function runTests (runType, t) {
 
   let globalOptions = /Global options\:/
   let noType = /Please specify a resource type to create/
-  let invalidType = /Invalid resource type: foo/
   let newApp = /begin new project \[parameters\]/
 
   // `new` is unusual in Begin commands in that it has subcommands, so test the subcommand help
@@ -35,17 +34,11 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new help (errors)`, async t => {
-    t.plan(8)
+    t.plan(4)
     let r
 
     r = await begin('new')
     t.match(r.stderr, noType, 'Did not find resource type arg')
-    t.match(r.stderr, globalOptions, 'Got help')
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.equal(r.code, 1, 'Exited 1')
-
-    r = await begin('new foo')
-    t.match(r.stderr, invalidType, 'Errored on invalid resource type arg')
     t.match(r.stderr, globalOptions, 'Got help')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.equal(r.code, 1, 'Exited 1')
@@ -72,20 +65,13 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new help (errors / JSON)`, async t => {
-    t.plan(8)
+    t.plan(4)
     let r, json
 
     r = await begin('new --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, noType, 'Did not find resource type arg')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 1, 'Exited 1')
-
-    r = await begin('new foo --json')
-    json = JSON.parse(r.stdout)
-    t.equal(json.ok, false, 'Got ok: false')
-    t.match(json.error, invalidType, 'Errored on invalid resource type arg')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
   })
