@@ -1,4 +1,4 @@
-let names = { en: [ 'new', 'gen', 'init' ] }
+let names = { en: [ 'new', 'gen' ] }
 let subcommands = [ 'project', 'http', 'event', 'scheduled' ]
 let help = require('./help').bind({}, subcommands)
 
