@@ -24,7 +24,7 @@ module.exports = async function action (params, utils) {
   // Method (optional)
   let method = args.m || args.method
   if (!method || method === true) {
-    method = 'any'
+    method = 'get'
   }
   if (typeof method !== 'string' ||
       !httpMethods.includes(method.toLowerCase())) {
