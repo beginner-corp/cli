@@ -13,7 +13,6 @@ async function runTests (runType, t) {
   let mode = `[New / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
-  let methodNotFound = /HTTP method not found/
   let methodInvalid = /Invalid HTTP method/
   let pathNotFound = /HTTP path not found/
   let pathNotString = /HTTP path must be a string/
@@ -65,15 +64,15 @@ async function runTests (runType, t) {
 
     r = await begin('new http', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
-    t.match(r.stderr, methodNotFound, 'Errored on missing method')
+    t.match(r.stderr, pathNotFound, 'Errored on missing path')
     t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new http -m', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
-    t.match(r.stderr, methodNotFound, 'Errored on missing method')
+    t.match(r.stderr, pathNotFound, 'Errored on missing path')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new http -m foo', cwd, true)
+    r = await begin('new http -m foo -p /', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, methodInvalid, 'Errored on invalid method')
     t.equal(r.code, 1, 'Exited 1')
@@ -155,18 +154,18 @@ async function runTests (runType, t) {
     r = await begin('new http --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
-    t.match(json.error, methodNotFound, 'Errored on missing method')
+    t.match(json.error, pathNotFound, 'Errored on missing path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
     r = await begin('new http -m --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
-    t.match(json.error, methodNotFound, 'Errored on missing method')
+    t.match(json.error, pathNotFound, 'Errored on missing path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new http -m foo --json', cwd, true)
+    r = await begin('new http -m foo -p / --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, methodInvalid, 'Errored on invalid method')

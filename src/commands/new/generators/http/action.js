@@ -9,17 +9,6 @@ module.exports = async function action (params, utils) {
   let invalid = await validate.project()
   if (invalid) return invalid
 
-  // Method (required)
-  let method = args.m || args.method
-  if (!method || method === true) {
-    return error('no_method')
-  }
-  if (typeof method !== 'string' ||
-      !httpMethods.includes(method.toLowerCase())) {
-    return error('invalid_method')
-  }
-  method = method.toLowerCase()
-
   // Path (required)
   let path = args.p || args.path
   if (!path || path === true) {
@@ -31,6 +20,17 @@ module.exports = async function action (params, utils) {
   if (!path.startsWith('/')) {
     return error('path_starts_with_slash')
   }
+
+  // Method (optional)
+  let method = args.m || args.method
+  if (!method || method === true) {
+    method = 'any'
+  }
+  if (typeof method !== 'string' ||
+      !httpMethods.includes(method.toLowerCase())) {
+    return error('invalid_method')
+  }
+  method = method.toLowerCase()
 
   // Runtime (optional)
   let runtime = args.r || args.runtime

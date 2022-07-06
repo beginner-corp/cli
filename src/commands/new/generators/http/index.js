@@ -12,12 +12,13 @@ module.exports = {
           header: 'HTTP parameters',
           items: [
             {
-              name: '-m, --method',
-              description: `HTTP method, one of: ${backtickify(httpMethods)}`,
-            },
-            {
               name: '-p, --path',
               description: 'URI path, must start with `/`, can include catchalls and URL params',
+            },
+            {
+              name: '-m, --method',
+              description: `HTTP method, one of: ${backtickify(httpMethods)}`,
+              optional: true,
             },
             {
               name: '-s, --src',
