@@ -1,0 +1,34 @@
+let copy = {
+  en: {
+    view_docs: 'View documentation at: https://docs.begin.com',
+  }
+}
+
+let deno = lang => `// ${copy[lang].view_docs}
+export async function handler (event: object) {
+  console.log(JSON.stringify(event, null, 2))
+  return
+}
+`
+
+let node = lang => `// ${copy[lang].view_docs}
+exports.handler = async function scheduled (event) {
+  console.log(JSON.stringify(event, null, 2))
+  return
+}
+`
+
+let ruby = lang => `# ${copy[lang].view_docs}
+def handler(event)
+  puts event
+  true
+end
+`
+
+let python = lang => `# ${copy[lang].view_docs}
+def handler(event, context):
+  print(event)
+  return True
+`
+
+module.exports = { node, deno, ruby, python }
