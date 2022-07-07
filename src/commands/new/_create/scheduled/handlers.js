@@ -12,7 +12,7 @@ export async function handler (event: object) {
 `
 
 let node = lang => `// ${copy[lang].view_docs}
-exports.handler = async function scheduled (event) {
+export async function handler (event) {
   console.log(JSON.stringify(event, null, 2))
   return
 }

@@ -59,10 +59,16 @@ module.exports = async function addItem (params) {
   // Write new Arc file
   writeFile(_project.manifest, arc)
 
+  // Whelp this is a huge hack to force ESM
+  if (handlerFile.endsWith('.js')) {
+    handlerFile = `${handlerFile.slice(0, -2)}mjs`
+  }
+
   // Write the function handler
   let handler = typeof handlers[runtime] === 'function'
     ? handlers[runtime](lang, getRelativeCwd(handlerFile))
     : handlers[runtime]
+
   writeFile(handlerFile, handler)
 
   // If not the default runtime, write a config.arc file

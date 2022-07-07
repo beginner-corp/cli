@@ -58,7 +58,7 @@ let deno = (lang, handlerFile) => `export async function handler (event: object)
   };
 }`
 
-let node = (lang, handlerFile) => `exports.handler = async function http (req) {
+let node = (lang, handlerFile) => `export async function handler (req) {
   return {
     statusCode: 200,
     headers: {
