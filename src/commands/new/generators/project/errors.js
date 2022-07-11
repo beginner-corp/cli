@@ -4,7 +4,7 @@ module.exports = function error (params, utils) {
     let { backtickify, runtimes } = utils
     let errors = {
       en: {
-        no_path: 'Project name not found, please run with -n or --name',
+        no_path: 'Project path not found, please run with -p or --path',
         folder_creation: 'Unable to create project folder',
         project_found: 'Existing Begin app already found in this directory',
         invalid_appname: `Invalid app name`,
