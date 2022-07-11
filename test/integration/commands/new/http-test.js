@@ -27,7 +27,7 @@ async function runTests (runType, t) {
     t.plan(33)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -84,7 +84,7 @@ async function runTests (runType, t) {
     t.plan(27)
     let r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
 
     r = await begin('new http', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -126,7 +126,7 @@ async function runTests (runType, t) {
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     await begin(`new http -m get -p /foo`, cwd, true)
     r = await begin(`new http -m get -p /foo`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -138,7 +138,7 @@ async function runTests (runType, t) {
     t.plan(33)
     let i, json, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -199,7 +199,7 @@ async function runTests (runType, t) {
     t.plan(36)
     let json, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
 
     r = await begin('new http --json', cwd, true)
     json = JSON.parse(r.stdout)
@@ -257,7 +257,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     await begin(`new http -m get -p /foo --json`, cwd, true)
     r = await begin(`new http -m get -p /foo --json`, cwd, true)
     json = JSON.parse(r.stdout)

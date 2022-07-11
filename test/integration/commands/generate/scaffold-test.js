@@ -20,7 +20,7 @@ async function runTests (runType, t) {
     t.plan(25)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -64,7 +64,7 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project', cwd)
+    r = await begin('new project -p .', cwd)
     r = await begin('new http -m get -p /books', cwd, true)
     await getInv(t, cwd)
     t.pass('Project is valid')
@@ -79,7 +79,7 @@ async function runTests (runType, t) {
     t.plan(24)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -122,7 +122,7 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project', cwd)
+    r = await begin('new project -p .', cwd)
     r = await begin('new http -m get -p /books', cwd, true)
     await getInv(t, cwd)
     t.pass('Project is valid')

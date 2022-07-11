@@ -21,7 +21,7 @@ async function runTests (runType, t) {
     let cwd, i, lambda, r
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project', cwd)
+    r = await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -34,7 +34,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project --runtime python', cwd)
+    r = await begin('new project --runtime python -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -53,14 +53,13 @@ async function runTests (runType, t) {
     let cwd, i, lambda, r
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project --name test-app', cwd)
+    r = await begin('new project --name test-app -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.app, 'test-app', 'Correct app name')
     t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
     lambda = i.get.http('get /*')
-    console.log(lambda)
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -68,7 +67,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project --name test-app-python --runtime python', cwd)
+    r = await begin('new project --name test-app-python --runtime python -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -89,11 +88,11 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project', cwd)
+    r = await begin('new project -p .', cwd)
     await getInv(t, cwd)
     t.pass('Project is valid')
     // Now error
-    r = await begin('new project', cwd, true)
+    r = await begin('new project -p .', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, appFound, 'Errored upon finding existing app in cwd')
     t.equal(r.code, 1, 'Exited 1')
@@ -104,7 +103,7 @@ async function runTests (runType, t) {
     let cwd, i, json, lambda, r
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project --json', cwd)
+    r = await begin('new project --json -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     json = JSON.parse(r.stdout)
@@ -118,7 +117,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     cwd = newFolder(newAppDir)
-    r = await begin('new project --runtime python --json', cwd)
+    r = await begin('new project --runtime python --json -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -138,11 +137,11 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project', cwd)
+    r = await begin('new project -p .', cwd)
     await getInv(t, cwd)
     t.pass('Project is valid')
     // Now error
-    r = await begin('new project --json', cwd, true)
+    r = await begin('new project --json -p .', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, appFound, 'Errored upon finding existing app in cwd')

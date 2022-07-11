@@ -29,7 +29,7 @@ async function runTests (runType, t) {
     t.plan(17)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -61,7 +61,7 @@ async function runTests (runType, t) {
     t.plan(27)
     let r
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
 
     r = await begin('new scheduled', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -103,7 +103,7 @@ async function runTests (runType, t) {
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     await begin(`new scheduled -n foo -r "1 day"`, cwd, true)
     r = await begin(`new scheduled -n foo -r "1 day"`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
@@ -115,7 +115,7 @@ async function runTests (runType, t) {
     t.plan(17)
     let i, lambda, r, json
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
@@ -149,7 +149,7 @@ async function runTests (runType, t) {
     t.plan(36)
     let r, json
     let cwd = newFolder(newAppDir)
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
 
     r = await begin('new scheduled --json', cwd, true)
     json = JSON.parse(r.stdout)
@@ -207,7 +207,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project', cwd)
+    await begin('new project -p .', cwd)
     await begin(`new scheduled -n foo -r "1 day" --json`, cwd, true)
     r = await begin(`new scheduled -n foo -r "1 day" --json`, cwd, true)
     json = JSON.parse(r.stdout)

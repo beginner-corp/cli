@@ -14,7 +14,7 @@ async function runTests (runType, t) {
 
   let globalOptions = /Global options\:/
   let noType = /Please specify a resource type to create/
-  let newApp = /begin new project \[parameters\]/
+  let newApp = /begin new project \<parameters\> \[options\]/
 
   // `new` is unusual in Begin commands in that it has subcommands, so test the subcommand help
   t.test(`${mode} new help`, async t => {
