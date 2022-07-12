@@ -1,0 +1,5 @@
+.begin
+.env
+.DS_Store
+node_modules
+public/static.json
