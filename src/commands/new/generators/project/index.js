@@ -1,15 +1,15 @@
 let { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
-let { isAbsolute, join, normalize, dirname } = require('path')
+let { join, dirname } = require('path')
 
 /** helper to safely write */
 function writes (filePath, body) {
-  let fileDir = dirname(filePath) 
+  let fileDir = dirname(filePath)
   if (!existsSync(fileDir)) {
-    mkdirSync(fileDir, { recursive: true });
-  } 
+    mkdirSync(fileDir, { recursive: true })
+  }
   if (!existsSync(filePath)) {
     writeFileSync(filePath, body)
-  } 
+  }
 }
 
 module.exports = {
@@ -17,19 +17,13 @@ module.exports = {
   description: 'Initialize a new project',
   action: async function ({ args, inventory }) {
 
-    // ensure _ === ['project', 'new']
-    if (args._.length > 2) {
-      return Error('Unknown params: ' + args._.slice(2, args._.length).join(','))
-    }
-
-    // check for existing manifest in current directory
     if (inventory.inv._project.manifest) {
       return Error('Existing Begin app already found in this directory')
     }
 
     // ensure --path
-    let path = args.path || args.p 
-    if (!path) 
+    let path = args.path || args.p
+    if (!path)
       return Error('Missing --path flag is required')
 
     // valid name (optional)
@@ -52,7 +46,7 @@ module.exports = {
     let pathToFavicon = join(__dirname, '_favicon.svg')
     let pathToPkg = join(__dirname, '_pkg.json')
     let pathToIgnore = join(__dirname, '_ignore.txt')
-   
+
     // load code strings
     let catchAll = readFileSync(pathToCatchAll).toString()
     let head = readFileSync(pathToHead).toString()
@@ -82,7 +76,7 @@ module.exports = {
       'package.json': pkg,
       '.gitignore': ignore,
       '.arc': `@app
-${ name }
+${name}
 
 @static
 fingerprint true
@@ -111,7 +105,7 @@ store 'node_modules/@enhance/store'`
     console.log('full path to new project: ' + join(process.cwd(), path))
     console.log('to work locally `cd ' + path + ' && npm install && npm start`')
   },
-  help: function (params) {
+  help () {
     return {
       en: {
         contents: {
@@ -120,11 +114,6 @@ store 'node_modules/@enhance/store'`
             {
               name: '-n, --name',
               description: 'Project name, must be: [a-z0-9-_]',
-              optional: true,
-            },
-            {
-              name: '-r, --runtime',
-              description: `Runtime, one of: ${backtickify(runtimes)}`,
               optional: true,
             },
             {
