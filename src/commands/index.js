@@ -3,6 +3,7 @@ let create = require('./create')
 let deploy = require('./deploy')
 let destroy = require('./destroy')
 let dev = require('./dev')
+let envar = require('./env')
 let init = require('./init')
 let newResource = require('./new')
 let generate = require('./generate')
@@ -11,7 +12,7 @@ let list = require('./list')
 let login = require('./login')
 let update = require('./update')
 let version = require('./version')
-let commands = [ app, create, deploy, destroy, dev, generate, help, init, list, login, newResource, update, version ]
+let commands = [ app, create, deploy, destroy, dev, envar, generate, help, init, list, login, newResource, update, version ]
 
 let helper = require('../helper')
 
