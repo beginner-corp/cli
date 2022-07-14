@@ -10,11 +10,6 @@ module.exports = {
         header: 'Delete parameters',
         items: [
           {
-            name: '-a, --appid',
-            description: `App to delete the variable from`,
-            optional: false,
-          },
-          {
             name: '-e, --env',
             description: `Environment to delete the variable from`,
             optional: false,

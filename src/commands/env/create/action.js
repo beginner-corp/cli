@@ -1,14 +1,8 @@
 module.exports = async function action (params, utils) {
-  let { args, token } = params
+  let { appID, args, token } = params
   let client = require('@begin/api')
   let error = require('../errors')(params, utils)
   let errors = []
-
-  // App ID (required)
-  let id = args.a || args.appid
-  if (!id || id === true) {
-    errors.push('no_appid')
-  }
 
   // Environment (required)
   let env = args.e || args.env
@@ -35,5 +29,13 @@ module.exports = async function action (params, utils) {
   let vars = {}
   vars[key] = value
 
-  await client.env.vars.add({ token, appID: id, envID: env, vars } )
+  try {
+    let { name, environments } = await client.find({ token, appID })
+    let environment = environments.find(item => item.envID === env)
+    await client.env.vars.add({ token, appID, envID: env, vars } )
+    console.log(`Successfully created environment variable ${key} in '${name}' (app ID: ${appID})' '${environment.name}' (env ID: ${env})`)
+  }
+  catch (err) {
+    return error([ 'create_fail' ])
+  }
 }

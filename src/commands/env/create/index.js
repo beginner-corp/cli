@@ -10,11 +10,6 @@ module.exports = {
         header: 'Create parameters',
         items: [
           {
-            name: '-a, --appid',
-            description: `App to create the variable in`,
-            optional: false,
-          },
-          {
             name: '-e, --env',
             description: `Environment to create the variable in`,
             optional: false,

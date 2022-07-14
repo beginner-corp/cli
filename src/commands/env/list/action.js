@@ -1,22 +1,16 @@
 module.exports = async function action (params, utils) {
-  let { args, token } = params
+  let { appID, token } = params
   let client = require('@begin/api')
   let error = require('../errors')(params, utils)
 
-  // App ID (required)
-  let id = args.a || args.appid
-  if (!id || id === true) {
-    return error([ 'no_appid' ])
-  }
-
   let app = null
   try {
-    app = await client.find({ token, appID: id })
+    app = await client.find({ token, appID })
   }
   catch (err) {
     return error([ 'no_appid_found' ])
   }
-  let  { appID, environments, name } = app
+  let  { environments, name } = app
 
   let item = '  ├──'
   let last = '  └──'
@@ -39,7 +33,7 @@ module.exports = async function action (params, utils) {
         let lastVar = keys.length - 1
         keys.forEach((key, i) => {
           let draw = lastVar === i ? last : item
-          output.push(`  ${draw} '${key}' '${vars[key]}'`)
+          output.push(`  ${draw} ${key}=${vars[key]}`)
         })
       }
     })
