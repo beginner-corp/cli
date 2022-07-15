@@ -3,7 +3,7 @@ let cwd = process.cwd()
 
 module.exports = async function action (params, utils) {
   let { args } = params
-  let { create, validate, httpMethods, runtimes } = utils
+  let { create, validate, httpMethods } = utils
   let error = require('./errors')(params, utils)
 
   let invalid = await validate.project()
@@ -32,17 +32,11 @@ module.exports = async function action (params, utils) {
   }
   method = method.toLowerCase()
 
-  // Runtime (optional)
-  let runtime = args.r || args.runtime
-  if (runtime && !runtimes.includes(runtime?.toLowerCase())) {
-    return error('invalid_runtime')
-  }
-
   // Source dir (optional)
   let src = args.s || args.src
   if (src && !resolve(src).startsWith(cwd)) {
     return error('src_must_be_in_project')
   }
 
-  return create.http({ method, path, runtime, src })
+  return create.http({ method, path, runtime: 'node', src })
 }

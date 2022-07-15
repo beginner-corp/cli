@@ -15,14 +15,13 @@ async function runTests (runType, t) {
 
   let nameNotFound = /Event name not found/
   let nameInvalid = /Invalid event name/
-  let invalidRuntime = /Function runtime must be one of/
   let invalidSrcPath = /Function source path must be within your project/
   let duplicateEvent = /Duplicate @events item/
   let newAppDir = 'new-event'
   let oob = join(process.cwd(), '..', 'whatev')
 
   t.test(`${mode} new event`, async t => {
-    // t.plan(17)
+    t.plan(10)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -41,21 +40,10 @@ async function runTests (runType, t) {
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
-
-    r = await begin('new event -n py --runtime python', cwd, true)
-    i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
-    lambda = i.get.events('py')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(existsSync(lambda.configFile), 'Wrote Lambda config')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new event (errors)`, async t => {
-    t.plan(18)
+    t.plan(15)
     let r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -75,11 +63,6 @@ async function runTests (runType, t) {
     t.match(r.stderr, nameInvalid, 'Errored on invalid name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new event -n foo -r whatev', cwd, true)
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.match(r.stderr, invalidRuntime, 'Errored on invalid runtime')
-    t.equal(r.code, 1, 'Exited 1')
-
     r = await begin(`new event -n foo --src ${oob}`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
@@ -94,7 +77,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new event (JSON)`, async t => {
-    t.plan(17)
+    t.plan(10)
     let i, json, lambda, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -114,22 +97,10 @@ async function runTests (runType, t) {
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
-
-    r = await begin('new event -n py --runtime python --json', cwd, true)
-    i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
-    lambda = i.get.events('py')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(existsSync(lambda.configFile), 'Wrote Lambda config')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
-    json = JSON.parse(r.stdout)
-    t.equal(json.ok, true, 'Got ok: true')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new event (errors / JSON)`, async t => {
-    t.plan(24)
+    t.plan(20)
     let json, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -152,13 +123,6 @@ async function runTests (runType, t) {
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameInvalid, 'Errored on invalid name')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 1, 'Exited 1')
-
-    r = await begin('new event -n foo -r whatev --json', cwd, true)
-    json = JSON.parse(r.stdout)
-    t.equal(json.ok, false, 'Got ok: false')
-    t.match(json.error, invalidRuntime, 'Errored on invalid runtime')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 

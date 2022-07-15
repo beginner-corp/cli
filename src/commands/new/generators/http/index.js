@@ -5,7 +5,7 @@ module.exports = {
   description: 'Create a new HTTP route',
   action,
   help: () => {
-    let { backtickify, httpMethods, runtimes } = require('../../../../lib')
+    let { backtickify, httpMethods } = require('../../../../lib')
     return {
       en: {
         contents: {
@@ -23,11 +23,6 @@ module.exports = {
             {
               name: '-s, --src',
               description: 'Custom path to handler source',
-              optional: true,
-            },
-            {
-              name: '-r, --runtime',
-              description: `Runtime, one of: ${backtickify(runtimes)}`,
               optional: true,
             },
           ],

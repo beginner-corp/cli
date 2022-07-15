@@ -17,14 +17,13 @@ async function runTests (runType, t) {
   let pathNotFound = /HTTP path not found/
   let pathNotString = /HTTP path must be a string/
   let pathStartsWithSlash = /HTTP path must begin with `\/`/
-  let invalidRuntime = /Function runtime must be one of/
   let invalidSrcPath = /Function source path must be within your project/
   let duplicateRoute = /Duplicate @http routes item/
   let newAppDir = 'new-http'
   let oob = join(process.cwd(), '..', 'whatev')
 
   t.test(`${mode} new http`, async t => {
-    t.plan(33)
+    t.plan(26)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -44,20 +43,9 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new http -m get -p /py --runtime python', cwd, true)
-    i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
-    lambda = i.get.http('get /py')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(existsSync(lambda.configFile), 'Wrote Lambda config')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
-
     r = await begin('new http -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -69,7 +57,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -m PUT -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has five Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -81,7 +69,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new http (errors)`, async t => {
-    t.plan(27)
+    t.plan(24)
     let r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -116,11 +104,6 @@ async function runTests (runType, t) {
     t.match(r.stderr, pathStartsWithSlash, 'Errored on path missing slash')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new http -m get -p / -r whatev', cwd, true)
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.match(r.stderr, invalidRuntime, 'Errored on invalid runtime')
-    t.equal(r.code, 1, 'Exited 1')
-
     r = await begin(`new http -m get -p / --src ${oob}`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
@@ -135,7 +118,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new http (JSON)`, async t => {
-    t.plan(33)
+    t.plan(26)
     let i, json, lambda, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -156,21 +139,9 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new http -m get -p /py --runtime python --json', cwd, true)
-    i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
-    lambda = i.get.http('get /py')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(existsSync(lambda.configFile), 'Wrote Lambda config')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
-    json = JSON.parse(r.stdout)
-    t.equal(json.ok, true, 'Got ok: true')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
-
     r = await begin('new http -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -183,7 +154,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -m PUT -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has five Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -196,7 +167,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new http (errors / JSON)`, async t => {
-    t.plan(36)
+    t.plan(32)
     let json, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -240,13 +211,6 @@ async function runTests (runType, t) {
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathStartsWithSlash, 'Errored on path missing slash')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 1, 'Exited 1')
-
-    r = await begin('new http -m get -p / -r whatev --json', cwd, true)
-    json = JSON.parse(r.stdout)
-    t.equal(json.ok, false, 'Got ok: false')
-    t.match(json.error, invalidRuntime, 'Errored on invalid runtime')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 

@@ -14,11 +14,11 @@ module.exports = {
             description: 'Event name, must be: [a-z0-9-_]',
           },
           {
-            name: '-r --rate',
+            name: '-r, --rate',
             description: 'Invocation frequency of the event by rate expression',
           },
           {
-            name: '-c --cron',
+            name: '-c, --cron',
             description: 'Invocation frequency of the event by cron expression',
           },
           {

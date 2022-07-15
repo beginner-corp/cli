@@ -17,7 +17,7 @@ async function runTests (runType, t) {
   let appFound = /Existing Begin app already found in this directory/
 
   t.test(`${mode} new project - normal`, async t => {
-    t.plan(17)
+    t.plan(8)
     let cwd, i, lambda, r
 
     cwd = newFolder(newAppDir)
@@ -32,24 +32,10 @@ async function runTests (runType, t) {
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
-
-    cwd = newFolder(newAppDir)
-    r = await begin('new project --runtime python -p .', cwd)
-    i = await getInv(t, cwd)
-    t.pass('Project is valid')
-    t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
-    lambda = i.get.http('get /*')
-    t.equal(lambda.config.runtimeAlias, 'python', 'Lambda is configured with Python')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
   })
 
   t.test(`${mode} new project - with app name`, async t => {
-    t.plan(19)
+    t.plan(9)
     let cwd, i, lambda, r
 
     cwd = newFolder(newAppDir)
@@ -62,21 +48,6 @@ async function runTests (runType, t) {
     lambda = i.get.http('get /*')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
-    t.notOk(r.stdout, 'Did not print to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
-
-    cwd = newFolder(newAppDir)
-    r = await begin('new project --name test-app-python --runtime python -p .', cwd)
-    i = await getInv(t, cwd)
-    t.pass('Project is valid')
-    t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.app, 'test-app-python', 'Correct app name')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
-    lambda = i.get.http('get /*')
-    t.equal(lambda.config.runtimeAlias, 'python', 'Lambda is configured with Python')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
@@ -99,7 +70,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} new app (JSON)`, async t => {
-    t.plan(17)
+    t.plan(8)
     let cwd, i, json, lambda, r
 
     cwd = newFolder(newAppDir)
@@ -112,20 +83,6 @@ async function runTests (runType, t) {
     lambda = i.get.http('get /*')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
-    t.equal(json.ok, true, 'Got ok: true')
-    t.notOk(r.stderr, 'Did not print to stderr')
-    t.equal(r.code, 0, 'Exited 0')
-
-    cwd = newFolder(newAppDir)
-    r = await begin('new project --runtime python --json -p .', cwd)
-    i = await getInv(t, cwd)
-    t.pass('Project is valid')
-    t.equal(i.inv._project.manifest, join(cwd, 'app.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
-    lambda = i.get.http('get /*')
-    t.equal(lambda.config.runtimeAlias, 'python', 'Lambda is configured with Python')
-    t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
-    t.ok(lambda.handlerFile.endsWith('.py'), 'Lambda handler is Python')
     t.equal(json.ok, true, 'Got ok: true')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
