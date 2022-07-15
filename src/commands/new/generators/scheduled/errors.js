@@ -12,6 +12,6 @@ module.exports = function error (params) {
         src_must_be_in_project: 'Function source path must be within your project',
       }
     }
-    return Error(errors[lang][err])
+    return Error(err.map(error => errors[lang][error]).join('\n'))
   }
 }
