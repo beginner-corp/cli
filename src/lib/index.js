@@ -7,9 +7,9 @@ function checkManifest (inventory) {
     return Error(message)
   }
   let { parse } = require('path')
-  let { ext } = parse(inventory.inv._project.manifest)
-  if (ext !== '.arc') {
-    let message = `Begin CLI only supports app.arc project manifests`
+  let { base, ext } = parse(inventory.inv._project.manifest)
+  if (base !== '.arc' && ext !== '.arc') {
+    let message = `Begin CLI only supports app.arc and .arc project manifests`
     return Error(message)
   }
 }
