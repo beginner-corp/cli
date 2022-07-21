@@ -26,6 +26,8 @@
     "@begin/chunker": "1.1.2",
     "cron-validate": "~1.4.3",
     "enquirer": "2.3.6",
+    "escodegen": "~2.0.0",
+    "esprima": "~4.0.1",
     "jsonschema": "~1.4.1",
     "lambda-runtimes": "1.1.1",
     "minimist": "1.2.6",

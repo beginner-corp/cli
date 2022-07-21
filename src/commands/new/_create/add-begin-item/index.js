@@ -2,8 +2,6 @@ let { join } = require('path')
 let { existsSync } = require('fs')
 
 function nameHandlerFile ({ path, prefix, runtime }) {
-  console.log(path, prefix)
-
   let cwd = process.cwd()
   let ext = runtime === 'html' ? '.html' : '.mjs'
   return join(cwd, prefix, `${path}${ext}`)
@@ -41,8 +39,6 @@ module.exports = async function create ({ path, prefix, handler, lang, runtime }
       return
     }
   }
-
-  console.log('calling namehandlerfile')
 
   let handlerFile = nameHandlerFile({ prefix, path, runtime })
 

@@ -5,7 +5,7 @@ let copy = {
 }
 
 let javascript = lang => `// ${copy[lang].view_docs}
-export default function FiveHundred ({ html, state }) {
+export default function Html ({ html, state }) {
   const { attrs } = state
   return html\`
   <el-header></el-header>
