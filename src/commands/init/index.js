@@ -6,6 +6,7 @@ let _inventory = require('@architect/inventory')
 
 async function action (params) {
   params.inventory = await _inventory()
+  params.args.path = '.'
   let utils = {
     create: require('../new/_create')(params),
     validate: require(`../new/_validate`)(params),

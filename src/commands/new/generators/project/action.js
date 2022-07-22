@@ -88,6 +88,12 @@ module.exports = async function (params, utils) {
   await initialInstall()
 
   // Success message
-  log(`Project ${appName} successfully created.`, args.json)
-  log(`Change into directory ${path} and run ${c.bold(c.cyan('begin dev'))}`, args.json)
+  if (args['_'][0] === 'init') {
+    log(`Project ${appName} successfully initialied.`, args.json)
+    log(`Run ${c.bold(c.cyan('begin dev'))} to get started.`, args.json)
+  }
+  else {
+    log(`Project ${appName} successfully created.`, args.json)
+    log(`Change into directory ${path} and run ${c.bold(c.cyan('begin dev'))} to get started.`, args.json)
+  }
 }
