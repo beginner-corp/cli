@@ -9,7 +9,5 @@ module.exports = async function createApi (params, args) {
     ? handlers[runtime](lang)
     : handlers[runtime]
 
-  console.log('calling addItem API')
-
   return addItem({ path, prefix: 'app/api', handler, lang, runtime }, params)
 }

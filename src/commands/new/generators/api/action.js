@@ -2,6 +2,8 @@ module.exports = async function action (params, utils) {
   let { args } = params
   let { create, validate } = utils
   let error = require('./errors')(params, utils)
+  let { existsSync } = require('fs')
+  let { join } = require('path')
 
   let invalid = await validate.project()
   if (invalid) return invalid
@@ -14,8 +16,9 @@ module.exports = async function action (params, utils) {
   if (typeof path !== 'string') {
     return error('invalid_path')
   }
-
-  console.log('calling create API with path ', path)
+  if (existsSync(join(process.cwd(), 'app/api', `${path}.mjs`))) {
+    return error('api_exists')
+  }
 
   return create.api({ path, runtime: 'node' })
 }
