@@ -46,6 +46,6 @@ module.exports = async function create ({ path, prefix, handler, lang, runtime }
     return errors(lang, 'found_file', handlerFile)
   }
   else {
-    writeFile(handlerFile, handler)
+    await writeFile(handlerFile, handler)
   }
 }

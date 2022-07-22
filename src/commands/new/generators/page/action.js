@@ -7,6 +7,8 @@ module.exports = async function action (params, utils) {
   let { args } = params
   let { create, validate } = utils
   let error = require('./errors')(params, utils)
+  let { existsSync } = require('fs')
+  let { join } = require('path')
 
   let invalid = await validate.project()
   if (invalid) return invalid
@@ -30,6 +32,11 @@ module.exports = async function action (params, utils) {
   }
   type = type.toLowerCase()
   type = type === 'js' ? 'javascript' : type
+
+  let ext = type === 'javascript' ? '.mjs' : '.html'
+  if (existsSync(join(process.cwd(), 'app/pages', `${path}${ext}`))) {
+    return error('page_exists')
+  }
 
   return create.page({ path, runtime: type })
 }
