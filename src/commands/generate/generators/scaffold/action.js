@@ -63,5 +63,6 @@ module.exports = async function action (params, utils) {
   addRouteSource({ manifest: crud, routeName, replacements: modelName })
 
   // Install Dependencies
+  // TODO: Use the npm commands in lib
   installDependencies(crud.dependencies)
 }

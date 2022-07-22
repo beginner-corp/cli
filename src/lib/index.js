@@ -43,6 +43,8 @@ let runtimes = [ 'node', 'deno', 'ruby', 'python' ]
 
 let mutateArc = require('./mutate-arc')
 
+let npmCommands = require('./npm-commands')
+
 function writeFile (params) {
   let { existsSync, mkdirSync, writeFileSync } = require('fs')
   let { dirname, isAbsolute, join } = require('path')
@@ -76,6 +78,7 @@ module.exports = {
   getRelativeCwd,
   httpMethods,
   mutateArc,
+  npmCommands,
   runtimes,
   writeFile,
 }

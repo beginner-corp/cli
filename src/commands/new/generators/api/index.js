@@ -1,7 +1,7 @@
 let action = require('./action')
 
 module.exports = {
-  name: 'event',
+  name: 'api',
   description: 'Create a new api route',
   action,
   help: () => {

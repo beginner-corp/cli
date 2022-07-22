@@ -1,7 +1,7 @@
 let action = require('./action')
 
 module.exports = {
-  name: 'event',
+  name: 'page',
   description: 'Create a new page',
   action,
   help: () => {
