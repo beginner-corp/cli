@@ -68,16 +68,14 @@ module.exports = async function (params, utils) {
   mkdirSync('public', { recursive: true })
 
   // Starter project files
-  let starterFiles = [
-    '@enhance/starter-project/app/elements/footer.mjs',
-    '@enhance/starter-project/app/elements/header.mjs',
-    '@enhance/starter-project/app/pages/index.html',
-    '@enhance/starter-project/app/elements.mjs',
-    '@enhance/starter-project/public/favicon.svg',
-  ]
+  // when you install @enhance/starter-project the manifest.json file is created
+  // so we can read it instead of having to maintain a file list here.
+  let manifestPath = require.resolve('@enhance/starter-project/manifest.json')
+  let manifestData = readFileSync(manifestPath).toString()
+  let starterProjectManifest = JSON.parse(manifestData)
 
   // Create starter files
-  starterFiles.forEach(file => {
+  starterProjectManifest.fileList.forEach(file => {
     let input = require.resolve(file)
     let data = readFileSync(input)
     writeFileSync(input.replace('/snapshot/cli/node_modules/@enhance/starter-project/', ''), data)

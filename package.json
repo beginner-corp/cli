@@ -24,7 +24,7 @@
     "@architect/sandbox": "5.2.2",
     "@begin/api": "1.4.1",
     "@begin/chunker": "1.1.2",
-    "@enhance/starter-project": "1.0.1",
+    "@enhance/starter-project": "1.0.4",
     "cron-validate": "~1.4.3",
     "enquirer": "2.3.6",
     "escodegen": "2.0.0",
