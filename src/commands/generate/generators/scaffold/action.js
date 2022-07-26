@@ -1,25 +1,24 @@
-let path = require('path')
 let { mkdirSync,  readFileSync, writeFileSync } = require('fs')
 let { createJsonSchema, writeJsonSchema } = require('./jsonschema')
 let { createModelName } = require('./model-utils')
-let { installDependencies } = require('./npm-commands')
 
-let mutateArc = require('../../../../lib/mutate-arc')
 let crud = require('./crud')
 
 function addRouteSource ({ manifest, routeName, replacements }) {
+  let path = require('path')
   const { sourceFiles } = manifest
   sourceFiles.forEach(file => {
     let dirname = path.dirname(file.target).replace('<ROUTE_NAME>', routeName)
     mkdirSync(dirname, { recursive: true })
     // eslint-disable-next-line
-      let source = require(file.src)
+    let source = require(file.src)
     writeFileSync(file.target.replace('<ROUTE_NAME>', routeName), source(replacements))
   })
 }
 
 module.exports = async function action (params, utils) {
-  let { writeFile } = utils
+  let { mutateArc, writeFile, npmCommands } = utils
+  let { installDependencies } = npmCommands
   let { args } = params
   let input = args._.slice(2)
   let project = params.inventory.inv._project
@@ -63,6 +62,5 @@ module.exports = async function action (params, utils) {
   addRouteSource({ manifest: crud, routeName, replacements: modelName })
 
   // Install Dependencies
-  // TODO: Use the npm commands in lib
   installDependencies(crud.dependencies)
 }
