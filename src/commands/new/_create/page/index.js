@@ -6,7 +6,8 @@ function createImportName (path) {
 // TODO: This should be shared code with arc-enhance-plugin
 function createPageTagName (path) {
   const pluralize = require('pluralize')
-  let raw = 'page-' + path.replace(/\.mjs/g, '').replace('/', '-').replace(/\//g, '-')
+  let rawPath = path.startsWith('/') ? path.slice(1) : path
+  let raw = 'page-' + rawPath.replace(/\.mjs/g, '').replace('/', '-').replace(/\//g, '-')
   // if there are dynamic parts we need to do some additional formatting
   if (raw.includes('$')) {
     let parts = raw.split('-')
