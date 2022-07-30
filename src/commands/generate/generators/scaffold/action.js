@@ -41,6 +41,14 @@ module.exports = async function action (params, utils) {
   // write JSON Schema file
   writeJsonSchema(modelName, schema)
 
+  // add data table to arcfile
+  let item = `data
+  scopeID *String
+  dataID **String
+  ttl TTL
+`
+  raw = mutateArc.upsert({ item, pragma: 'tables', raw })
+
   // TODO still add routes if they exist
   // add routes to arcfile
   crud.routes.forEach(route => raw = mutateArc.upsert({ item: route.replace('<ROUTE_NAME>', routeName), pragma: 'http', raw }))
