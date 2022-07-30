@@ -97,26 +97,29 @@ module.exports = async function createPage (params, args) {
   if (runtime !== 'html') {
     let esprima = require('esprima')
     let escodegen = require('escodegen')
-    let { readFileSync, writeFileSync } = require('fs')
-    let elements = readFileSync('./app/elements.mjs').toString()
+    let { existsSync, readFileSync, writeFileSync } = require('fs')
 
-    try {
-      // parse elements.mjs
-      let tokens = esprima.parseModule(elements)
-      // create import name
-      let name = createImportName(path)
-      // add import statement
-      tokens = addImport({ tokens, path, name })
-      // add page to elements
-      tokens = addElement({ tokens, path, name })
-      // convert AST to code
-      elements = escodegen.generate(tokens)
-      // re-write elements.mjs
-      writeFileSync('./app/elements.mjs', elements)
+    if (existsSync('./app/elements.mjs')) {
+      try {
+        let elements = readFileSync('./app/elements.mjs').toString()
+        // parse elements.mjs
+        let tokens = esprima.parseModule(elements)
+        // create import name
+        let name = createImportName(path)
+        // add import statement
+        tokens = addImport({ tokens, path, name })
+        // add page to elements
+        tokens = addElement({ tokens, path, name })
+        // convert AST to code
+        elements = escodegen.generate(tokens)
+        // re-write elements.mjs
+        writeFileSync('./app/elements.mjs', elements)
+      }
+      catch (err) {
+        console.log(err)
+      }
     }
-    catch (err) {
-      console.log(err)
-    }
+
   }
 
   let handlers = require('./handlers')
