@@ -1,9 +1,9 @@
 const { mkdirSync, writeFileSync } = require('fs')
 const { createModelName } = require('./model-utils')
 
-function addIdPropertyToSchema (schema) {
-  if (!Object.keys(schema.properties).includes('id')) {
-    schema.properties.ID = {
+function addKeyPropertyToSchema (schema) {
+  if (!Object.keys(schema.properties).includes('key')) {
+    schema.properties.key = {
       type: 'string'
     }
   }
@@ -24,15 +24,15 @@ function createJsonSchema (id, ...properties) {
     }
   })
 
-  schema = addIdPropertyToSchema(schema)
+  schema = addKeyPropertyToSchema(schema)
 
   return schema
 }
 
 function writeJsonSchema (modelName, schema) {
-  schema = addIdPropertyToSchema(schema)
-  mkdirSync(`src/shared/schemas`, { recursive: true })
-  writeFileSync(`src/shared/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema)}`)
+  schema = addKeyPropertyToSchema(schema)
+  mkdirSync(`app/schemas`, { recursive: true })
+  writeFileSync(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema)}`)
 }
 
 module.exports = {

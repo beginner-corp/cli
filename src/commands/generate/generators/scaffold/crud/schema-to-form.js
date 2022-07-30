@@ -2,7 +2,7 @@ module.exports = function () {
   return `const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
   const getType = (key, property) => {
-      if (key === 'ID') {
+      if (key === 'key') {
         return 'hidden'
       }
       let { type } = property
@@ -90,7 +90,7 @@ module.exports = function () {
     const schemaToForm = function(action, schema, data = {}) {
       return \`<h2>\${capitalize(schema?.id)}</h2><form
       style="display: flex; flex-direction: column; gap: 1rem;"
-      action="/\${action}\${data.ID ? \`/\${data.ID}\` : ''}"
+      action="/\${action}\${data.key ? \`/\${data.key}\` : ''}"
       method="POST">
       \${Object.keys(schema.properties).map(key =>
     input(key, schema, data)

@@ -38,20 +38,10 @@ module.exports = async function action (params, utils) {
   const modelName = createModelName(id)
   const routeName = modelName.plural
 
-  if (params.inventory.get.http(`get /${routeName}`) !== undefined) {
-    let msg = `${routeName} already exist in the project`
-    throw Error(msg)
-  }
-
   // write JSON Schema file
   writeJsonSchema(modelName, schema)
 
-  // add table to arcfile
-  let item = `${routeName}
-  ID *String
-`
-  raw = mutateArc.upsert({ item, pragma: 'tables', raw })
-
+  // TODO still add routes if they exist
   // add routes to arcfile
   crud.routes.forEach(route => raw = mutateArc.upsert({ item: route.replace('<ROUTE_NAME>', routeName), pragma: 'http', raw }))
 
