@@ -21,7 +21,7 @@ async function runTests (runType, t) {
   let newAppDir = 'new-page'
 
   t.test(`${mode} new page`, async t => {
-    t.plan(14)
+    t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -29,7 +29,6 @@ async function runTests (runType, t) {
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
-    t.ok(existsSync(join(cwd, './app/elements.mjs')), 'Elements file exists')
 
     r = await begin('new page -p test', cwd, true)
     i = await getInv(t, cwd)
