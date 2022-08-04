@@ -11,7 +11,6 @@ test('Run new tests', async t => {
 
 async function runTests (runType, t) {
   let mode = `[New / ${runType}]`
-  if (runType !== 'binary') return false
   let begin = _begin[runType].bind({}, t)
 
   let pathNotFound = /Page path not found/
