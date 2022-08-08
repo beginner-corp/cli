@@ -7,23 +7,18 @@ let copy = {
 let javascript = lang => `// ${copy[lang].view_docs}
 export default function Html ({ html, state }) {
   const { attrs } = state
-  return html\`
-  <el-header></el-header>
-  <section>
+  return html\`<section>
     <h1>Index page</h1>
     <p>html content for home page here</p>
   </section>
-  <el-footer message="hi there"></el-footer>
 \`
 }
 `
 
-let html = () => `<el-header></el-header>
-<section>
+let html = () => `<section>
   <h1>Index page</h1>
   <p>html content for home page here</p>
 </section>
-<el-footer message="hi there"></el-footer>
 `
 
 module.exports = { html, javascript }

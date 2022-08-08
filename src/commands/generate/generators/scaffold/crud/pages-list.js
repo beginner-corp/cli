@@ -11,12 +11,10 @@ const rows = (item = {}) => {
   }
 
   export default function Html ({ html, state }) {
-    console.log('list ${plural}')
     const { store } = state
     let ${plural} = store.${plural}?.map(item=> \`<div>\${rows(item)}</div><p><a href="/${plural}/\${item.key}">Edit this ${singular}</a></p><p><form action="/${plural}/\${item.key}/delete" method="POST"><button>Delete this ${singular}</button></form></p>\`).join('')
 
     return html\`
-    <el-header></el-header>
     <section>
       <h1>Index page</h1>
       \${${plural}}
@@ -24,7 +22,6 @@ const rows = (item = {}) => {
         <a href="/${plural}/new">New ${singular}</a>
       </div>
     </section>
-    <el-footer message="hi there"></el-footer>
     \`
   }`
 }

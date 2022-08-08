@@ -6,9 +6,7 @@ module.exports = function ({ plural, singular, capSingular  }) {
   export default function Html ({ html, state }) {
     const form = schemaToForm('${plural}', ${capSingular}, {})
     return html\`
-    <el-header></el-header>
     \${form}
-    <el-footer message="hi there"></el-footer>
   \`
   }`
 }
