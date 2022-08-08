@@ -14,7 +14,7 @@ async function runTests (runType, t) {
   let begin = _begin[runType].bind({}, t)
 
   let newAppDir = 'crud-app'
-  // let alreadyExists = / already exist in the project/
+  let alreadyExists = /The schema already exists/
 
   t.test(`${mode} scaffold project - normal`, async t => {
     t.plan(16)
@@ -44,24 +44,19 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} scaffold app (errors)`, async t => {
-    t.plan(2)
+    t.plan(4)
     let cwd, r
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
     r = await begin('new project -p .', cwd)
+    t.pass('Project is valid')
+    await begin('generate scaffold Books title:string author:string', cwd, true)
     r = await begin('generate scaffold Books title:string author:string', cwd, true)
     await getInv(t, cwd)
-    t.pass('Project is valid')
-    // Now error
-    /*
-    r = await begin('generate scaffold Books title:string author:string', cwd, true)
-    */
     t.notOk(r.stdout, 'Did not print to stdout')
-    /*
     t.match(r.stderr, alreadyExists, 'Errored upon finding existing routes in project')
     t.equal(r.code, 1, 'Exited 1')
-    */
   })
 
   t.test(`${mode} scaffold project - normal / JSON`, async t => {
@@ -91,25 +86,21 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} scaffold app (errors / JSON)`, async t => {
-    t.plan(2)
-    let cwd, r
+    t.plan(5)
+    let cwd, json, r
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
     r = await begin('new project -p .', cwd)
+    t.pass('Project is valid')
+
+    await begin('generate scaffold Books title:string author:string --json', cwd, true)
     r = await begin('generate scaffold Books title:string author:string --json', cwd, true)
     await getInv(t, cwd)
-    t.pass('Project is valid')
-    // Now error
-    /*
-    r = await begin('generate scaffold Books title:string author:string --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, alreadyExists, 'Errored upon finding existing routes in project')
-    */
     t.notOk(r.stderr, 'Did not print to stderr')
-    /*
     t.equal(r.code, 1, 'Exited 1')
-    */
   })
 }

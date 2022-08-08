@@ -1,4 +1,4 @@
-const { mkdirSync, writeFileSync } = require('fs')
+const { existsSync, mkdirSync, writeFileSync } = require('fs')
 const { createModelName } = require('./model-utils')
 
 function addKeyPropertyToSchema (schema) {
@@ -35,7 +35,12 @@ function writeJsonSchema (modelName, schema) {
   writeFileSync(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema)}`)
 }
 
+function existsJsonSchema (modelName) {
+  return existsSync(`app/schemas/${modelName.singular}.mjs`)
+}
+
 module.exports = {
   createJsonSchema,
+  existsJsonSchema,
   writeJsonSchema
 }

@@ -1,5 +1,5 @@
 let { mkdirSync,  readFileSync, writeFileSync } = require('fs')
-let { createJsonSchema, writeJsonSchema } = require('./jsonschema')
+let { createJsonSchema, existsJsonSchema, writeJsonSchema } = require('./jsonschema')
 let { createModelName } = require('./model-utils')
 
 let crud = require('./crud')
@@ -20,6 +20,7 @@ module.exports = async function action (params, utils) {
   let { mutateArc, writeFile, npmCommands } = utils
   let { installDependencies } = npmCommands
   let { args } = params
+  let error = require('./errors')(params, utils)
   let input = args._.slice(2)
   let project = params.inventory.inv._project
   let raw = project.raw
@@ -37,6 +38,10 @@ module.exports = async function action (params, utils) {
   const { id } = schema
   const modelName = createModelName(id)
   const routeName = modelName.plural
+
+  if (existsJsonSchema(modelName)) {
+    return error('schema_already_exists')
+  }
 
   // write JSON Schema file
   writeJsonSchema(modelName, schema)
