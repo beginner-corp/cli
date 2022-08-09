@@ -46,17 +46,6 @@ module.exports = async function action (params, utils) {
   // write JSON Schema file
   writeJsonSchema(modelName, schema)
 
-  // skip adding the data table if it is already in the arc file
-  if (!project?.arc?.tables?.find(table => Object.keys(table).includes('data'))) {
-    let item = `data
-  scopeID *String
-  dataID **String
-  ttl TTL
-`
-    // add data table to arcfile
-    raw = mutateArc.upsert({ item, pragma: 'tables', raw })
-  }
-
   // add routes to arcfile
   crud.routes.forEach(route => raw = mutateArc.upsert({ item: route.replace('<ROUTE_NAME>', routeName), pragma: 'http', raw }))
 
