@@ -63,7 +63,6 @@ module.exports = async function (params, utils) {
   writeFile('.arc', arc)
 
   // Create starter app folders
-  mkdirSync('app/elements', { recursive: true })
   mkdirSync('app/pages', { recursive: true })
   mkdirSync('public', { recursive: true })
 
