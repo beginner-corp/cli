@@ -56,7 +56,7 @@ module.exports = async function (params, utils) {
       '@enhance/arc-plugin-enhance': 'latest'
     }
   }
-  writeFile('package.json', JSON.stringify(packageJson))
+  writeFile('package.json', JSON.stringify(packageJson, null, 2))
 
   // Write the new Arc project manifest
   let arc = `@app\n${appName}\n\n@http\n\n@views\nsrc app\n\n@plugins\nenhance/arc-plugin-enhance\n`
