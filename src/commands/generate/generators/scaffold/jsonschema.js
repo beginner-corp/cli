@@ -18,10 +18,8 @@ function createJsonSchema (id, ...properties) {
   }
 
   properties.forEach(prop => {
-    const [ name, type ] = prop.split(':')
-    schema.properties[name] = {
-      type: type
-    }
+    const [ name, type = 'string' ] = prop.split(':')
+    schema.properties[name] = createProp(type)
   })
 
   schema = addKeyPropertyToSchema(schema)
@@ -29,10 +27,24 @@ function createJsonSchema (id, ...properties) {
   return schema
 }
 
+function createProp (type) {
+  if (type !== 'string') {
+    return {
+      type: 'string',
+      format: type
+    }
+  }
+  else {
+    return {
+      type: type
+    }
+  }
+}
+
 function writeJsonSchema (modelName, schema) {
   schema = addKeyPropertyToSchema(schema)
   mkdirSync(`app/schemas`, { recursive: true })
-  writeFileSync(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema)}`)
+  writeFileSync(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
 }
 
 function existsJsonSchema (modelName) {

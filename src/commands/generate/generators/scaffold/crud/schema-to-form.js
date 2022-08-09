@@ -17,6 +17,9 @@ module.exports = function () {
           if (property.format === 'date-time') {
             return 'datetime-local'
           }
+          else if (property.format === 'uri') {
+            return 'url'
+          }
           else {
             return property.format
           }
