@@ -1,10 +1,16 @@
 module.exports = function ({ plural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
-import { get${capSingular}, upsert${capSingular} } from '../../db/${plural}.mjs'
-import { ${capSingular} } from '../../schemas/${singular}.mjs'
-import { validator } from '@begin/validator'
+import { get${capSingular}, upsert${capSingular}, validate } from '../../db/${plural}.mjs'
 
 export async function get (req) {
+  if (req.session.problems) {
+    let { problems, ...session } = req.session
+    return {
+      session,
+      json: { ...problems }
+    }
+  }
+
   const id = req.pathParameters?.id
   const ${singular} = await get${capSingular}(id)
   return {
@@ -16,12 +22,13 @@ export async function post (req) {
   const id = req.pathParameters?.id
 
   // Validate
-  let res = validator(req, ${capSingular} )
-  if (!res.valid) {
-      return {
-          statusCode: 500,
-          json: { error: res.errors.map(e => e.stack).join('\\n') }
-      }
+  let problems = await validate.update(req)
+  if (problems) {
+    return {
+      session: { problems },
+      json: { problems },
+      location: '/${plural}/new'
+    }
   }
 
   try {

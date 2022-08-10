@@ -28,7 +28,7 @@ function getType (key, property) {
   return type
 }
 
-function inputTemplate (key, type, property, data, required = [], update) {
+function inputTemplate (key, type, property, data, required = []) {
   let input = '<input type="' + type + '" id="' + key + '" name="' + key + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '"'
@@ -45,16 +45,13 @@ function inputTemplate (key, type, property, data, required = [], update) {
   if (property.pattern) {
     input = input + 'pattern="' + property.pattern + '"'
   }
-  if (update) {
-    input = input + `value="\${${data}.${key}}"`
-  }
   if (required.includes(key)) {
     input = input + 'required'
   }
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked'
   }
-  input = input + ' />'
+  input = input + `value="\${${data}?.${key}}" />`
   return input
 }
 
@@ -69,7 +66,7 @@ function selectTemplate (key, property, data, required = []) {
   return input
 }
 
-function input (key, schema, update, data) {
+function input (key, schema, data) {
   const property = schema.properties[key]
   const type = getType(key, property)
   let elem = ''
@@ -79,11 +76,11 @@ function input (key, schema, update, data) {
   else if (type === 'object') {
     elem = elem + `<h2>${capitalize(key)}</h2>`
     elem = elem + Object.keys(schema.properties[key].properties).map(innerKey =>
-      input(innerKey, schema.properties[key], update, data)
+      input(innerKey, schema.properties[key], data)
     ).join('\n')
   }
   else {
-    elem = inputTemplate(key, type, property, data, schema.required, update)
+    elem = inputTemplate(key, type, property, data, schema.required)
   }
   if (type !== 'hidden' && type !== 'object') {
     elem = `<label>${capitalize(key)} ${elem}</label>`
@@ -93,12 +90,16 @@ function input (key, schema, update, data) {
 
 function schemaToForm ({ action, schema, update = false, data }) {
   return `<h2>${capitalize(schema?.id)}</h2>
+<div style="display:\${display}">
+  <p>Found some problems!</p>
+  <ul>\${problems?.map(li).join('') || ''}</ul>
+</div>
 <form
   style="display: flex; flex-direction: column; gap: 1rem;"
   action="/${action}${update ? `/\${${data}.key}` : ''}"
   method="POST">
   ${Object.keys(schema.properties).map(key =>
-    input(key, schema, update, data)
+    input(key, schema, data)
   ).join('\n  ')}
   <button style="max-width: 6rem;">Save</button>
 </form>`

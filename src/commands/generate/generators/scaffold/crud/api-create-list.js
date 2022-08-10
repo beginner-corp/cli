@@ -1,8 +1,6 @@
 module.exports = function ({ plural, capPlural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
-import { get${capPlural}, upsert${capSingular} } from '../db/${plural}.mjs'
-import { ${capSingular} } from '../schemas/${singular}.mjs'
-import { validator } from '@begin/validator'
+import { get${capPlural}, upsert${capSingular}, validate } from '../db/${plural}.mjs'
 
 export async function get (req) {
   const ${plural} = await get${capPlural}()
@@ -13,18 +11,13 @@ export async function get (req) {
 
 export async function post (req) {
   // Validate
-  if (req.body.key) {
+  let problems = await validate.create(req)
+  if (problems) {
     return {
-        statusCode: 422,
-        json: { error: 'Create should not include an key parameter' }
+      session: { problems },
+      json: { problems },
+      location: '/${plural}/new'
     }
-  }
-  let res = validator(req, ${capSingular} )
-  if (!res.valid) {
-      return {
-          statusCode: 500,
-          json: { error: res.errors.map(e => e.stack).join('\\n') }
-      }
   }
 
   try {

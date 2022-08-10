@@ -5,6 +5,10 @@ module.exports = function ({ plural, singular, schema }) {
 export default function Html ({ html, state }) {
   const { store } = state
   const ${singular} = store.${singular} || {}
+  const problems = store.problems || []
+  const display = problems.length > 0? 'block' : 'none'
+  const li = p => \`<li>\${ p }</li>\`
+
   return html\`
   ${schemaToForm({ action: plural, schema, update: true, data: singular })}
 \`
