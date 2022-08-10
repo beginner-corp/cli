@@ -1,14 +1,13 @@
-module.exports = function ({ plural, singular, capSingular  }) {
-  return `// View documentation at: https://docs.begin.com
-    import { ${capSingular} } from '../../schemas/${singular}.mjs'
-    import { schemaToForm } from '../../schemas/schema-to-form.mjs'
+const { schemaToForm } = require('../schema-to-form')
 
-    export default function Html ({ html, state }) {
-      const { store } = state
-      const ${singular} = store.${singular} || {author:'', title:''}
-      const form = schemaToForm('${plural}', ${capSingular}, ${singular})
-      return html\`
-      \${form}
-    \`
-    }`
+module.exports = function ({ plural, singular, schema }) {
+  return `// View documentation at: https://docs.begin.com
+
+export default function Html ({ html, state }) {
+  const { store } = state
+  const ${singular} = store.${singular} || {}
+  return html\`
+  ${schemaToForm({ action: plural, schema, update: true, data: singular })}
+\`
+}`
 }

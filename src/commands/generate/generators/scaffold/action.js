@@ -53,7 +53,7 @@ module.exports = async function action (params, utils) {
   await writeFile(project.manifest, raw)
 
   // Copy source code
-  addRouteSource({ manifest: crud, routeName, replacements: modelName })
+  addRouteSource({ manifest: crud, routeName, replacements: { ...modelName, schema } })
 
   // Install Dependencies
   installDependencies(crud.dependencies)

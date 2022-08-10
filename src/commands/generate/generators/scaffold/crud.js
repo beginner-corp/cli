@@ -2,7 +2,6 @@ const crud = {
   routes: [],
   sourceFiles: [
     // Utils
-    { src: './crud/schema-to-form.js', target: 'app/schemas/schema-to-form.mjs' },
     { src: './crud/model.js', target: 'app/db/<ROUTE_NAME>.mjs' },
     // API
     { src: './crud/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
