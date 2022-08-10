@@ -2,7 +2,7 @@ module.exports = function ({ plural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
 import { get${capSingular}, upsert${capSingular} } from '../../db/${plural}.mjs'
 import { ${capSingular} } from '../../schemas/${singular}.mjs'
-import { isJSON, validator } from '@begin/validator'
+import { validator } from '@begin/validator'
 
 export async function get (req) {
   const id = req.pathParameters?.id
@@ -24,9 +24,20 @@ export async function post (req) {
       }
   }
 
-  await upsert${capSingular}({key: id, ...req.body})
-  return {
-    location: '/${plural}'
+  try {
+    const ${singular} = await upsert${capSingular}({key: id, ...req.body})
+    return {
+        session: {},
+        json: { ${singular} },
+        location: '/${plural}'
+    }
+  }
+  catch (err) {
+    return {
+        session: { error: err.message },
+        json: { error: err.message },
+        location: '/${plural}'
+    }
   }
 }
 `

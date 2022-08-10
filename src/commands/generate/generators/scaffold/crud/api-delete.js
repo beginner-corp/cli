@@ -4,9 +4,21 @@ import { delete${capSingular} } from '../../../db/${plural}.mjs'
 
 export async function post (req) {
   const id = req.pathParameters?.id
-  await delete${capSingular}(id)
-  return {
-    location: '/${plural}'
+
+  try {
+    await delete${capSingular}(id)
+    return {
+      session: {},
+      json: null,
+      location: '/${plural}'
+    }
+  }
+  catch (err) {
+    return {
+      session: { error: err.message },
+      json: { error: err.message },
+      location: '/${plural}'
+    }
   }
 }
 `

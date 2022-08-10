@@ -2,7 +2,7 @@ module.exports = function ({ plural, capPlural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
 import { get${capPlural}, upsert${capSingular} } from '../db/${plural}.mjs'
 import { ${capSingular} } from '../schemas/${singular}.mjs'
-import { isJSON, validator } from '@begin/validator'
+import { validator } from '@begin/validator'
 
 export async function get (req) {
   const ${plural} = await get${capPlural}()
@@ -27,31 +27,20 @@ export async function post (req) {
       }
   }
 
-  // Client requested JSON response
-  if (isJSON(req)) {
-    try {
-        const ${singular} = await upsert${capSingular}(req.body)
-        return {
-            json: { ${singular} }
-        }
-    }
-    catch (err) {
-        return {
-            statusCode: 500,
-            json: { error: err.message }
-        }
+  try {
+    const ${singular} = await upsert${capSingular}(req.body)
+    return {
+        session: {},
+        json: { ${singular} },
+        location: '/accounts'
     }
   }
-  // Client requested HTML response
-  else {
-    try {
-      await upsert${capSingular}(req.body)
+  catch (err) {
       return {
-        location: '/${plural}'
+          session: { error: err.message },
+          json: { error: err.message },
+          location: '/${plural}'
       }
-    } catch (err) {
-        return { statusCode: 400, json: { errors: [err.message] }}
-    }
   }
 }
 `
