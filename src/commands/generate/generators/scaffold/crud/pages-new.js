@@ -6,5 +6,6 @@ export default function Html ({ html, state }) {
   return html\`
   ${schemaToForm({ action: plural, schema })}
 \`
-}`
+}
+`
 }
