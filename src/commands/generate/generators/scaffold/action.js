@@ -18,7 +18,7 @@ function addRouteSource ({ manifest, routeName, replacements }) {
 
 module.exports = async function action (params, utils) {
   let { mutateArc, writeFile, npmCommands } = utils
-  let { installDependencies } = npmCommands
+  let { installAwsSdk, installDependencies } = npmCommands
   let { args } = params
   let error = require('./errors')(params, utils)
   let input = args._.slice(2)
@@ -56,5 +56,6 @@ module.exports = async function action (params, utils) {
   addRouteSource({ manifest: crud, routeName, replacements: { ...modelName, schema } })
 
   // Install Dependencies
-  installDependencies(crud.dependencies)
+  installAwsSdk()
+  await installDependencies(crud.dependencies)
 }
