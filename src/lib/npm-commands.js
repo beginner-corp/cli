@@ -35,11 +35,13 @@ function isInstalled (cmd, args, packageName) {
 }
 
 function installAwsSdk () {
-  if (!isInstalledLocally('aws-sdk') && !isInstalledGlobally('aws-sdk')) {
-    let c = require('picocolors')
-    console.log('Installing aws-sdk as a development dependency')
-    console.log(`To avoid this message in the future you can globally install the sdk ${c.cyan('npm install -g aws-sdk')}`)
-    spawnSync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
+  if (process.env.NODE_ENV !== 'testing') {
+    if (!isInstalledLocally('aws-sdk') && !isInstalledGlobally('aws-sdk')) {
+      let c = require('picocolors')
+      console.log('Installing aws-sdk as a development dependency')
+      console.log(`To avoid this message in the future you can globally install the sdk ${c.cyan('npm install -g aws-sdk')}`)
+      spawnSync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
+    }
   }
 }
 
