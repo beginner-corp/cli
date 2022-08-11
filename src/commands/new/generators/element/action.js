@@ -11,6 +11,8 @@ const reservedNames = new Set([
 
 /*
  * validateElementName adapted from https://github.com/sindresorhus/validate-element-name
+ * MIT License
+ * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
  */
 function validateElementName (name) {
   const isPotentialCustomElementName = require('is-potential-custom-element-name')

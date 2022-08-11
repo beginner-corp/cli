@@ -1,0 +1,11 @@
+Begin CLI
+Copyright 2022 Beginner Corp
+
+This product includes software developed at
+Beginner Corp (https://begin.com/).
+
+The Initial Developer of the src/commands/new/generators/element/action.js#validateElementName,
+is Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com).
+Adapted from validate-element-name (https://github.com/sindresorhus/validate-element-name).
+Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
+
