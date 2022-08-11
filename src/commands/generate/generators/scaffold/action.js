@@ -57,5 +57,5 @@ module.exports = async function action (params, utils) {
 
   // Install Dependencies
   installAwsSdk()
-  await installDependencies(crud.dependencies)
+  installDependencies(crud.dependencies)
 }

@@ -83,7 +83,7 @@ module.exports = async function (params, utils) {
 
   // Need to install enhance/arc-plugin-enhance or 💥
   log('Installing npm dependencies', args.json)
-  await initialInstall()
+  initialInstall()
 
   // Success message
   if (args['_'][0] === 'init') {

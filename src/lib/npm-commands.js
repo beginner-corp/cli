@@ -1,21 +1,5 @@
-let { exec: _exec, spawnSync } = require('child_process')
-let { promisify } = require('util')
-let exec = promisify(_exec)
+let { spawnSync } = require('child_process')
 const { readFileSync } = require('fs')
-
-async function executeCmd (cmd) {
-  return exec(cmd, (error, stdout, stderr) => {
-    if (error) {
-      console.log(`error: ${error.message}`)
-      return
-    }
-    if (stderr) {
-      console.log(`stderr: ${stderr}`)
-      return
-    }
-    // console.log(`stdout: ${stdout}`)
-  })
-}
 
 function isInstalledLocally (packageName) {
   return isInstalled('npm', [ 'list' ], packageName )
@@ -45,18 +29,18 @@ function installAwsSdk () {
   }
 }
 
-async function installDependencies (dependencies) {
+function installDependencies (dependencies) {
   if (process.env.NODE_ENV !== 'testing') {
     console.log('Installing npm dependencies')
     const packageJson = JSON.parse(readFileSync('./package.json'))
     const installedDeps = Object.keys(packageJson.dependencies)
     const deps = dependencies.filter(dep => !installedDeps.includes(dep)).join(' ')
-    await executeCmd(`npm i ${deps} --silent`)
+    spawnSync('npm', [ 'install', `${deps}`, '--silent' ])
   }
 }
 
-async function initialInstall () {
-  return exec(`npm i`)
+function initialInstall () {
+  spawnSync('npm', [ 'install', '--silent' ])
 }
 
 module.exports = {
