@@ -1,6 +1,6 @@
 module.exports = function ({ plural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
-import { get${capSingular}, upsert${capSingular}, validate } from '../../db/${plural}.mjs'
+import { get${capSingular}, upsert${capSingular}, validate } from '../../../models/${plural}.mjs'
 
 export async function get (req) {
   if (req.session.problems) {

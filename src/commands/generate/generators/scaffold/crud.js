@@ -2,7 +2,7 @@ const crud = {
   routes: [],
   sourceFiles: [
     // Utils
-    { src: './crud/model.js', target: 'app/db/<ROUTE_NAME>.mjs' },
+    { src: './crud/model.js', target: 'models/<ROUTE_NAME>.mjs' },
     // API
     { src: './crud/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
     { src: './crud/api-delete.js', target: 'app/api/<ROUTE_NAME>/$id/delete.mjs' },

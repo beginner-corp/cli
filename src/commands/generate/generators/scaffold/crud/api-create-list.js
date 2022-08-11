@@ -1,6 +1,6 @@
 module.exports = function ({ plural, capPlural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
-import { get${capPlural}, upsert${capSingular}, validate } from '../db/${plural}.mjs'
+import { get${capPlural}, upsert${capSingular}, validate } from '../../models/${plural}.mjs'
 
 export async function get (req) {
   const ${plural} = await get${capPlural}()
@@ -25,7 +25,7 @@ export async function post (req) {
     return {
         session: {},
         json: { ${singular} },
-        location: '/accounts'
+        location: '/${plural}'
     }
   }
   catch (err) {
