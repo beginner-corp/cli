@@ -20,26 +20,27 @@ const get${capPlural} = async function () {
 }
 
 const validate = {
-    async create (req) {
-        let problems = []
-        if (req.body.key) {
-            problems.push({ error: 'Create should not include an key parameter'})
-        }
+    shared (req) {
         let res = validator(req, ${capSingular})
         if (!res.valid) {
-            res.errors.map(e => problems.push(e.stack))
+            return res.errors.map(e => {
+                return { name: e.property.replace(/instance\./,''), error: e.message }
+            })
+        }
+        return []
+    },
+    async create (req) {
+        let problems = [...validate.shared(req)]
+        if (req.body.key) {
+            problems.push({ name: 'key', error: 'should not be included on a create'})
         }
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, ${singular}: req.body } : false
+        return problems.length > 0 ? { problems, book: req.body } : false
     },
     async update (req) {
-        let problems = []
-        let res = validator(req, ${capSingular})
-        if (!res.valid) {
-            res.errors.map(e => problems.push(e.stack))
-        }
+        let problems = [...validate.shared(req)]
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, ${singular}: req.body } : false
+        return problems.length > 0 ? { problems, book: req.body } : false
     }
 }
 

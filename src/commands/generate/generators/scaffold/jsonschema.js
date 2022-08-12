@@ -1,6 +1,15 @@
 const { existsSync, mkdirSync, writeFileSync } = require('fs')
 const { createModelName } = require('./model-utils')
 
+const standardJsonTypes = [
+  'string',
+  'number',
+  'integer',
+  'object',
+  'array',
+  'boolean'
+]
+
 function addKeyPropertyToSchema (schema) {
   if (!Object.keys(schema.properties).includes('key')) {
     schema.properties.key = {
@@ -28,15 +37,15 @@ function createJsonSchema (id, ...properties) {
 }
 
 function createProp (type) {
-  if (type !== 'string') {
+  if (standardJsonTypes.includes(type)) {
     return {
-      type: 'string',
-      format: type
+      type: type
     }
   }
   else {
     return {
-      type: type
+      type: 'string',
+      format: type
     }
   }
 }

@@ -24,10 +24,11 @@ export async function post (req) {
   // Validate
   let problems = await validate.update(req)
   if (problems) {
+    let key = problems.${singular}.key || 'new'
     return {
       session: { problems },
       json: { problems },
-      location: '/${plural}/new'
+      location: \`/${plural}/\${key}\`
     }
   }
 
