@@ -1,4 +1,4 @@
-let { spawnSync } = require('child_process')
+const spawn = require('cross-spawn')
 const { readFileSync } = require('fs')
 
 function isInstalledLocally (packageName) {
@@ -10,8 +10,8 @@ function isInstalledGlobally (packageName) {
 }
 
 function isInstalled (cmd, args, packageName) {
-  let spawn = spawnSync(cmd, [ ...args, packageName ])
-  let stdout = spawn.stdout.toString().trim()
+  let result = spawn.sync(cmd, [ ...args, packageName ])
+  let stdout = result.stdout.toString().trim()
   if (stdout.includes(packageName)) {
     return true
   }
@@ -24,7 +24,7 @@ function installAwsSdk () {
       let c = require('picocolors')
       console.log('Installing aws-sdk as a development dependency')
       console.log(`To avoid this message in the future you can globally install the sdk ${c.cyan('npm install -g aws-sdk')}`)
-      spawnSync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
+      spawn.sync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
     }
   }
 }
@@ -35,12 +35,12 @@ function installDependencies (dependencies) {
     const packageJson = JSON.parse(readFileSync('./package.json'))
     const installedDeps = Object.keys(packageJson.dependencies)
     const deps = dependencies.filter(dep => !installedDeps.includes(dep)).join(' ')
-    spawnSync('npm', [ 'install', `${deps}`, '--silent' ])
+    spawn.sync('npm', [ 'install', `${deps}`, '--silent' ])
   }
 }
 
 function initialInstall () {
-  spawnSync('npm', [ 'install', '--silent' ])
+  spawn.sync('npm', [ 'install', '--silent' ])
 }
 
 module.exports = {
