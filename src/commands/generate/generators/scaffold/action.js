@@ -1,10 +1,10 @@
-let { mkdirSync,  readFileSync, writeFileSync } = require('fs')
+let { mkdirSync,  readFileSync } = require('fs')
 let { createJsonSchema, existsJsonSchema, writeJsonSchema } = require('./jsonschema')
 let { createModelName } = require('./model-utils')
 
 let crud = require('./crud')
 
-function addRouteSource ({ manifest, routeName, replacements }) {
+function addRouteSource ({ manifest, routeName, replacements, writeFile }) {
   let path = require('path')
   const { sourceFiles } = manifest
   sourceFiles.forEach(file => {
@@ -12,7 +12,7 @@ function addRouteSource ({ manifest, routeName, replacements }) {
     mkdirSync(dirname, { recursive: true })
     // eslint-disable-next-line
     let source = require(file.src)
-    writeFileSync(file.target.replace('<ROUTE_NAME>', routeName), source(replacements))
+    writeFile(file.target.replace('<ROUTE_NAME>', routeName), source(replacements))
   })
 }
 
@@ -44,16 +44,16 @@ module.exports = async function action (params, utils) {
   }
 
   // write JSON Schema file
-  writeJsonSchema(modelName, schema)
+  writeJsonSchema(modelName, schema, writeFile)
 
   // add routes to arcfile
   crud.routes.forEach(route => raw = mutateArc.upsert({ item: route.replace('<ROUTE_NAME>', routeName), pragma: 'http', raw }))
 
   // Write the arcfile to disk
-  await writeFile(project.manifest, raw)
+  writeFile(project.manifest, raw)
 
   // Copy source code
-  addRouteSource({ manifest: crud, routeName, replacements: { ...modelName, schema } })
+  addRouteSource({ manifest: crud, routeName, replacements: { ...modelName, schema }, writeFile })
 
   // Install Dependencies
   installAwsSdk()

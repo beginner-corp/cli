@@ -1,4 +1,4 @@
-const { existsSync, mkdirSync, writeFileSync } = require('fs')
+const { existsSync, mkdirSync } = require('fs')
 const { createModelName } = require('./model-utils')
 
 const standardJsonTypes = [
@@ -50,10 +50,10 @@ function createProp (type) {
   }
 }
 
-function writeJsonSchema (modelName, schema) {
+function writeJsonSchema (modelName, schema, writeFile) {
   schema = addKeyPropertyToSchema(schema)
   mkdirSync(`app/schemas`, { recursive: true })
-  writeFileSync(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
+  writeFile(`app/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
 }
 
 function existsJsonSchema (modelName) {

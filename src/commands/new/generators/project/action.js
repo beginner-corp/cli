@@ -1,5 +1,5 @@
 let looseName = /^[a-z][a-zA-Z0-9-_]+$/
-let { existsSync, mkdirSync, readFileSync, writeFileSync } = require('fs')
+let { existsSync, mkdirSync, readFileSync } = require('fs')
 let { isAbsolute, join, normalize } = require('path')
 
 function log (text, json = false) {
@@ -78,7 +78,7 @@ module.exports = async function (params, utils) {
   starterProjectManifest.fileList.forEach(file => {
     let input = require.resolve(file)
     let data = readFileSync(input)
-    writeFileSync(input.replace('/snapshot/cli/node_modules/@enhance/starter-project/', ''), data)
+    writeFile(input.replace('/snapshot/cli/node_modules/@enhance/starter-project/', ''), data)
   })
 
   // Need to install enhance/arc-plugin-enhance or 💥

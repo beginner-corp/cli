@@ -91,13 +91,13 @@ function addElement ({ tokens, path, name }) {
 
 module.exports = async function createPage (params, args) {
   let { lang } = params
-  let { path, runtime } = args
+  let { path, runtime, writeFile } = args
   let addItem = require('../add-begin-item')
 
   if (runtime !== 'html') {
     let esprima = require('esprima')
     let escodegen = require('escodegen')
-    let { existsSync, readFileSync, writeFileSync } = require('fs')
+    let { existsSync, readFileSync } = require('fs')
 
     if (existsSync('./app/elements.mjs')) {
       try {
@@ -113,7 +113,7 @@ module.exports = async function createPage (params, args) {
         // convert AST to code
         elements = escodegen.generate(tokens)
         // re-write elements.mjs
-        writeFileSync('./app/elements.mjs', elements)
+        writeFile('./app/elements.mjs', elements)
       }
       catch (err) {
         console.log(err)
