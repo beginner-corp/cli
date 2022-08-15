@@ -38,12 +38,13 @@ module.exports = async function action (params, utils) {
 
   // Create JSON Schema from input
   let schema = {}
-  if (input[0] === '-f' || input[0] === '--file') {
-    // read JSON Schema File
-    schema = JSON.parse(readFileSync(input[1]))
+  let file = args.f || args.file
+  if (!file || file === true) {
+    schema = createJsonSchema(...input)
   }
   else {
-    schema = createJsonSchema(...input)
+    // read JSON Schema File
+    schema = JSON.parse(readFileSync(file))
   }
 
   const { id } = schema
