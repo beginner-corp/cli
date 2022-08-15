@@ -34,8 +34,8 @@ function installDependencies (dependencies) {
     console.log('Installing npm dependencies')
     const packageJson = JSON.parse(readFileSync('./package.json'))
     const installedDeps = Object.keys(packageJson.dependencies)
-    const deps = dependencies.filter(dep => !installedDeps.includes(dep)).join(' ')
-    spawn.sync('npm', [ 'install', `${deps}`, '--silent' ])
+    const deps = dependencies.filter(dep => !installedDeps.includes(dep))
+    deps.forEach(dep => spawn.sync('npm', [ 'install', `${dep}`, '--silent' ]))
   }
 }
 

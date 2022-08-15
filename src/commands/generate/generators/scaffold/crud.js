@@ -12,8 +12,12 @@ const crud = {
     { src: './crud/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
     { src: './crud/pages-new.js', target: 'app/pages/<ROUTE_NAME>/new.mjs' },
   ],
+  elements: [
+    { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
+  ],
   dependencies: [
-    '@begin/validator'
+    '@begin/validator',
+    'github:enhance-dev/form-elements'
   ]
 }
 

@@ -29,7 +29,10 @@ function getType (key, property) {
 }
 
 function inputTemplate (key, type, property, data, required = []) {
-  let input = '<input type="' + type + '" id="' + key + '" name="' + key + '" '
+  if (type === 'hidden') {
+    return `<input type="hidden" id="${key}" name="${key}" value="\${${data}?.${key}}" />`
+  }
+  let input = `<enhance-text-input label="${capitalize(key)}" type="` + type + '" id="' + key + '" name="' + key + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '"'
   }
@@ -45,13 +48,16 @@ function inputTemplate (key, type, property, data, required = []) {
   if (property.pattern) {
     input = input + 'pattern="' + property.pattern + '"'
   }
+  if (property.description) {
+    input = input + 'description="' + property.description + '"'
+  }
   if (required.includes(key)) {
     input = input + 'required'
   }
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked'
   }
-  input = input + `value="\${${data}?.${key}}" />`
+  input = input + `value="\${${data}?.${key}}"></enhance-text-input>`
   return input
 }
 
@@ -81,9 +87,6 @@ function input (key, schema, data) {
   }
   else {
     elem = inputTemplate(key, type, property, data, schema.required)
-  }
-  if (type !== 'hidden' && type !== 'object') {
-    elem = `<label>${capitalize(key)} ${elem}</label>`
   }
   return elem
 }

@@ -16,6 +16,17 @@ function addRouteSource ({ manifest, routeName, replacements, writeFile }) {
   })
 }
 
+function addElements (elements, writeFile) {
+  let path = require('path')
+  elements.forEach(element => {
+    let dirname = path.dirname('app/elements')
+    mkdirSync(dirname, { recursive: true })
+    // eslint-disable-next-line
+    let source = require('./crud/element.js')
+    writeFile(`app/elements/${element.tagName}.mjs`, source(element))
+  })
+}
+
 module.exports = async function action (params, utils) {
   let { mutateArc, writeFile, npmCommands } = utils
   let { installAwsSdk, installDependencies } = npmCommands
@@ -54,6 +65,9 @@ module.exports = async function action (params, utils) {
 
   // Copy source code
   addRouteSource({ manifest: crud, routeName, replacements: { ...modelName, schema }, writeFile })
+
+  // Write elements
+  addElements(crud.elements, writeFile)
 
   // Install Dependencies
   installAwsSdk()
