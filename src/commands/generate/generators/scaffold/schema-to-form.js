@@ -34,30 +34,30 @@ function inputTemplate (key, type, property, data, required = []) {
   }
   let input = `<enhance-text-input label="${capitalize(key)}" type="` + type + '" id="' + key + '" name="' + key + '" '
   if (property.minimum) {
-    input = input + 'min="' + property.minimum + '"'
+    input = input + 'min="' + property.minimum + '" '
   }
   if (property.minLength) {
-    input = input + 'minlength="' + property.minLength + '"'
+    input = input + 'minlength="' + property.minLength + '" '
   }
   if (property.maximum) {
-    input = input + 'max="' + property.maximum + '"'
+    input = input + 'max="' + property.maximum + '" '
   }
   if (property.maxLength) {
-    input = input + 'maxlength="' + property.maxLength + '"'
+    input = input + 'maxlength="' + property.maxLength + '" '
   }
   if (property.pattern) {
-    input = input + 'pattern="' + property.pattern + '"'
+    input = input + 'pattern="' + property.pattern + '" '
   }
   if (property.description) {
-    input = input + 'description="' + property.description + '"'
+    input = input + 'description="' + property.description + '" '
   }
   if (required.includes(key)) {
-    input = input + 'required'
+    input = input + 'required '
   }
   if (type === 'checkbox' && data[key] === true) {
-    input = input + 'checked'
+    input = input + 'checked '
   }
-  input = input + `value="\${${data}?.${key}}"></enhance-text-input>`
+  input = input + `value="\${${data}?.${key}}" errors="\${problems?.${key}?.errors}"></enhance-text-input>`
   return input
 }
 
@@ -93,10 +93,6 @@ function input (key, schema, data) {
 
 function schemaToForm ({ action, schema, update = false, data }) {
   return `<h2>${capitalize(schema?.id)}</h2>
-<div style="display:\${display}">
-  <p>Found some problems!</p>
-  <ul>\${problems?.map(li).join('') || ''}</ul>
-</div>
 <form
   style="display: flex; flex-direction: column; gap: 1rem;"
   action="/${action}${update ? `/\${${data}.key}` : ''}"

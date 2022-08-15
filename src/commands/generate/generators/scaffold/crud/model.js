@@ -21,28 +21,36 @@ const get${capPlural} = async function () {
 
 const validate = {
     shared (req) {
+        let problems = {}
         let res = validator(req, ${capSingular})
         if (!res.valid) {
-            return res.errors.map(e => {
-                return { name: e.property.replace(/instance\./,''), error: e.message }
+            res.errors.forEach(e => {
+                let key = e.property === 'instance' ? e.argument : e.property.replace(/instance./,'')
+                let msg = e.message.replace(/"/g,'')
+                if (problems[key]) {
+                    problems[key].errors = \`\${problems[key].errors}<p>\${$msg}</p>\`
+                } else {
+                    problems[key] = { errors: \`<p>\${msg}}</p>\` }
+                }
             })
         }
-        return []
+        return problems
     },
     async create (req) {
-        let problems = [...validate.shared(req)]
+        let problems = validate.shared(req)
         if (req.body.key) {
-            problems.push({ name: 'key', error: 'should not be included on a create'})
+            problems['key'] = { errors: '<p>should not be included on a create</p>' }
         }
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, ${singular}: req.body } : false
+        return Object.keys(problems).length > 0 ? { problems,  ${singular}: req.body } : false
     },
     async update (req) {
-        let problems = [...validate.shared(req)]
+        let problems = validate.shared(req)
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, ${singular}: req.body } : false
+        return Object.keys(problems).length > 0 ? { problems,  ${singular}: req.body } : false
     }
 }
+
 
 export {
     delete${capSingular},
