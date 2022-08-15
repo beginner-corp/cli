@@ -39,7 +39,7 @@ function inputTemplate (key, type, property, data, required = []) {
     type = 'number'
   }
 
-  let input = `<enhance-text-input label="${capitalize(key)}" type="` + type + '" id="' + key + '" name="' + key + '" '
+  let input = `<enhance-text-input label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + key + '" name="' + key + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
   }

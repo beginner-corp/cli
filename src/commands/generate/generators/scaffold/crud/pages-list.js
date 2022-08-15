@@ -1,18 +1,16 @@
 function schemaToList ({ schema = {}, prefix = '' }) {
   return Object.keys(schema.properties).map(key => {
-    console.log(schema.properties[key])
     if (schema.properties[key].type === 'object') {
       return schemaToList({ schema: schema.properties[key], prefix: `.${key}?` })
     }
     else {
-      return `<p><strong>${key}: </strong>\${item?${prefix}.${key}}</p>`
+      return `<p class="pb-2"><strong class="capitalize">${key.replace(/([a-z])([A-Z])/g, '$1 $2')}: </strong>\${item?${prefix}.${key}}</p>`
     }
   }
   ).join('\n  ')
 }
 
 module.exports = function ({ plural, singular, schema }) {
-  console.log('create list', schema)
   let list = schemaToList({ schema })
 
   return `// View documentation at: https://docs.begin.com
