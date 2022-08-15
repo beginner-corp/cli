@@ -5,10 +5,7 @@ function getType (key, property) {
     return 'hidden'
   }
   let { type } = property
-  if (type === 'integer' || type === 'number') {
-    return 'number'
-  }
-  else if (type === 'boolean') {
+  if (type === 'boolean') {
     return 'checkbox'
   }
   else if (type === 'string') {
@@ -32,6 +29,16 @@ function inputTemplate (key, type, property, data, required = []) {
   if (type === 'hidden') {
     return `<input type="hidden" id="${key}" name="${key}" value="\${${data}?.${key}}" />`
   }
+
+  // if the json schema indicates an number allow decimals
+  if (type === 'number' && !property.step) {
+    property.step = 0.01
+  }
+  // otherwise, just and integer
+  else if (type === 'integer') {
+    type = 'number'
+  }
+
   let input = `<enhance-text-input label="${capitalize(key)}" type="` + type + '" id="' + key + '" name="' + key + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
@@ -50,6 +57,9 @@ function inputTemplate (key, type, property, data, required = []) {
   }
   if (property.description) {
     input = input + 'description="' + property.description + '" '
+  }
+  if (property.step) {
+    input = input + 'step="' + property.step + '" '
   }
   if (required.includes(key)) {
     input = input + 'required '
