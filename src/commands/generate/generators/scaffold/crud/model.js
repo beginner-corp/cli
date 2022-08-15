@@ -35,12 +35,12 @@ const validate = {
             problems.push({ name: 'key', error: 'should not be included on a create'})
         }
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, book: req.body } : false
+        return problems.length > 0 ? { problems, ${singular}: req.body } : false
     },
     async update (req) {
         let problems = [...validate.shared(req)]
         // Insert your custom validation here
-        return problems.length > 0 ? { problems, book: req.body } : false
+        return problems.length > 0 ? { problems, ${singular}: req.body } : false
     }
 }
 
