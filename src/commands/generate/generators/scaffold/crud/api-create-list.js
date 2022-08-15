@@ -2,7 +2,7 @@ module.exports = function ({ plural, capPlural, singular, capSingular  }) {
   return `// View documentation at: https://docs.begin.com
 import { get${capPlural}, upsert${capSingular}, validate } from '../../models/${plural}.mjs'
 
-export async function get (req) {
+export async function get () {
   const ${plural} = await get${capPlural}()
   return {
     json: { ${plural} }
