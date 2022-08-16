@@ -28,9 +28,9 @@ const validate = {
                 let key = e.property === 'instance' ? e.argument : e.property.replace(/instance./,'')
                 let msg = e.message.replace(/"/g,'')
                 if (problems[key]) {
-                    problems[key].errors = \`\${problems[key].errors}<p>\${$msg}</p>\`
+                    problems[key].errors = \`\${problems[key].errors}<p>\${msg}</p>\`
                 } else {
-                    problems[key] = { errors: \`<p>\${msg}}</p>\` }
+                    problems[key] = { errors: \`<p>\${msg}</p>\` }
                 }
             })
         }
