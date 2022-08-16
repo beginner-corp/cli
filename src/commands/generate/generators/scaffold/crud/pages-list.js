@@ -4,7 +4,7 @@ function schemaToList ({ schema = {}, prefix = '' }) {
       return schemaToList({ schema: schema.properties[key], prefix: `.${key}?` })
     }
     else {
-      return `<p class="pb-2"><strong class="capitalize">${key.replace(/([a-z])([A-Z])/g, '$1 $2')}: </strong>\${item?${prefix}.${key}}</p>`
+      return `<p class="pb-2"><strong class="capitalize">${key.replace(/([a-z])([A-Z])/g, '$1 $2')}: </strong>\${item?${prefix}.${key} || ''}</p>`
     }
   }
   ).join('\n  ')
