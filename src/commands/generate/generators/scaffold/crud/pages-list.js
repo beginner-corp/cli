@@ -1,3 +1,5 @@
+const { schemaToForm } = require('../schema-to-form')
+
 function schemaToList ({ schema = {}, prefix = '' }) {
   return Object.keys(schema.properties).map(key => {
     if (schema.properties[key].type === 'object') {
@@ -17,6 +19,8 @@ module.exports = function ({ plural, singular, capPlural, schema }) {
 export default function Html ({ html, state }) {
   const { store } = state
   let ${plural} = store.${plural} || []
+  const ${singular} = store.${singular} || {}
+  const problems = store.problems || {}
 
   return html\`
   <section>
@@ -32,10 +36,11 @@ export default function Html ({ html, state }) {
     <button>Delete this ${singular}</button>
   </form>
 </p>\`).join('\\n')}
-    <div>
-      <a href="/${plural}/new">New ${singular}</a>
-    </div>
-  </section>
+<details \${Object.keys(problems).length ? 'open' : ''}>
+    <summary>New ${singular}</summary>
+    ${schemaToForm({ action: plural, schema, update: true, data: singular })}
+</details>
+</section>
   \`
 }
 `

@@ -10,7 +10,6 @@ const crud = {
     // Pages
     { src: './crud/pages-list.js', target: 'app/pages/<ROUTE_NAME>.mjs' },
     { src: './crud/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
-    { src: './crud/pages-new.js', target: 'app/pages/<ROUTE_NAME>/new.mjs' },
   ],
   elements: [
     { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }

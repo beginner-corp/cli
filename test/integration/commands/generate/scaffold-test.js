@@ -17,7 +17,7 @@ async function runTests (runType, t) {
   let alreadyExists = /The schema already exists/
 
   t.test(`${mode} scaffold project - normal`, async t => {
-    t.plan(14)
+    t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -35,7 +35,6 @@ async function runTests (runType, t) {
     t.ok(existsSync(join(cwd, 'models/books.mjs')), 'Wrote books db code')
     t.ok(existsSync(join(cwd, 'app/pages/books.mjs')), 'Wrote books view')
     t.ok(existsSync(join(cwd, 'app/pages/books/$id.mjs')), 'Wrote books/$id view')
-    t.ok(existsSync(join(cwd, 'app/pages/books/new.mjs')), 'Wrote books/new view')
     t.ok(existsSync(join(cwd, 'app/schemas/book.mjs')), 'Wrote books JSON schema')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
@@ -58,7 +57,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} scaffold project - normal / JSON`, async t => {
-    t.plan(14)
+    t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
     await begin('new project -p .', cwd)
@@ -76,7 +75,6 @@ async function runTests (runType, t) {
     t.ok(existsSync(join(cwd, 'models/books.mjs')), 'Wrote books db code')
     t.ok(existsSync(join(cwd, 'app/pages/books.mjs')), 'Wrote books view')
     t.ok(existsSync(join(cwd, 'app/pages/books/$id.mjs')), 'Wrote books/$id view')
-    t.ok(existsSync(join(cwd, 'app/pages/books/new.mjs')), 'Wrote books/new view')
     t.ok(existsSync(join(cwd, 'app/schemas/book.mjs')), 'Wrote books JSON schema')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
