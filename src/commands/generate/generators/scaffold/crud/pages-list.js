@@ -10,7 +10,7 @@ function schemaToList ({ schema = {}, prefix = '' }) {
   ).join('\n  ')
 }
 
-module.exports = function ({ plural, singular, schema }) {
+module.exports = function ({ plural, singular, capPlural, schema }) {
   let list = schemaToList({ schema })
 
   return `// View documentation at: https://docs.begin.com
@@ -20,7 +20,7 @@ export default function Html ({ html, state }) {
 
   return html\`
   <section>
-    <h1>Index page</h1>
+    <h1 class="mb1 font-semibold text3">${capPlural} page</h1>
     \${${plural}.map(item => \`<div>
   ${list}
 </div>
