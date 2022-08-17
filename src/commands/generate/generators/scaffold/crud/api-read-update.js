@@ -22,7 +22,7 @@ export async function post (req) {
   const id = req.pathParameters?.id
 
   // Validate
-  let problems = await validate.update(req)
+  let { problems, ${singular} } = await validate.update(req)
   if (problems) {
     let key = problems.${singular}.key || 'new'
     return {
@@ -33,10 +33,10 @@ export async function post (req) {
   }
 
   try {
-    const ${singular} = await upsert${capSingular}({key: id, ...req.body})
+    const result = await upsert${capSingular}({key: id, ...${singular}})
     return {
         session: {},
-        json: { ${singular} },
+        json: { ${singular}: result },
         location: '/${plural}'
     }
   }

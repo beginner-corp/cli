@@ -25,7 +25,7 @@ function getType (key, property) {
   return type
 }
 
-function inputTemplate (key, type, property, data, required = []) {
+function inputTemplate (key, type, property, data, required = [], keyPrefix = '') {
   if (type === 'hidden') {
     return `<input type="hidden" id="${key}" name="${key}" value="\${${data}?.${key}}" />`
   }
@@ -39,7 +39,10 @@ function inputTemplate (key, type, property, data, required = []) {
     type = 'number'
   }
 
-  let input = `<enhance-text-input label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + key + '" name="' + key + '" '
+  let name = keyPrefix ? `${keyPrefix}` : key
+  let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
+
+  let input = `<enhance-text-input label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
   }
@@ -67,12 +70,13 @@ function inputTemplate (key, type, property, data, required = []) {
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked '
   }
-  input = input + `value="\${${data}?.${key}}" errors="\${problems?.${key}?.errors}"></enhance-text-input>`
+  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-text-input>`
   return input
 }
 
-function selectTemplate (key, property, data, required = []) {
-  let input = '<select id="' + key + '" name="' + key + '"'
+function selectTemplate (key, property, data, required = [], keyPrefix = '') {
+  let name = keyPrefix ? `${keyPrefix}.${key}` : key
+  let input = '<select id="' + name + '" name="' + name + '"'
   if (required.includes(key)) {
     input = input + 'required'
   }
@@ -82,21 +86,23 @@ function selectTemplate (key, property, data, required = []) {
   return input
 }
 
-function input (key, schema, data) {
+// need to add a prefix here
+function input (key, schema, data, prefix = '') {
   const property = schema.properties[key]
   const type = getType(key, property)
   let elem = ''
+  let keyPrefix = prefix ? `${prefix}.${key}` : ''
   if (property.enum) {
-    elem = selectTemplate(key, property, data, schema.required)
+    elem = selectTemplate(key, property, data, schema.required, keyPrefix)
   }
   else if (type === 'object') {
     elem = elem + `<h2>${capitalize(key)}</h2>`
     elem = elem + Object.keys(schema.properties[key].properties).map(innerKey =>
-      input(innerKey, schema.properties[key], data)
+      input(innerKey, schema.properties[key], data, key)
     ).join('\n')
   }
   else {
-    elem = inputTemplate(key, type, property, data, schema.required)
+    elem = inputTemplate(key, type, property, data, schema.required, keyPrefix)
   }
   return elem
 }

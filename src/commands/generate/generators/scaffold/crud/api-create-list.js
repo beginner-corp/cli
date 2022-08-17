@@ -19,7 +19,7 @@ export async function get (req) {
 
 export async function post (req) {
   // Validate
-  let problems = await validate.create(req)
+  let { problems, ${singular} } = await validate.create(req)
   if (problems) {
     return {
       session: { problems },
@@ -29,10 +29,10 @@ export async function post (req) {
   }
 
   try {
-    const ${singular} = await upsert${capSingular}(req.body)
+    const result = await upsert${capSingular}(${singular})
     return {
         session: {},
-        json: { ${singular} },
+        json: { ${singular}: result },
         location: '/${plural}'
     }
   }
