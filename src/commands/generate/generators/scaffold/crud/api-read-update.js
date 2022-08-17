@@ -4,17 +4,17 @@ import { get${capSingular}, upsert${capSingular}, validate } from '../../../mode
 
 export async function get (req) {
   if (req.session.problems) {
-    let { problems, ...session } = req.session
+    let { problems, ${singular}, ...session } = req.session
     return {
       session,
-      json: { ...problems }
+      json: { problems, ${singular} }
     }
   }
 
   const id = req.pathParameters?.id
-  const ${singular} = await get${capSingular}(id)
+  const result = await get${capSingular}(id)
   return {
-    json: { ${singular} }
+    json: { ${singular}: result }
   }
 }
 
@@ -24,11 +24,10 @@ export async function post (req) {
   // Validate
   let { problems, ${singular} } = await validate.update(req)
   if (problems) {
-    let key = problems.${singular}.key || 'new'
     return {
-      session: { problems },
-      json: { problems },
-      location: \`/${plural}/\${key}\`
+      session: { problems, ${singular} },
+      json: { problems, ${singular} },
+      location: \`/${plural}/\${${singular}.key}\`
     }
   }
 

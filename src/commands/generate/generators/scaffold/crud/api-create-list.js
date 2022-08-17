@@ -5,10 +5,10 @@ import { get${capPlural}, upsert${capSingular}, validate } from '../../models/${
 export async function get (req) {
   const ${plural} = await get${capPlural}()
   if (req.session.problems) {
-    let { problems, ...session } = req.session
+    let { problems, ${singular},...session } = req.session
     return {
       session,
-      json: { ...problems, ${plural} }
+      json: { problems, ${plural}, ${singular} }
     }
   }
 
@@ -22,8 +22,8 @@ export async function post (req) {
   let { problems, ${singular} } = await validate.create(req)
   if (problems) {
     return {
-      session: { problems },
-      json: { problems },
+      session: { problems, ${singular} },
+      json: { problems, ${singular} },
       location: '/${plural}'
     }
   }
