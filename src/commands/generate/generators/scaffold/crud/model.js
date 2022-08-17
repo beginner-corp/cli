@@ -1,6 +1,6 @@
 module.exports = function ({ plural, capPlural, singular, capSingular }) {
   return `import data from '@begin/data'
-import { validator } from '@begin/validator'
+import { convertToNestedObject, validator } from '@begin/validator'
 import { ${capSingular} } from '../app/schemas/${singular}.mjs'
 
 const delete${capSingular} = async function (key) {
@@ -34,7 +34,7 @@ const validate = {
                 }
             })
         }
-        return { problems, data }
+        return { problems: convertToNestedObject(problems), data }
     },
     async create (req) {
         let { problems, data } = validate.shared(req)
