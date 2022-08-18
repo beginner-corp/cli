@@ -21,7 +21,7 @@ const get${capPlural} = async function () {
 
 const validate = {
     shared (req) {
-        return validator(req, Person)
+        return validator(req, ${capSingular})
     },
     async create (req) {
         let { valid, problems, data } = validate.shared(req)
