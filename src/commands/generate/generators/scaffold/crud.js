@@ -15,7 +15,7 @@ const crud = {
     { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
   ],
   dependencies: [
-    '@begin/validator',
+    '@begin/validator@0.0.9',
     'github:enhance-dev/form-elements'
   ]
 }
