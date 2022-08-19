@@ -1,5 +1,5 @@
 let names = { en: [ 'gen', 'generate' ] }
-let subcommands = [ 'scaffold' ]
+let subcommands = [ 'scaffold', 'auth' ]
 let help = require('./help').bind({}, subcommands)
 
 async function action (params) {
