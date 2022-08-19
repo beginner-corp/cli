@@ -9,11 +9,13 @@ async function action (params) {
     let _inventory = require('@architect/inventory')
     params.inventory = await _inventory()
     let lib = require('../../lib')
+    let generatorUtils = require('./utils.js')
     let utils = {
       // create: require('./_create')(params),
       // validate: require(`./_validate`)(params),
       ...lib,
       writeFile: lib.writeFile(params),
+      addRouteSource: generatorUtils.addRouteSource
     }
     return generator.action(params, utils)
   }
