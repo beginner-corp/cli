@@ -1,4 +1,4 @@
-module.exports = async function action (params, utils) {
+module.exports = async function action (params, utils, command) {
   let { mutateArc, writeFile, npmCommands, addRouteSource } = utils
   let { installDependencies } = npmCommands
   let project = params.inventory.inv._project
@@ -17,5 +17,5 @@ module.exports = async function action (params, utils) {
   writeFile(project.manifest, raw)
 
   // Copy source code
-  addRouteSource({ manifest, writeFile, command: params.args._[1] })
+  addRouteSource({ manifest, writeFile, command })
 }

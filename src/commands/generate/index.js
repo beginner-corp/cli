@@ -11,13 +11,12 @@ async function action (params) {
     let lib = require('../../lib')
     let generatorUtils = require('./utils.js')
     let utils = {
-      // create: require('./_create')(params),
-      // validate: require(`./_validate`)(params),
+      generate: require('./generators/_generate'),
       ...lib,
       writeFile: lib.writeFile(params),
       addRouteSource: generatorUtils.addRouteSource
     }
-    return generator.action(params, utils)
+    return generator.action(params, utils, subcommand)
   }
   else {
     let err = Error('Please specify a generator type to run')
