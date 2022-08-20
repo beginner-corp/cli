@@ -1,5 +1,10 @@
 const manifest = {
-  routes: [],
+  arcMutations: [
+    { pragma: 'plugins', item: 'arc-plugin-oauth' },
+    { pragma: 'oauth', item: 'use-mock true' },
+    { pragma: 'oauth', item: 'mock-list auth/mock-allow.mjs' },
+    { pragma: 'oauth', item: 'allow-list auth/allow.mjs' },
+  ],
   sourceFiles: [
     // Utils
     { src: 'handlers/allow.js', target: 'models/auth/allow.mjs' },

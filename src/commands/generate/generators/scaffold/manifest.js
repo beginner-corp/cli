@@ -1,5 +1,5 @@
 const manifest = {
-  routes: [],
+  arcMutations: [],
   sourceFiles: [
     // Utils
     { src: 'handlers/model.js', target: 'models/<ROUTE_NAME>.mjs' },
