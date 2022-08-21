@@ -40,6 +40,29 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
   })
 
+  t.test(`${mode} scaffold project - file based`, async t => {
+    t.plan(13)
+    let i, r
+    let cwd = newFolder(newAppDir)
+    await begin('new project -p .', cwd)
+    i = await getInv(t, cwd)
+    t.pass('Project is valid')
+    t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    r = await begin('generate scaffold -f ../../mock/person.schema.json', cwd, true)
+    i = await getInv(t, cwd)
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.ok(existsSync(join(cwd, 'app/api/people.mjs')), 'Wrote people api route')
+    t.ok(existsSync(join(cwd, 'app/api/people/$id.mjs')), 'Wrote people/$id api route')
+    t.ok(existsSync(join(cwd, 'app/api/people/$id/delete.mjs')), 'Wrote people/$id/delete api route')
+    t.ok(existsSync(join(cwd, 'models/people.mjs')), 'Wrote people db code')
+    t.ok(existsSync(join(cwd, 'app/pages/people.mjs')), 'Wrote people view')
+    t.ok(existsSync(join(cwd, 'app/pages/people/$id.mjs')), 'Wrote people/$id view')
+    t.ok(existsSync(join(cwd, 'app/schemas/person.mjs')), 'Wrote person JSON schema')
+    t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.code, 0, 'Exited 0')
+  })
+
   t.test(`${mode} scaffold app (errors)`, async t => {
     t.plan(4)
     let cwd, r
@@ -76,6 +99,30 @@ async function runTests (runType, t) {
     t.ok(existsSync(join(cwd, 'app/pages/books.mjs')), 'Wrote books view')
     t.ok(existsSync(join(cwd, 'app/pages/books/$id.mjs')), 'Wrote books/$id view')
     t.ok(existsSync(join(cwd, 'app/schemas/book.mjs')), 'Wrote books JSON schema')
+    t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.code, 0, 'Exited 0')
+  })
+
+  t.test(`${mode} scaffold project - file based / JSON`, async t => {
+    t.plan(13)
+    let i, r
+    let cwd = newFolder(newAppDir)
+    await begin('new project -p .', cwd)
+    i = await getInv(t, cwd)
+    t.pass('Project is valid')
+    t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+
+    r = await begin('generate scaffold  -f ../../mock/person.schema.json', cwd, true)
+    i = await getInv(t, cwd)
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.ok(existsSync(join(cwd, 'app/api/people.mjs')), 'Wrote people api route')
+    t.ok(existsSync(join(cwd, 'app/api/people/$id.mjs')), 'Wrote people/$id api route')
+    t.ok(existsSync(join(cwd, 'app/api/people/$id/delete.mjs')), 'Wrote people/$id/delete api route')
+    t.ok(existsSync(join(cwd, 'models/people.mjs')), 'Wrote people db code')
+    t.ok(existsSync(join(cwd, 'app/pages/people.mjs')), 'Wrote people view')
+    t.ok(existsSync(join(cwd, 'app/pages/people/$id.mjs')), 'Wrote people/$id view')
+    t.ok(existsSync(join(cwd, 'app/schemas/person.mjs')), 'Wrote person JSON schema')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
