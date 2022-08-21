@@ -41,5 +41,5 @@ module.exports = async function action (params, utils, command) {
   installAwsSdk()
 
   // Step 3: Run the generic generator
-  generate({ manifest, routeName, replacements: { ...modelName, schema }, command, project, utils })
+  generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
 }

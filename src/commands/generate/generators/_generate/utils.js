@@ -1,8 +1,9 @@
 
 let { mkdirSync } = require('fs')
 
-function addRouteSource ({ manifest, routeName = '', replacements = {}, writeFile, command }) {
+function addRouteSource ({ manifest, replacements = {}, writeFile, command }) {
   let path = require('path')
+  const { routeName = '' } = replacements
   const { sourceFiles } = manifest
   sourceFiles.forEach(file => {
     let dirname = path.dirname(file.target).replace('<ROUTE_NAME>', routeName)

@@ -1,7 +1,7 @@
 const { addElements, addRouteSource } = require('./utils')
 const { installDependencies } = require('../../../../lib/npm-commands')
 
-module.exports = async function generate ({ manifest, routeName, replacements, utils, command, project }) {
+module.exports = async function generate ({ manifest, replacements, utils, command, project }) {
   const { mutateArc, writeFile } = utils
   const { arcMutations = [], elements = [], dependencies = [] } = manifest
   let raw = project.raw
@@ -21,5 +21,5 @@ module.exports = async function generate ({ manifest, routeName, replacements, u
   addElements(elements, writeFile)
 
   // Copy source code
-  addRouteSource({ manifest, routeName, replacements, writeFile, command })
+  addRouteSource({ manifest, replacements, writeFile, command })
 }
