@@ -109,12 +109,12 @@ function input (key, schema, data, prefix = '') {
 
 function schemaToForm ({ action, schema, update = false, data }) {
   return `<h1 class="mb1 font-semibold text3">${capitalize(schema?.id)}</h1>
-<div style="display:\${problems.form ? 'block' : 'none'}">
+<div class="\${problems.form ? 'block' : 'hidden'}">
   <p>Found some problems!</p>
   <ul>\${problems.form}</ul>
 </div>
 <form
-  style="display: flex; flex-direction: column; gap: 1rem;"
+  class="flex flex-col gap-1"
   action="/${action}${update ? `/\${${data}.key}` : ''}"
   method="POST">
   ${Object.keys(schema.properties).map(key =>
