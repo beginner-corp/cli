@@ -120,7 +120,7 @@ function schemaToForm ({ action, schema, update = false, data }) {
   ${Object.keys(schema.properties).map(key =>
     input(key, schema, data)
   ).join('\n  ')}
-  <button style="max-width: 6rem;">Save</button>
+  <enhance-submit-button><span slot="label">Save</span></enhance-submit-button>
 </form>`
 }
 

@@ -33,7 +33,7 @@ export default function Html ({ html, state }) {
 </p>
 <p>
   <form action="/${plural}/\${item.key}/delete" method="POST">
-    <button>Delete this ${singular}</button>
+    <enhance-submit-button><span slot="label">Delete this ${singular}</span></enhance-submit-button>
   </form>
 </p>\`).join('\\n')}
 <details \${Object.keys(problems).length ? 'open' : ''}>

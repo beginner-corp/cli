@@ -12,6 +12,7 @@ const manifest = {
     { src: 'handlers/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
   ],
   elements: [
+    { name: 'SubmitButton', package: '@enhance/form-elements', tagName: 'enhance-submit-button' },
     { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
   ],
   dependencies: [
