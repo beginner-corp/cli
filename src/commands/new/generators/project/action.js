@@ -55,10 +55,32 @@ module.exports = async function (params, utils) {
     'name': `${appName}`,
     'version': '0.0.1',
     'scripts': {
-      'start': 'sandbox'
+      'start': 'sandbox',
+      'lint': 'eslint ./app/**/*.mjs --fix'
+    },
+    'devDependencies': {
+      '@architect/sandbox': 'latest',
+      'eslint': 'latest'
     },
     'dependencies': {
       '@enhance/arc-plugin-enhance': 'latest'
+    },
+    'eslintConfig': {
+      'env': {
+        'node': true
+      },
+      'extends': 'eslint:recommended',
+      'rules': {
+        'indent': [
+          'error',
+          2
+        ]
+      },
+      'ignorePatterns': [],
+      'parserOptions': {
+        'sourceType': 'module',
+        'ecmaVersion': 2022
+      }
     }
   }
   writeFile('package.json', JSON.stringify(packageJson, null, 2))
@@ -69,7 +91,6 @@ module.exports = async function (params, utils) {
 
   // Create starter app folders
   mkdirSync('app/pages', { recursive: true })
-  mkdirSync('models', { recursive: true })
   mkdirSync('public', { recursive: true })
 
   // Starter project files
