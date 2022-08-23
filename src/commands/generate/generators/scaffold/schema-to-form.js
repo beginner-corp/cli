@@ -108,20 +108,20 @@ function input (key, schema, data, prefix = '') {
 }
 
 function schemaToForm ({ action, schema, update = false, data }) {
-  return `<h1 class="mb1 font-semibold text3">${capitalize(schema?.id)}</h1>
-<div class="\${problems.form ? 'block' : 'hidden'}">
-  <p>Found some problems!</p>
-  <ul>\${problems.form}</ul>
-</div>
-<form
-  class="flex flex-col gap-1"
+  return `<enhance-form
   action="/${action}${update ? `/\${${data}.key}` : ''}"
   method="POST">
+  <div class="\${problems.form ? 'block' : 'hidden'}">
+    <p>Found some problems!</p>
+    <ul>\${problems.form}</ul>
+  </div>
+  <enhance-fieldset legend="${capitalize(schema?.id)}">
   ${Object.keys(schema.properties).map(key =>
     input(key, schema, data)
   ).join('\n  ')}
-  <enhance-submit-button><span slot="label">Save</span></enhance-submit-button>
-</form>`
+  <enhance-submit-button style="float: right"><span slot="label">Save</span></enhance-submit-button>
+  </enhance-fieldset>
+</enhance-form>`
 }
 
 module.exports = {

@@ -7,9 +7,9 @@ export default function Html ({ html, state }) {
   const ${singular} = store.${singular} || {}
   const problems = store.problems || {}
 
-  return html\`
+  return html\`<enhance-page-container>
   ${schemaToForm({ action: plural, schema, update: true, data: singular })}
-\`
+</enhance-page-container>\`
 }
 `
 }

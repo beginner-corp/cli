@@ -22,23 +22,26 @@ export default function Html ({ html, state }) {
   const ${singular} = store.${singular} || {}
   const problems = store.problems || {}
 
-  return html\`
-  <section>
+  return html\`<enhance-page-container>
+  <main>
     <h1 class="mb1 font-semibold text3">${capPlural} page</h1>
-    \${${plural}.map(item => \`<div class="mb0">
+    \${${plural}.map(item => \`<article class="mb2">
+<div class="mb0">
   ${list}
 </div>
 <p class="mb-1">
-  <a href="/${plural}/\${item.key}">Edit this ${singular}</a>
+  <enhance-link href="/${plural}/\${item.key}">Edit this ${singular}</enhance-link>
 </p>
 <form action="/${plural}/\${item.key}/delete" method="POST" class="mb-1">
   <enhance-submit-button><span slot="label">Delete this ${singular}</span></enhance-submit-button>
-</form>\`).join('\\n')}
-<details \${Object.keys(problems).length ? 'open' : ''}>
+</form>
+</article>\`).join('\\n')}
+<details class="mb0" \${Object.keys(problems).length ? 'open' : ''}>
     <summary>New ${singular}</summary>
     ${schemaToForm({ action: plural, schema, update: true, data: singular })}
 </details>
-</section>
+</main>
+</enhance-page-container>
   \`
 }
 `
