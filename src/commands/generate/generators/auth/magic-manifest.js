@@ -26,6 +26,8 @@ const manifest = {
     { src: 'handlers/magic/ws/connect/index.js', target: 'src/ws/connect/index.js' },
     { src: 'handlers/magic/ws/default/index.js', target: 'src/ws/default/index.js' },
     { src: 'handlers/magic/ws/disconnect/index.js', target: 'src/ws/disconnect/index.js' },
+    // Seed database
+    { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.mjs' },
   ],
   elements: [
   ],

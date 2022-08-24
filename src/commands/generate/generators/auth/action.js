@@ -17,6 +17,7 @@ module.exports = async function action (params, utils, command) {
   }
   else if (authType === 'magic-link') {
     // TODO: add prefs for seed DB
+    console.log(project)
 
     let manifest = require('./magic-manifest')
     generate({ manifest, command, project, utils })
