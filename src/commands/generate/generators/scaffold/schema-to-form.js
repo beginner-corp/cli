@@ -26,6 +26,7 @@ function getType (key, property) {
 }
 
 function inputTemplate (key, type, property, data, required = [], keyPrefix = '') {
+  let tagName = type === 'checkbox' ? 'checkbox' : 'text-input'
   if (type === 'hidden') {
     return `<input type="hidden" id="${key}" name="${key}" value="\${${data}?.${key}}" />`
   }
@@ -42,7 +43,7 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   let name = keyPrefix ? `${keyPrefix}` : key
   let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
 
-  let input = `<enhance-text-input label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
+  let input = `<enhance-${tagName} label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
   }
@@ -70,7 +71,7 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked '
   }
-  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-text-input>`
+  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-${tagName}>`
   return input
 }
 
@@ -86,7 +87,6 @@ function selectTemplate (key, property, data, required = [], keyPrefix = '') {
   return input
 }
 
-// need to add a prefix here
 function input (key, schema, data, prefix = '') {
   const property = schema.properties[key]
   const type = getType(key, property)

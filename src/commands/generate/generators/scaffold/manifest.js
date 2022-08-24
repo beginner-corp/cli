@@ -12,6 +12,7 @@ const manifest = {
     { src: 'handlers/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
   ],
   elements: [
+    { name: 'CheckBox', package: '@enhance/form-elements', tagName: 'enhance-checkbox' },
     { name: 'FieldSet', package: '@enhance/form-elements', tagName: 'enhance-fieldset' },
     { name: 'FormElement', package: '@enhance/form-elements', tagName: 'enhance-form' },
     { name: 'LinkElement', package: '@enhance/form-elements', tagName: 'enhance-link' },
