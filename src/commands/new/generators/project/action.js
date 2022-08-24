@@ -59,7 +59,6 @@ module.exports = async function (params, utils) {
       'lint': 'eslint ./app/**/*.mjs --fix'
     },
     'devDependencies': {
-      '@architect/sandbox': 'latest',
       'eslint': 'latest'
     },
     'dependencies': {
