@@ -34,16 +34,16 @@ export async function post (req) {
   try {
     const result = await upsert${capSingular}({key: id, ...${singular}})
     return {
-        session: {},
-        json: { ${singular}: result },
-        location: '/${plural}'
+      session: {},
+      json: { ${singular}: result },
+      location: '/${plural}'
     }
   }
   catch (err) {
     return {
-        session: { error: err.message },
-        json: { error: err.message },
-        location: '/${plural}'
+      session: { error: err.message },
+      json: { error: err.message },
+      location: '/${plural}'
     }
   }
 }

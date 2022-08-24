@@ -6,7 +6,8 @@ let copy = {
 
 let javascript = lang => `// ${copy[lang].view_docs}
 export default function Html ({ html, state }) {
-  const { attrs } = state
+  // eslint-disable-next-line
+  const { attrs, store } = state
   return html\`<section>
     <h1>Index page</h1>
     <p>html content for home page here</p>
