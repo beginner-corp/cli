@@ -55,7 +55,7 @@ module.exports = async function (params, utils) {
     'name': `${appName}`,
     'version': '0.0.1',
     'scripts': {
-      'start': 'sandbox',
+      'start': 'begin dev',
       'lint': 'eslint ./app/**/*.mjs --fix'
     },
     'devDependencies': {
