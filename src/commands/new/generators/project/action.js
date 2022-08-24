@@ -2,6 +2,7 @@ let looseName = /^[a-z][a-zA-Z0-9-_]+$/
 let { existsSync, mkdirSync, readFileSync } = require('fs')
 let { isAbsolute, join, normalize, sep } = require('path')
 
+
 function log (text, json = false) {
   if (!json) {
     console.log(text)
@@ -108,11 +109,14 @@ module.exports = async function (params, utils) {
 
   // Need to install enhance/arc-plugin-enhance or 💥
   log('Installing npm dependencies', args.json)
-  initialInstall()
+  const { status } = initialInstall()
+  if (status !== 0) {
+    log(`${c.bold(c.cyan('npm install'))} failed. Please re-run ${c.bold(c.cyan('npm install'))} to see a detailed error message.`)
+  }
 
   // Success message
   if (args['_'][0] === 'init') {
-    log(`Project ${appName} successfully initialied.`, args.json)
+    log(`Project ${appName} successfully initialized.`, args.json)
     log(`Run ${c.bold(c.cyan('begin dev'))} to get started.`, args.json)
   }
   else {

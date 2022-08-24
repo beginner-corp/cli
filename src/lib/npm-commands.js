@@ -40,7 +40,7 @@ function installDependencies (dependencies) {
 }
 
 function initialInstall () {
-  spawn.sync('npm', [ 'install', '--silent' ])
+  return spawn.sync('npm', [ 'install', '--silent' ], { encoding: 'utf-8' })
 }
 
 module.exports = {
