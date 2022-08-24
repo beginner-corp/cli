@@ -96,10 +96,11 @@ function input (key, schema, data, prefix = '') {
     elem = selectTemplate(key, property, data, schema.required, keyPrefix)
   }
   else if (type === 'object') {
-    elem = elem + `<h2>${capitalize(key)}</h2>`
+    elem = elem + `<enhance-fieldset legend="${capitalize(key)}">`
     elem = elem + Object.keys(schema.properties[key].properties).map(innerKey =>
       input(innerKey, schema.properties[key], data, key)
     ).join('\n')
+    elem = elem + `</enhance-fieldset>`
   }
   else {
     elem = inputTemplate(key, type, property, data, schema.required, keyPrefix)
