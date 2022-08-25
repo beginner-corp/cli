@@ -95,9 +95,8 @@ function input (key, schema, data, prefix = '') {
   const property = schema.properties[key]
   const type = getType(key, property)
   let elem = ''
-  let keyPrefix = prefix ? `${prefix}.${key}` : ''
   if (property.enum) {
-    elem = selectTemplate(key, property, data, schema.required, keyPrefix)
+    elem = selectTemplate(key, property, data, schema.required, prefix)
   }
   else if (type === 'object') {
     elem = elem + `<enhance-fieldset legend="${capitalize(key)}">`
@@ -107,6 +106,7 @@ function input (key, schema, data, prefix = '') {
     elem = elem + `</enhance-fieldset>`
   }
   else {
+    let keyPrefix = prefix ? `${prefix}.${key}` : ''
     elem = inputTemplate(key, type, property, data, schema.required, keyPrefix)
   }
   return elem
