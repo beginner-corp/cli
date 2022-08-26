@@ -8,11 +8,14 @@ const manifest = {
     // API
     { src: 'handlers/magic/api/auth/example.js', target: 'app/api/auth/example.mjs' },
     { src: 'handlers/magic/api/auth/login.js', target: 'app/api/auth/login.mjs' },
+    { src: 'handlers/magic/api/auth/signup.js', target: 'app/api/auth/signup.mjs' },
+    { src: 'handlers/magic/api/auth/logout.js', target: 'app/api/auth/logout.mjs' },
     { src: 'handlers/magic/api/auth/verify.js', target: 'app/api/auth/verify.mjs' },
     { src: 'handlers/magic/api/auth/wait.js', target: 'app/api/auth/wait.mjs' },
     // Pages
     { src: 'handlers/magic/pages/auth/example.js', target: 'app/pages/auth/example.mjs' },
     { src: 'handlers/magic/pages/auth/login.js', target: 'app/pages/auth/login.html' },
+    { src: 'handlers/magic/pages/auth/signup.js', target: 'app/pages/auth/signup.html' },
     // { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.mjs' },
     { src: 'handlers/magic/pages/auth/wait.js', target: 'app/pages/auth/wait.mjs' },
     // Shared code (inside models directory)
@@ -28,9 +31,37 @@ const manifest = {
     { src: 'handlers/magic/ws/disconnect/index.js', target: 'src/ws/disconnect/index.js' },
     // Seed database
     { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.mjs' },
+    // Schemas
+    { src: 'handlers/magic/schemas/user.js', target: 'app/schemas/user.schema.json' },
+    { src: 'handlers/magic/schemas/role.js', target: 'app/schemas/role.schema.json' },
+    // Users and Roles
+    { src: 'handlers/magic/tmp-users/app/api/roles.js', target: 'app/api/roles.mjs' },
+    { src: 'handlers/magic/tmp-users/app/api/roles/$id.js', target: 'app/api/roles/$id.mjs' },
+    { src: 'handlers/magic/tmp-users/app/api/roles/$id/delete.js', target: 'app/api/roles/$id/delete.mjs' },
+    { src: 'handlers/magic/tmp-users/app/api/users.js', target: 'app/api/users.mjs' },
+    { src: 'handlers/magic/tmp-users/app/api/users/$id.js', target: 'app/api/users/$id.mjs' },
+    { src: 'handlers/magic/tmp-users/app/api/users/$id/delete.js', target: 'app/api/users/$id/delete.mjs' },
+    { src: 'handlers/magic/tmp-users/app/pages/roles.js', target: 'app/pages/roles.mjs' },
+    { src: 'handlers/magic/tmp-users/app/pages/roles/$id.js', target: 'app/pages/roles/$id.mjs' },
+    { src: 'handlers/magic/tmp-users/app/pages/users.js', target: 'app/pages/users.mjs' },
+    { src: 'handlers/magic/tmp-users/app/pages/users/$id.js', target: 'app/pages/users/$id.mjs' },
+    { src: 'handlers/magic/tmp-users/app/schemas/role.js', target: 'app/schemas/role.mjs' },
+    { src: 'handlers/magic/tmp-users/app/schemas/user.js', target: 'app/schemas/user.mjs' },
+    { src: 'handlers/magic/tmp-users/models/roles.js', target: 'models/roles.mjs' },
+    { src: 'handlers/magic/tmp-users/models/users.js', target: 'models/users.mjs' },
   ],
   elements: [
+    { name: 'FieldSet', package: '@enhance/form-elements', tagName: 'enhance-fieldset' },
+    { name: 'FormElement', package: '@enhance/form-elements', tagName: 'enhance-form' },
+    { name: 'LinkElement', package: '@enhance/form-elements', tagName: 'enhance-link' },
+    { name: 'PageContainer', package: '@enhance/form-elements', tagName: 'enhance-page-container' },
+    { name: 'SubmitButton', package: '@enhance/form-elements', tagName: 'enhance-submit-button' },
+    { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
   ],
+  dependencies: [
+    '@begin/validator@0.0.9',
+    'github:enhance-dev/form-elements'
+  ]
 }
 
 module.exports = manifest

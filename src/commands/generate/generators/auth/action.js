@@ -1,5 +1,7 @@
+
 module.exports = async function action (params, utils, command) {
   let { args } = params
+  let { writeFile } = utils
   let error = require('./errors')(params, utils)
   let project = params.inventory.inv._project
   let generate = require('../_generate')
@@ -16,8 +18,15 @@ module.exports = async function action (params, utils, command) {
     generate({ manifest, command, project, utils })
   }
   else if (authType === 'magic-link') {
-    // TODO: add prefs for seed DB
-    console.log(project)
+
+    const prefsFile = project.localPreferencesFile
+    const { readFileSync } = require('fs')
+    let prefs = readFileSync(prefsFile, 'utf8')
+    if (!/@sandbox-startup/.test(prefs)) {
+      prefs += `@sandbox-startup
+node ./scripts/seed-users.mjs`
+      writeFile(prefsFile, prefs)
+    }
 
     let manifest = require('./magic-manifest')
     generate({ manifest, command, project, utils })

@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `export default function({html,state}) {
+  return `export default function ({ html, state }) {
   return html\`
     <html>
     <body>
@@ -14,6 +14,7 @@ module.exports = function () {
       </script>
       <script type=module src=\${state?.store?.wsScriptUrl}></script>
     </body>
-</html> \`
-  }`
+</html>\`
+}
+`
 }
