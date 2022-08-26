@@ -77,16 +77,17 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
 
 function selectTemplate (key, property, data, required = [], keyPrefix = '') {
   let name = keyPrefix ? `${keyPrefix}.${key}` : key
-  let input = `<label for="${capitalize(name)}" class="radius0">
+  let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
+  let input = `<label for="${name}" class="radius0">
   <div class="mb-3">
-    ${name}
+    ${capitalize(name)}
   </div>
   <select id="${name}" name="${name}" class="p-2 flex-grow w-full font-light text0 radius0 border-solid mb-2 border1 select-none" `
   if (required.includes(key)) {
     input = input + 'required'
   }
   input = input + '>'
-  property.enum.forEach(item => input = input + `<option value="${item}" ${item === data[key]?.value ? 'selected' : ''}>${item}</option>`)
+  property.enum.forEach(item => input = input + `<option value="${item}" \${"${item}" === ${data}?.${dataPath} ? 'selected' : ''}>${item}</option>`)
   input = input + '</select></label>'
   return input
 }
