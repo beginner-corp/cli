@@ -5,7 +5,7 @@ import { getRoles, upsertRole, validate } from '../../models/roles.mjs'
 export async function get (req) {
   const roles = await getRoles()
   if (req.session.problems) {
-    let { problems, role,...session } = req.session
+    let { problems, role, ...session } = req.session
     return {
       session,
       json: { problems, roles, role }
@@ -31,17 +31,17 @@ export async function post (req) {
   try {
     const result = await upsertRole(role)
     return {
-        session: {},
-        json: { role: result },
-        location: '/roles'
+      session: {},
+      json: { role: result },
+      location: '/roles'
     }
   }
   catch (err) {
-      return {
-          session: { error: err.message },
-          json: { error: err.message },
-          location: '/roles'
-      }
+    return {
+      session: { error: err.message },
+      json: { error: err.message },
+      location: '/roles'
+    }
   }
 }
 `

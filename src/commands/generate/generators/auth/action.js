@@ -13,11 +13,11 @@ module.exports = async function action (params, utils, command) {
   }
 
   let authType = args.t || args.type
-  if (!authType || authType === 'oauth') {
+  if (authType === 'oauth') {
     let manifest = require('./oauth-manifest')
     generate({ manifest, command, project, utils })
   }
-  else if (authType === 'magic-link') {
+  else if (!authType || authType === 'magic-link') {
 
     const prefsFile = project.localPreferencesFile
     const { readFileSync } = require('fs')

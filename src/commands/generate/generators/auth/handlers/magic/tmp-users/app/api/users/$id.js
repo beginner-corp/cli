@@ -36,16 +36,16 @@ export async function post (req) {
   try {
     const result = await upsertUser({key: id, ...user})
     return {
-        session: {},
-        json: { user: result },
-        location: '/users'
+      session: {},
+      json: { user: result },
+      location: '/users'
     }
   }
   catch (err) {
     return {
-        session: { error: err.message },
-        json: { error: err.message },
-        location: '/users'
+      session: { error: err.message },
+      json: { error: err.message },
+      location: '/users'
     }
   }
 }

@@ -1,9 +1,9 @@
 module.exports = function () {
   return `
-export async function post (req) {
+export async function post () {
   return {
     session: {},
-    location: '/auth/signup'
+    location: '/'
   }
 }
 `
