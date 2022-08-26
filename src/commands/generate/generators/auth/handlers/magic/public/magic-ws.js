@@ -1,5 +1,6 @@
 module.exports = function () {
   return `// get the web socket url from the backend
+// TODO: Directly template URL
 let url = window.WS_URL
 let magicQueryId = window.magicQueryId
 

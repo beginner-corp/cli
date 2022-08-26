@@ -10,13 +10,13 @@ export async function post (req) {
   const magicId = crypto.randomBytes(10).toString('base64')
   const magicQueryId = crypto.randomBytes(10).toString('base64')
   const magicVerifyId = crypto.randomBytes(10).toString('base64')
-  const newSession = { ...session, magicId }
+  const newSession = { ...session, magicId, signingUp:true }
 
   const email = req?.body?.email
 
   await arc.events.publish({
     name: 'auth-link',
-    payload: { magicId, magicQueryId, magicVerifyId, email },
+    payload: { magicId, magicQueryId, magicVerifyId, email, signingUp:true },
   })
 
   return {
