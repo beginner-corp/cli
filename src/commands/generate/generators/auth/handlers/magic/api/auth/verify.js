@@ -11,7 +11,9 @@ export async function get (req){
     const connectionId = (await db.get({ table: 'session', key: sessionInfo.magicQueryId })).connectionId
     await arc.ws.send({ id: connectionId, payload: { verified: true } })
   }
-  catch (e) { }
+  catch (e) {
+    console.log(e)
+  }
   return {
     html: '<h1> Verified</h1><br/><p>You are logged in. You can close this window</p>'
   }

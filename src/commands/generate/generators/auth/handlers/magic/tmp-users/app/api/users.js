@@ -5,7 +5,7 @@ import { getUsers, upsertUser, validate } from '../../models/users.mjs'
 export async function get (req) {
   const users = await getUsers()
   if (req.session.problems) {
-    let { problems, user,...session } = req.session
+    let { problems, user, ...session } = req.session
     return {
       session,
       json: { problems, users, user }
@@ -31,17 +31,17 @@ export async function post (req) {
   try {
     const result = await upsertUser(user)
     return {
-        session: {},
-        json: { user: result },
-        location: '/users'
+      session: {},
+      json: { user: result },
+      location: '/users'
     }
   }
   catch (err) {
-      return {
-          session: { error: err.message },
-          json: { error: err.message },
-          location: '/users'
-      }
+    return {
+      session: { error: err.message },
+      json: { error: err.message },
+      location: '/users'
+    }
   }
 }
 `

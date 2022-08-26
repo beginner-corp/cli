@@ -2,6 +2,7 @@ module.exports = function () {
   return `import arc from '@architect/functions'
 import db from '@begin/data'
 import { getUsers } from '../../../models/users.mjs'
+import { getRoles } from '../../../models/roles.mjs'
 let wsScriptUrl = arc.static('bundles/magic-ws.mjs')
 let wsUrl = getWS()
 
@@ -13,7 +14,9 @@ export async function get (req) {
   try {
     sessionInfo = await db.get({ table: 'session', key: session.magicId })
   }
-  catch (e){}
+  catch (e) {
+    console.log(e)
+  }
   const verified = sessionInfo?.verified
 
   if (!verified) {
@@ -23,20 +26,27 @@ export async function get (req) {
     }
   }
   if (signingUp) {
-    // TODO: Add New User
+    return {
+      session:{ verifiedEmail:sessionInfo?.email },
+      location: '/auth/register'
+    }
   }
   if (!signingUp) {
-    let users, user
+    let users, user, roles, permissions
     try {
-      users = await getUsers({ table: 'users' })
+      users = await getUsers()
       user = users.find(i => i.email === sessionInfo.email)
+      roles = await getRoles()
+      permissions = Object.values(user?.roles).filter(Boolean).map(role => roles.find(i => role === i.name))
     }
-    catch (e){}
+    catch (e) {
+      console.log(e)
+    }
 
     if (user) {
       // Verified User
       return {
-        session: { ...newSession, account: user },
+        session: { ...newSession, account: { user, permissions } },
         location: redirectAfterAuth
       }
     }
