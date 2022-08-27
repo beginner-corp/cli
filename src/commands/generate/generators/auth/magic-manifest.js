@@ -19,7 +19,7 @@ const manifest = {
     { src: 'handlers/magic/pages/auth/login.js', target: 'app/pages/auth/login.html' },
     { src: 'handlers/magic/pages/auth/signup.js', target: 'app/pages/auth/signup.html' },
     { src: 'handlers/magic/pages/auth/register.js', target: 'app/pages/auth/register.mjs' },
-    // { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.mjs' },
+    { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.html' },
     { src: 'handlers/magic/pages/auth/wait.js', target: 'app/pages/auth/wait.mjs' },
     { src: 'handlers/magic/pages/auth/welcome.js', target: 'app/pages/auth/welcome.mjs' },
     // Shared code (inside models directory)
