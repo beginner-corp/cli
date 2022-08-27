@@ -7,9 +7,9 @@ export async function get (){}
 export async function post (req) {
   const session = req?.session
 
-  const magicId = crypto.randomBytes(10).toString('base64')
-  const magicQueryId = crypto.randomBytes(10).toString('base64')
-  const magicVerifyId = crypto.randomBytes(10).toString('base64')
+  const magicId = crypto.randomBytes(20).toString('base64')
+  const magicQueryId = crypto.randomBytes(20).toString('base64')
+  const magicVerifyId = crypto.randomBytes(20).toString('base64')
   const newSession = { ...session, magicId }
 
   const email = req?.body?.email

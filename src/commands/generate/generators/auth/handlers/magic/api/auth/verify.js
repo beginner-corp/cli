@@ -15,7 +15,6 @@ export async function get (req){
     console.log(e)
   }
   return {
-    html: '<h1> Verified</h1><br/><p>You are logged in. You can close this window</p>'
   }
 }
 `
