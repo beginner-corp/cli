@@ -51,7 +51,7 @@ export async function post (req) {
       const roles = await getRoles()
       const permissions = Object.values(newUser?.roles).filter(Boolean).map(role => roles.find(i => role === i.name))
       return {
-        session: {},
+        session: {account: { user:newUser, permissions } },
         json: { account: { user: newUser, permissions } },
         location: '/auth/welcome'
       }
