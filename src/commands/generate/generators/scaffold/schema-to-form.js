@@ -106,6 +106,9 @@ function input (key, schema, data, prefix = '') {
     ).join('\n')
     elem = elem + `</enhance-fieldset>`
   }
+  else if (type === 'array') {
+    // TODO: skip arrays for now
+  }
   else {
     let keyPrefix = prefix ? `${prefix}.${key}` : ''
     elem = inputTemplate(key, type, property, data, schema.required, keyPrefix)
