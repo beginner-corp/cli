@@ -21,7 +21,7 @@ const manifest = {
     { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
   ],
   dependencies: [
-    '@begin/validator@0.0.9',
+    '@begin/validator@0.0.10',
     'github:enhance-dev/form-elements'
   ]
 }
