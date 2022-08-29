@@ -5,10 +5,15 @@ module.exports = async function createScheduled (params, args) {
   let item = `${name} ${rate ? `rate(${rate})` : `cron(${cron})`}`
   if (src) {
     src = getRelativeCwd(src)
-    item = `${name}
+  }
+  else {
+    src = getRelativeCwd(`jobs/scheduled/${name}`)
+  }
+
+  // Scheduled arc
+  item = `${name}
   ${rate ? `rate ${rate}` : `cron ${cron}`}
   src ${src}`
-  }
 
   let defaultHandlers = require('./handlers')
   let addItem = require('../add-item')

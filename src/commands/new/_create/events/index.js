@@ -5,9 +5,15 @@ module.exports = async function createEvent (params, args) {
   let item = name
   if (src) {
     src = getRelativeCwd(src)
-    item = `${name}
-  src ${src}`
   }
+  else {
+    src = getRelativeCwd(`jobs/events/${name}`)
+  }
+
+  // Event arc
+  item = `
+${name}
+  src ${src}`
 
   let defaultHandlers = require('./handlers')
   let addItem = require('../add-item')
