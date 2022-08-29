@@ -60,7 +60,7 @@ export async function post (req) {
     }
   } else {
     return {
-      location: '/roles'
+      statusCode:401
     }
   }
 }

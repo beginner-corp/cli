@@ -14,12 +14,6 @@ module.exports = function () {
     return session?.account
   }
 
-  const keys = Object.keys(operation)
-  
-  if (keys?.length === 1 && keys[0] === 'role' && userRoles?.includes(operation.role)) {
-    return session?.account
-  }
-
   return false
   
 }

@@ -18,7 +18,7 @@ module.exports = function () {
     "rules": {
       "type": "object",
       "properties": {
-        "action1": {
+        "action_1": {
           "type": "string",
           "enum": [
             "",
@@ -29,7 +29,7 @@ module.exports = function () {
             "change_permissions"
           ]
         },
-        "target1": {
+        "target_1": {
           "type": "string",
           "enum": [
             "",
@@ -38,7 +38,7 @@ module.exports = function () {
             "roles"
           ]
         },
-        "owner1": {
+        "owner_1": {
           "type": "string",
           "enum": [
             "",
@@ -47,10 +47,10 @@ module.exports = function () {
             "user"
           ]
         },
-        "id1": {
+        "id_1": {
           "type": "string"
         },
-        "action2": {
+        "action_2": {
           "type": "string",
           "enum": [
             "",
@@ -61,7 +61,7 @@ module.exports = function () {
             "change_permissions"
           ]
         },
-        "target2": {
+        "target_2": {
           "type": "string",
           "enum": [
             "",
@@ -70,7 +70,7 @@ module.exports = function () {
             "roles"
           ]
         },
-        "owner2": {
+        "owner_2": {
           "type": "string",
           "enum": [
             "",
@@ -79,7 +79,71 @@ module.exports = function () {
             "user"
           ]
         },
-        "id2": {
+        "id_2": {
+          "type": "string"
+        },
+        "action_3": {
+          "type": "string",
+          "enum": [
+            "",
+            "create",
+            "read",
+            "update",
+            "delete",
+            "change_permissions"
+          ]
+        },
+        "target_3": {
+          "type": "string",
+          "enum": [
+            "",
+            "posts",
+            "users",
+            "roles"
+          ]
+        },
+        "owner_3": {
+          "type": "string",
+          "enum": [
+            "",
+            "SELF",
+            "ALL",
+            "user"
+          ]
+        },
+        "id_3": {
+          "type": "string"
+        },
+        "action_4": {
+          "type": "string",
+          "enum": [
+            "",
+            "create",
+            "read",
+            "update",
+            "delete",
+            "change_permissions"
+          ]
+        },
+        "target_4": {
+          "type": "string",
+          "enum": [
+            "",
+            "posts",
+            "users",
+            "roles"
+          ]
+        },
+        "owner_4": {
+          "type": "string",
+          "enum": [
+            "",
+            "SELF",
+            "ALL",
+            "user"
+          ]
+        },
+        "id_4": {
           "type": "string"
         }
       }
