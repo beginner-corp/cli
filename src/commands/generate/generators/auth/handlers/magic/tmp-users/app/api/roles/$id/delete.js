@@ -26,7 +26,7 @@ export async function post (req) {
     }
   } else {
     return {
-      location: '/auth/login'
+      statusCode:401
     }
   }
 }

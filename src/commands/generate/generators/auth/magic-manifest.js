@@ -35,9 +35,6 @@ const manifest = {
     { src: 'handlers/magic/ws/disconnect/index.js', target: 'src/ws/disconnect/index.js' },
     // Seed database
     { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.mjs' },
-    // Schemas
-    { src: 'handlers/magic/schemas/user.js', target: 'app/schemas/user.schema.json' },
-    { src: 'handlers/magic/schemas/role.js', target: 'app/schemas/role.schema.json' },
     // Users and Roles
     // TODO: These files are sectioned under tmp-users for now. It needs to be refactored because it duplicates a lot from generate scaffold
     { src: 'handlers/magic/tmp-users/app/api/roles.js', target: 'app/api/roles.mjs' },
