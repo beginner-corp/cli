@@ -1,7 +1,5 @@
 const manifest = {
   arcMutations: [
-    { pragma: 'bundles', item: 'magic-ws src/auth/client/magic-ws.mjs' },
-    { pragma: 'ws', item: '#web sockets' },
     { pragma: 'events', item: 'auth-link' },
   ],
   sourceFiles: [
@@ -27,12 +25,6 @@ const manifest = {
       src: 'handlers/magic/models/auth/helpers/can-i.js', target: 'models/auth/helpers/can-i.mjs' },
     // Events
     { src: 'handlers/magic/events/auth-link/index.js', target: 'src/events/auth-link/index.mjs' },
-    // Other Src
-    { src: 'handlers/magic/public/magic-ws.js', target: 'src/auth/client/magic-ws.mjs' },
-    // Web Socket
-    { src: 'handlers/magic/ws/connect/index.js', target: 'src/ws/connect/index.js' },
-    { src: 'handlers/magic/ws/default/index.js', target: 'src/ws/default/index.js' },
-    { src: 'handlers/magic/ws/disconnect/index.js', target: 'src/ws/disconnect/index.js' },
     // Seed database
     { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.mjs' },
     // Users and Roles
