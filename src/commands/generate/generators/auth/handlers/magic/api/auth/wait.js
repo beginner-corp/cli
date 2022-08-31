@@ -3,8 +3,6 @@ module.exports = function () {
 import db from '@begin/data'
 import { getUsers } from '../../../models/users.mjs'
 import { getRoles } from '../../../models/roles.mjs'
-let wsScriptUrl = arc.static('bundles/magic-ws.mjs')
-let wsUrl = getWS()
 
 export async function get (req) {
   const magicQueryId = req.query?.magic
@@ -22,7 +20,7 @@ export async function get (req) {
   if (!verified) {
     // still waiting
     return {
-      json: { wsUrl, wsScriptUrl, magicQueryId }
+      json: { magicQueryId }
     }
   }
   if (signingUp) {
@@ -61,19 +59,6 @@ export async function get (req) {
 
 }
 
-function getWS () {
-  let env = process.env.ARC_ENV
-  let testing = 'ws://localhost:3333'
-  let staging = 'TODO: these urls are printed after create'
-  let production = 'TODO: these urls are printed after create'
-  if (env === 'testing')
-    return testing
-  if (env === 'staging')
-    return staging
-  if (env === 'production')
-    return production
-  return testing
-}
 
 `
 }
