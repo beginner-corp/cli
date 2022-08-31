@@ -63,6 +63,29 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
   })
 
+  t.test(`${mode} scaffold project - reference file based`, async t => {
+    t.plan(13)
+    let i, r
+    let cwd = newFolder(newAppDir)
+    await begin('new project -p .', cwd)
+    i = await getInv(t, cwd)
+    t.pass('Project is valid')
+    t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd, true)
+    i = await getInv(t, cwd)
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.ok(existsSync(join(cwd, 'app/api/customers.mjs')), 'Wrote customers api route')
+    t.ok(existsSync(join(cwd, 'app/api/customers/$id.mjs')), 'Wrote customers/$id api route')
+    t.ok(existsSync(join(cwd, 'app/api/customers/$id/delete.mjs')), 'Wrote customers/$id/delete api route')
+    t.ok(existsSync(join(cwd, 'models/customers.mjs')), 'Wrote customers db code')
+    t.ok(existsSync(join(cwd, 'app/pages/customers.mjs')), 'Wrote customers view')
+    t.ok(existsSync(join(cwd, 'app/pages/customers/$id.mjs')), 'Wrote customers/$id view')
+    t.ok(existsSync(join(cwd, 'app/schemas/customer.mjs')), 'Wrote customer JSON schema')
+    t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.code, 0, 'Exited 0')
+  })
+
   t.test(`${mode} scaffold app (errors)`, async t => {
     t.plan(4)
     let cwd, r
@@ -123,6 +146,30 @@ async function runTests (runType, t) {
     t.ok(existsSync(join(cwd, 'app/pages/people.mjs')), 'Wrote people view')
     t.ok(existsSync(join(cwd, 'app/pages/people/$id.mjs')), 'Wrote people/$id view')
     t.ok(existsSync(join(cwd, 'app/schemas/person.mjs')), 'Wrote person JSON schema')
+    t.notOk(r.stderr, 'Did not print to stderr')
+    t.equal(r.code, 0, 'Exited 0')
+  })
+
+  t.test(`${mode} scaffold project - referenced file based / JSON`, async t => {
+    t.plan(13)
+    let i, r
+    let cwd = newFolder(newAppDir)
+    await begin('new project -p .', cwd)
+    i = await getInv(t, cwd)
+    t.pass('Project is valid')
+    t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+
+    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd, true)
+    i = await getInv(t, cwd)
+    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.ok(existsSync(join(cwd, 'app/api/customers.mjs')), 'Wrote customers api route')
+    t.ok(existsSync(join(cwd, 'app/api/customers/$id.mjs')), 'Wrote customers/$id api route')
+    t.ok(existsSync(join(cwd, 'app/api/customers/$id/delete.mjs')), 'Wrote customers/$id/delete api route')
+    t.ok(existsSync(join(cwd, 'models/customers.mjs')), 'Wrote customers db code')
+    t.ok(existsSync(join(cwd, 'app/pages/customers.mjs')), 'Wrote customers view')
+    t.ok(existsSync(join(cwd, 'app/pages/customers/$id.mjs')), 'Wrote customers/$id view')
+    t.ok(existsSync(join(cwd, 'app/schemas/customer.mjs')), 'Wrote customer JSON schema')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })

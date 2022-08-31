@@ -26,6 +26,7 @@ function getType (key, property) {
 }
 
 function inputTemplate (key, type, property, data, required = [], keyPrefix = '') {
+  let tagName = type === 'checkbox' ? 'checkbox' : 'text-input'
   if (type === 'hidden') {
     return `<input type="hidden" id="${key}" name="${key}" value="\${${data}?.${key}}" />`
   }
@@ -42,7 +43,7 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   let name = keyPrefix ? `${keyPrefix}` : key
   let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
 
-  let input = `<enhance-text-input label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
+  let input = `<enhance-${tagName} label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
   }
@@ -70,38 +71,46 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked '
   }
-  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-text-input>`
+  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-${tagName}>`
   return input
 }
 
 function selectTemplate (key, property, data, required = [], keyPrefix = '') {
   let name = keyPrefix ? `${keyPrefix}.${key}` : key
-  let input = '<select id="' + name + '" name="' + name + '"'
+  let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
+  let input = `<label for="${name}" class="radius0">
+  <div class="mb-3">
+    ${capitalize(name)}
+  </div>
+  <select id="${name}" name="${name}" class="p-2 flex-grow w-full font-light text0 radius0 border-solid mb-2 border1 select-none" `
   if (required.includes(key)) {
     input = input + 'required'
   }
   input = input + '>'
-  property.enum.forEach(item => input = input + `<option value="${item}" ${item === data[key]?.value ? 'selected' : ''}>${item}</option>`)
-  input = input + '</select>'
+  property.enum.forEach(item => input = input + `<option value="${item}" \${"${item}" === ${data}?.${dataPath} ? 'selected' : ''}>${item}</option>`)
+  input = input + '</select></label>'
   return input
 }
 
-// need to add a prefix here
 function input (key, schema, data, prefix = '') {
   const property = schema.properties[key]
   const type = getType(key, property)
   let elem = ''
-  let keyPrefix = prefix ? `${prefix}.${key}` : ''
   if (property.enum) {
-    elem = selectTemplate(key, property, data, schema.required, keyPrefix)
+    elem = selectTemplate(key, property, data, schema.required, prefix)
   }
   else if (type === 'object') {
-    elem = elem + `<h2>${capitalize(key)}</h2>`
+    elem = elem + `<enhance-fieldset legend="${capitalize(key)}">`
     elem = elem + Object.keys(schema.properties[key].properties).map(innerKey =>
       input(innerKey, schema.properties[key], data, key)
     ).join('\n')
+    elem = elem + `</enhance-fieldset>`
+  }
+  else if (type === 'array') {
+    // TODO: skip arrays for now
   }
   else {
+    let keyPrefix = prefix ? `${prefix}.${key}` : ''
     elem = inputTemplate(key, type, property, data, schema.required, keyPrefix)
   }
   return elem

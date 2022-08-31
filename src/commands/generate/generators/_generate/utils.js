@@ -1,4 +1,3 @@
-
 let { mkdirSync } = require('fs')
 
 function addRouteSource ({ manifest, replacements = {}, writeFile, command }) {

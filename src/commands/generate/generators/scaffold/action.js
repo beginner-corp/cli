@@ -1,5 +1,4 @@
-let { readFileSync } = require('fs')
-let { createJsonSchema, existsJsonSchema, writeJsonSchema } = require('./jsonschema')
+let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
 let { createModelName } = require('./model-utils')
 
 module.exports = async function action (params, utils, command) {
@@ -23,7 +22,7 @@ module.exports = async function action (params, utils, command) {
   }
   else {
     // read JSON Schema File
-    schema = JSON.parse(readFileSync(file))
+    schema = await readSchemaFile(file)
   }
 
   const { id } = schema

@@ -1,6 +1,6 @@
 module.exports = function ({ plural, capPlural, singular, capSingular }) {
   return `import data from '@begin/data'
-import { convertToNestedObject, validator } from '@begin/validator'
+import { validator } from '@begin/validator'
 import { ${capSingular} } from '../app/schemas/${singular}.mjs'
 
 const delete${capSingular} = async function (key) {

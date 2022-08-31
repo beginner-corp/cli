@@ -1,5 +1,6 @@
-const { existsSync, mkdirSync } = require('fs')
+const { existsSync, mkdirSync, readFileSync } = require('fs')
 const { createModelName } = require('./model-utils')
+const $RefParser = require('@apidevtools/json-schema-ref-parser')
 
 const standardJsonTypes = [
   'string',
@@ -60,8 +61,34 @@ function existsJsonSchema (modelName) {
   return existsSync(`app/schemas/${modelName.singular}.mjs`)
 }
 
+function generateSchemaWithId (schema) {
+  let id = !schema.id && schema['$id'] ? schema['$id'] : schema.id
+  if (id.startsWith('http')) {
+    id = (new URL(id)).pathname
+  }
+  schema.id = id.split('/').pop()
+  return schema
+}
+
+async function dereferenceSchema (schema) {
+  try {
+    return await $RefParser.dereference(schema)
+  }
+  catch (err) {
+    return schema
+  }
+}
+
+async function readSchemaFile (file) {
+  const schema = await dereferenceSchema(generateSchemaWithId(JSON.parse(readFileSync(file))))
+  return schema
+}
+
 module.exports = {
   createJsonSchema,
+  dereferenceSchema,
   existsJsonSchema,
+  generateSchemaWithId,
+  readSchemaFile,
   writeJsonSchema
 }
