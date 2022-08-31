@@ -1,31 +1,11 @@
 const spawn = require('cross-spawn')
 const { readFileSync } = require('fs')
 
-function isInstalledLocally (packageName) {
-  return isInstalled('npm', [ 'list' ], packageName )
-}
-
-function isInstalledGlobally (packageName) {
-  return isInstalled('npm', [ 'list', '--g' ], packageName )
-}
-
-function isInstalled (cmd, args, packageName) {
-  let result = spawn.sync(cmd, [ ...args, packageName ])
-  let stdout = result.stdout.toString().trim()
-  if (stdout.includes(packageName)) {
-    return true
-  }
-  return false
-}
-
 function installAwsSdk () {
   if (process.env.NODE_ENV !== 'testing') {
-    if (!isInstalledLocally('aws-sdk') && !isInstalledGlobally('aws-sdk')) {
-      let c = require('picocolors')
-      console.log('Installing aws-sdk as a development dependency')
-      console.log(`To avoid this message in the future you can globally install the sdk ${c.cyan('npm install -g aws-sdk')}`)
-      spawn.sync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
-    }
+    let c = require('picocolors')
+    console.log(`Installing ${c.bold(c.cyan('aws-sdk'))} as a development dependency`)
+    spawn.sync('npm', [ 'install', 'aws-sdk', '--save-dev' ])
   }
 }
 
