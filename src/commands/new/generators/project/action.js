@@ -107,6 +107,18 @@ module.exports = async function (params, utils) {
     writeFile(shortenPath(input), data)
   })
 
+  // Write .gitignore
+  let gitIgnore = `.env
+.DS_Store
+node_modules
+public/static.json
+public/bundles
+sam.json
+sam.yaml
+package-lock.json
+`
+  writeFile(`.gitignore`, gitIgnore)
+
   // Need to install enhance/arc-plugin-enhance or 💥
   log('Installing npm dependencies', args.json)
   const { status } = initialInstall()
