@@ -1,11 +1,10 @@
 module.exports = function () {
   return `// View documentation at: https://docs.begin.com
 import { getUsers, upsertUser, validate } from '../../../models/users.mjs'
-import { getRoles } from '../../../models/roles.mjs'
 
 export async function get (req) {
   const session = req.session
-  const { verifiedEmail, redirectAfterAuth } = session
+  const { verifiedEmail } = session
 
   if (!verifiedEmail){
     return {
@@ -47,11 +46,9 @@ export async function post (req) {
     const exists = users.find(dbUser => dbUser.email === verifiedEmail)
     if (!exists){
       const newUser = await upsertUser(user)
-      const roles = await getRoles()
-      const permissions = Object.values(newUser?.roles).filter(Boolean).map(role => roles.find(i => role === i.name))
       return {
-        session: { account: { user: newUser, permissions } },
-        json: { account: { user: newUser, permissions } },
+        session: { account: { user: newUser } },
+        json: { account: { user: newUser } },
         location: '/auth/welcome'
       }
     }

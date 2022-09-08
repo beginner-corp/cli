@@ -6,9 +6,7 @@ module.exports = function () {
     <button>Logout</button>
   </form>
   <p>You are logged in with \${user?.email}.</p>
-  <p>You are \${state.store.admin ? '' : 'not'} an Admin</p>
-  <p>You \${state.store.canEditMyTasks ? 'can' : 'can not'} edit tasks</p>\
-  <p>You \${state.store.canEditUsers ? 'can' : 'can not'} edit users</p>\`
+  <p>You are \${state.store.admin ? '' : 'not'} an Admin</p>\`
 }
 `
 }

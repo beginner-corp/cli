@@ -1,8 +1,8 @@
 module.exports = function () {
-  return `import whoAmI from '../../../models/auth/who-am-i.mjs'
+  return `import canI from '../../../models/auth/can-i.mjs'
 
 export async function get (req) {
-  const authenticated = whoAmI(req)
+  const authenticated = canI(req)
   if (authenticated) {
     return {
       json: { account: authenticated }

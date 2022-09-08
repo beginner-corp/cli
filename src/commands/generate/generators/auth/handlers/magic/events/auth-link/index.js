@@ -7,7 +7,7 @@ export async function handler (event) {
   await db.set({ table: 'session', key: sessionToken, sessionToken, verifyToken, email, redirectAfterAuth, newRegistration })
   await db.set({ table: 'session', key: verifyToken, sessionToken })
 
-  console.log('Login Here: ', \`http://localhost:3333/auth/verify?token=\${encodeURIComponent(verifyToken)}\`)
+  console.log('Login Link: ', \`http://localhost:3333/auth/verify?token=\${encodeURIComponent(verifyToken)}\`)
   return
 }
 `

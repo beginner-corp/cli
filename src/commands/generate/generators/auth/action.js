@@ -33,55 +33,67 @@ node ./scripts/seed-users.js`
     installAwsSdk()
 
     let manifest = require('./magic-manifest')
-    generate({ manifest, command, project, utils })
+
+    let { writeJsonSchema } = require('../scaffold/jsonschema')
+
+
+    const modelName = {
+      singular: 'user',
+      capSingular: 'User',
+      plural: 'users',
+      capPlural: 'Users'
+    }
+    const routeName = 'users'
+    const schema = {
+      id: 'User',
+      type: 'object',
+      required: [ 'email' ],
+      properties: {
+        firstname: {
+          type: 'string'
+        },
+        lastname: {
+          type: 'string'
+        },
+        email: {
+          type: 'string',
+          format: 'email'
+        },
+        roles: {
+          type: 'object',
+          properties: {
+            role1: {
+              type: 'string',
+              enum: [
+                '',
+                'admin',
+                'member'
+              ]
+            },
+            role2: {
+              type: 'string',
+              enum: [
+                '',
+                'admin',
+                'member'
+              ]
+            },
+            role3: {
+              type: 'string',
+              enum: [
+                '',
+                'admin',
+                'member'
+              ]
+            }
+          }
+        }
+      }
+    }
+
+    writeJsonSchema(modelName, schema, writeFile)
+    generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
   }
+
 
 }
-
-/*
-let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
-let { createModelName } = require('./model-utils')
-
-module.exports = async function action (params, utils, command) {
-  let { writeFile, npmCommands } = utils
-  let { installAwsSdk } = npmCommands
-  let { args } = params
-  let error = require('./errors')(params, utils)
-  let input = args._.slice(2)
-  let project = params.inventory.inv._project
-  let generate = require('../_generate')
-
-  // Step 1: load manifest file
-  let manifest = require('./manifest')
-
-  // Step 2: pre generate setup
-  // Create JSON Schema from input
-  let schema = {}
-  let file = args.f || args.file
-  if (!file || file === true) {
-    schema = createJsonSchema(...input)
-  }
-  else {
-    // read JSON Schema File
-    schema = await readSchemaFile(file)
-  }
-
-  const { id } = schema
-  const modelName = createModelName(id)
-  const routeName = modelName.plural
-
-  if (existsJsonSchema(modelName)) {
-    return error('schema_already_exists')
-  }
-
-  // write JSON Schema file
-  writeJsonSchema(modelName, schema, writeFile)
-
-  // Install Dependencies
-  installAwsSdk()
-
-  // Step 3: Run the generic generator
-  generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
-}
-
-*/
