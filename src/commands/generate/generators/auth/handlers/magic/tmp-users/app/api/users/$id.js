@@ -29,12 +29,12 @@ export async function post (req) {
     return {
       session: { problems, user },
       json: { problems, user },
-      location: \`/users/\${ user.key }\`
+      location: \`/users/\${user.key}\`
     }
   }
 
   try {
-    const result = await upsertUser({key: id, ...user})
+    const result = await upsertUser({ key: id, ...user })
     return {
       session: {},
       json: { user: result },
@@ -49,5 +49,6 @@ export async function post (req) {
     }
   }
 }
+
 `
 }

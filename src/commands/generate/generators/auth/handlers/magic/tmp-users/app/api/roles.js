@@ -1,11 +1,11 @@
 module.exports = function () {
   return `// View documentation at: https://docs.begin.com
 import { getRoles, upsertRole, validate } from '../../models/roles.mjs'
-import canI from '../../models/auth/helpers/can-i.mjs'
+import amI from '../../models/auth/am-i.mjs'
 
 export async function get (req) {
-  const iCan = canI( req, { role: 'admin' } )
-  if (iCan) {
+  const admin = amI( req, 'admin'  )
+  if (admin) {
 
     const roles = await getRoles()
     if (req.session.problems) {
@@ -19,7 +19,8 @@ export async function get (req) {
     return {
       json: { roles }
     }
-  } else {
+  }
+  else {
     return {
       location: '/'
     }
@@ -27,8 +28,8 @@ export async function get (req) {
 }
 
 export async function post (req) {
-   const iCan = canI( req, { role: 'admin' } )
-  if (iCan) {
+  const admin = amI( req, 'admin'  )
+  if (admin) {
 
     // Validate
     let { problems, role } = await validate.create(req)
@@ -56,11 +57,13 @@ export async function post (req) {
       }
     }
 
-   } else {
+  }
+  else {
     return {
-      location: '/'
+      statusCode:401
     }
   }
 }
+
 `
 }

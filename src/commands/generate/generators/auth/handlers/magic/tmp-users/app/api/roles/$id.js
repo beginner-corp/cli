@@ -3,11 +3,11 @@ module.exports = function () {
   return `/* eslint-disable filenames/match-regex */
 // View documentation at: https://docs.begin.com
 import { getRole, upsertRole, validate } from '../../../models/roles.mjs'
-import canI from '../../../models/auth/helpers/can-i.mjs'
+import canI from '../../../models/auth/am-i.mjs'
 
 export async function get (req) {
-  const iCan = canI( req, { role: 'admin' } )
-  if (iCan) {
+  const admin = amI( req, 'admin' )
+  if (admin) {
     if (req.session.problems) {
       let { problems, role, ...session } = req.session
       return {
@@ -21,7 +21,8 @@ export async function get (req) {
     return {
       json: { role: result }
     }
-  } else {
+  }
+  else {
     return {
       location: '/roles'
     }
@@ -30,8 +31,8 @@ export async function get (req) {
 
 export async function post (req) {
   const id = req.pathParameters?.id
-  const iCan = canI( req, { role: 'admin' } )
-  if (iCan) {
+  const admin = amI( req, 'admin'  )
+  if (admin) {
 
     // Validate
     let { problems, role } = await validate.update(req)
@@ -39,12 +40,12 @@ export async function post (req) {
       return {
         session: { problems, role },
         json: { problems, role },
-        location: \`/roles/\${ role.key }\`
+        location: \`/roles/\${role.key}\`
       }
     }
 
     try {
-      const result = await upsertRole({key: id, ...role})
+      const result = await upsertRole({ key: id, ...role })
       return {
         session: {},
         json: { role: result },
@@ -58,11 +59,13 @@ export async function post (req) {
         location: '/roles'
       }
     }
-  } else {
+  }
+  else {
     return {
-      statusCode:401
+      statusCode: 401
     }
   }
 }
+
 `
 }

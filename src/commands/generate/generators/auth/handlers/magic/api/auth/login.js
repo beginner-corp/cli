@@ -7,21 +7,21 @@ export async function get (){}
 export async function post (req) {
   const session = req?.session
 
-  const magicId = crypto.randomBytes(20).toString('base64')
-  const magicQueryId = crypto.randomBytes(20).toString('base64')
-  const magicVerifyId = crypto.randomBytes(20).toString('base64')
-  const newSession = { ...session, magicId }
+  const sessionToken = crypto.randomBytes(32).toString('base64')
+  const verifyToken = crypto.randomBytes(32).toString('base64')
+  const { redirectAfterAuth = '/' } = session
 
+  // TODO: Sanitize this
   const email = req?.body?.email
 
   await arc.events.publish({
     name: 'auth-link',
-    payload: { magicId, magicQueryId, magicVerifyId, email },
+    payload: { sessionToken, verifyToken, email, redirectAfterAuth },
   })
 
   return {
-    session: newSession,
-    location: \`/auth/wait?magic=\${encodeURIComponent(magicQueryId)}\`
+    session: {},
+    html: '<div>Check email for link</div>'
   }
 }
 `

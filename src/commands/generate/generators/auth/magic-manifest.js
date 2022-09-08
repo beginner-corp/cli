@@ -10,7 +10,6 @@ const manifest = {
     { src: 'handlers/magic/api/auth/register.js', target: 'app/api/auth/register.mjs' },
     { src: 'handlers/magic/api/auth/logout.js', target: 'app/api/auth/logout.mjs' },
     { src: 'handlers/magic/api/auth/verify.js', target: 'app/api/auth/verify.mjs' },
-    { src: 'handlers/magic/api/auth/wait.js', target: 'app/api/auth/wait.mjs' },
     { src: 'handlers/magic/api/auth/welcome.js', target: 'app/api/auth/welcome.mjs' },
     // Pages
     { src: 'handlers/magic/pages/auth/example.js', target: 'app/pages/auth/example.mjs' },
@@ -18,15 +17,15 @@ const manifest = {
     { src: 'handlers/magic/pages/auth/signup.js', target: 'app/pages/auth/signup.html' },
     { src: 'handlers/magic/pages/auth/register.js', target: 'app/pages/auth/register.mjs' },
     { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.html' },
-    { src: 'handlers/magic/pages/auth/wait.js', target: 'app/pages/auth/wait.mjs' },
     { src: 'handlers/magic/pages/auth/welcome.js', target: 'app/pages/auth/welcome.mjs' },
     // Shared code (inside models directory)
-    {
-      src: 'handlers/magic/models/auth/helpers/can-i.js', target: 'models/auth/helpers/can-i.mjs' },
+    { src: 'handlers/magic/models/auth/can-i.js', target: 'models/auth/can-i.mjs' },
+    { src: 'handlers/magic/models/auth/am-i.js', target: 'models/auth/am-i.mjs' },
+    { src: 'handlers/magic/models/auth/who-am-i.js', target: 'models/auth/who-am-i.mjs' },
     // Events
     { src: 'handlers/magic/events/auth-link/index.js', target: 'src/events/auth-link/index.mjs' },
     // Seed database
-    { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.mjs' },
+    { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.js' },
     // Users and Roles
     // TODO: These files are sectioned under tmp-users for now. It needs to be refactored because it duplicates a lot from generate scaffold
     { src: 'handlers/magic/tmp-users/app/api/roles.js', target: 'app/api/roles.mjs' },
@@ -40,9 +39,9 @@ const manifest = {
     { src: 'handlers/magic/tmp-users/app/pages/users.js', target: 'app/pages/users.mjs' },
     { src: 'handlers/magic/tmp-users/app/pages/users/$id.js', target: 'app/pages/users/$id.mjs' },
     { src: 'handlers/magic/tmp-users/app/schemas/role.js', target: 'app/schemas/role.mjs' },
-    { src: 'handlers/magic/tmp-users/app/schemas/registration.js', target: 'app/schemas/registration.mjs' },
+    // { src: 'handlers/magic/tmp-users/app/schemas/registration.js', target: 'app/schemas/registration.mjs' },
     { src: 'handlers/magic/tmp-users/app/schemas/user.js', target: 'app/schemas/user.mjs' },
-    { src: 'handlers/magic/tmp-users/models/registration.js', target: 'models/registration.mjs' },
+    // { src: 'handlers/magic/tmp-users/models/registration.js', target: 'models/registration.mjs' },
     { src: 'handlers/magic/tmp-users/models/roles.js', target: 'models/roles.mjs' },
     { src: 'handlers/magic/tmp-users/models/users.js', target: 'models/users.mjs' },
   ],
@@ -61,3 +60,36 @@ const manifest = {
 }
 
 module.exports = manifest
+
+/*
+
+const manifest = {
+  arcMutations: [],
+  sourceFiles: [
+    // Utils
+    { src: 'handlers/model.js', target: 'models/<ROUTE_NAME>.mjs' },
+    // API
+    { src: 'handlers/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
+    { src: 'handlers/api-delete.js', target: 'app/api/<ROUTE_NAME>/$id/delete.mjs' },
+    { src: 'handlers/api-read-update.js', target: 'app/api/<ROUTE_NAME>/$id.mjs' },
+    // Pages
+    { src: 'handlers/pages-list.js', target: 'app/pages/<ROUTE_NAME>.mjs' },
+    { src: 'handlers/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
+  ],
+  elements: [
+    { name: 'CheckBox', package: '@enhance/form-elements', tagName: 'enhance-checkbox' },
+    { name: 'FieldSet', package: '@enhance/form-elements', tagName: 'enhance-fieldset' },
+    { name: 'FormElement', package: '@enhance/form-elements', tagName: 'enhance-form' },
+    { name: 'LinkElement', package: '@enhance/form-elements', tagName: 'enhance-link' },
+    { name: 'PageContainer', package: '@enhance/form-elements', tagName: 'enhance-page-container' },
+    { name: 'SubmitButton', package: '@enhance/form-elements', tagName: 'enhance-submit-button' },
+    { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
+  ],
+  dependencies: [
+    '@begin/validator@0.0.10',
+    'github:enhance-dev/form-elements'
+  ]
+}
+
+module.exports = manifest
+*/

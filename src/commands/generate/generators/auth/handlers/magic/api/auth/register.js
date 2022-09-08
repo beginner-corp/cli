@@ -1,16 +1,14 @@
 module.exports = function () {
   return `// View documentation at: https://docs.begin.com
-import { getUsers, upsertUser } from '../../../models/users.mjs'
+import { getUsers, upsertUser, validate } from '../../../models/users.mjs'
 import { getRoles } from '../../../models/roles.mjs'
-import { validate } from '../../../models/registration.mjs'
 
 export async function get (req) {
   const session = req.session
-  const verifiedEmail = session?.verifiedEmail
+  const { verifiedEmail, redirectAfterAuth } = session
 
   if (!verifiedEmail){
     return {
-      session: {},
       location: '/auth/signup'
     }
   }
@@ -19,26 +17,27 @@ export async function get (req) {
     let { problems, user, ...session } = req.session
     return {
       session,
-      json: { problems, user, email:verifiedEmail }
+      json: { problems, user, email: verifiedEmail }
     }
   }
 
   return {
-    json: { email:verifiedEmail}
+    json: { email: verifiedEmail }
   }
 }
 
 export async function post (req) {
   const session = req.session
   const verifiedEmail = session?.verifiedEmail
+  let newReq = req
+  newReq.body.email = verifiedEmail
+  newReq.body.roles = { role1: 'member', role2: '', role3: '' }
   // Validate
-  let { problems, registration } = await validate.create(req)
-  // TODO: this needs to go elsewhere
-  const user = { ...registration, email:verifiedEmail , roles: { role1: 'member', role2: '', role3: '' } }
+  let { problems, user } = await validate.create(newReq)
   if (problems) {
     return {
-      session: { ...session, problems, registration },
-      json: { problems, registration, email:verifiedEmail },
+      session: { ...session, problems, registration: user },
+      json: { problems, registration: user, email: verifiedEmail },
       location: '/auth/register'
     }
   }
@@ -51,7 +50,7 @@ export async function post (req) {
       const roles = await getRoles()
       const permissions = Object.values(newUser?.roles).filter(Boolean).map(role => roles.find(i => role === i.name))
       return {
-        session: {account: { user:newUser, permissions } },
+        session: { account: { user: newUser, permissions } },
         json: { account: { user: newUser, permissions } },
         location: '/auth/welcome'
       }
@@ -74,8 +73,5 @@ export async function post (req) {
     }
   }
 }
-
-
-
 `
 }
