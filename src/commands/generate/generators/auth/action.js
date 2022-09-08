@@ -1,7 +1,8 @@
 
 module.exports = async function action (params, utils, command) {
   let { args } = params
-  let { writeFile } = utils
+  let { writeFile, npmCommands } = utils
+  let { installAwsSdk } = npmCommands
   let error = require('./errors')(params, utils)
   let project = params.inventory.inv._project
   let generate = require('../_generate')
@@ -24,12 +25,63 @@ module.exports = async function action (params, utils, command) {
     let prefs = readFileSync(prefsFile, 'utf8')
     if (!/@sandbox-startup/.test(prefs)) {
       prefs += `@sandbox-startup
-node ./scripts/seed-users.mjs`
+node ./scripts/seed-users.js`
       writeFile(prefsFile, prefs)
     }
+
+    // Install Dependencies
+    installAwsSdk()
 
     let manifest = require('./magic-manifest')
     generate({ manifest, command, project, utils })
   }
 
 }
+
+/*
+let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
+let { createModelName } = require('./model-utils')
+
+module.exports = async function action (params, utils, command) {
+  let { writeFile, npmCommands } = utils
+  let { installAwsSdk } = npmCommands
+  let { args } = params
+  let error = require('./errors')(params, utils)
+  let input = args._.slice(2)
+  let project = params.inventory.inv._project
+  let generate = require('../_generate')
+
+  // Step 1: load manifest file
+  let manifest = require('./manifest')
+
+  // Step 2: pre generate setup
+  // Create JSON Schema from input
+  let schema = {}
+  let file = args.f || args.file
+  if (!file || file === true) {
+    schema = createJsonSchema(...input)
+  }
+  else {
+    // read JSON Schema File
+    schema = await readSchemaFile(file)
+  }
+
+  const { id } = schema
+  const modelName = createModelName(id)
+  const routeName = modelName.plural
+
+  if (existsJsonSchema(modelName)) {
+    return error('schema_already_exists')
+  }
+
+  // write JSON Schema file
+  writeJsonSchema(modelName, schema, writeFile)
+
+  // Install Dependencies
+  installAwsSdk()
+
+  // Step 3: Run the generic generator
+  generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
+}
+
+*/

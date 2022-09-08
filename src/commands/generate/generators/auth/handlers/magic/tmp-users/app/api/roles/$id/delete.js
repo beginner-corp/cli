@@ -1,13 +1,13 @@
 module.exports = function () {
   return `// View documentation at: https://docs.begin.com
 import { deleteRole } from '../../../../models/roles.mjs'
-import canI from '../../../../models/auth/helpers/can-i.mjs'
+import amI from '../../../../models/auth/am-i.mjs'
 
 export async function post (req) {
   const id = req.pathParameters?.id
 
-  const iCan = canI( req, { role: 'admin' } )
-  if (iCan) {
+  const admin = amI( req,  'admin'  )
+  if (admin) {
 
     try {
       await deleteRole(id)
