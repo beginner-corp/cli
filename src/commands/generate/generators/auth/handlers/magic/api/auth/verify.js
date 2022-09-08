@@ -1,7 +1,6 @@
 module.exports = function () {
   return `import db from '@begin/data'
 import { getUsers } from '../../../models/users.mjs'
-import { getRoles } from '../../../models/roles.mjs'
 
 export async function get (req){
   const token = req.query?.token
@@ -19,12 +18,10 @@ export async function get (req){
         location: '/auth/register'
       }
     }
-    let users, user, roles, permissions
+    let users, user
     try {
       users = await getUsers()
       user = users.find(i => i.email === sessionInfo.email)
-      roles = await getRoles()
-      permissions = Object.values(user?.roles).filter(Boolean).map(role => roles.find(i => role === i.name))
     }
     catch (e) {
       console.log(e)
@@ -33,7 +30,7 @@ export async function get (req){
     if (user) {
       // Verified User
       return {
-        session: { account: { user, permissions } },
+        session: { account: { user } },
         location: sessionInfo?.redirectAfterAuth
       }
     }
