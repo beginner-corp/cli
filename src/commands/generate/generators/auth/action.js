@@ -92,7 +92,7 @@ node ./scripts/seed-users.js`
     }
 
     writeJsonSchema(modelName, schema, writeFile)
-    generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
+    generate({ manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })
   }
 
 
