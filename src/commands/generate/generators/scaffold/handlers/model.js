@@ -1,7 +1,7 @@
 module.exports = function ({ plural, capPlural, singular, capSingular }) {
   return `import data from '@begin/data'
 import { validator } from '@begin/validator'
-import { ${capSingular} } from '../app/schemas/${singular}.mjs'
+import { ${capSingular} } from './schemas/${singular}.mjs'
 
 const delete${capSingular} = async function (key) {
   return data.destroy({ table: '${plural}', key })
