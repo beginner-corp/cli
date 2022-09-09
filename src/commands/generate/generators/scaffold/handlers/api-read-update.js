@@ -1,8 +1,19 @@
-module.exports = function ({ plural, singular, capSingular  }) {
-  return `// View documentation at: https://docs.begin.com
+module.exports = function ({ plural, singular, capSingular, includeAuth = false, authRole = 'admin'    }) {
+  return `/* eslint-disable filenames/match-regex */
+// View documentation at: https://docs.begin.com
 import { get${capSingular}, upsert${capSingular}, validate } from '../../../models/${plural}.mjs'
+import canI from '../../../models/auth/can-i.mjs'
 
 export async function get (req) {
+  ${includeAuth ? `
+  const admin = canI(req, '${authRole}')
+  if (!admin) {
+    return {
+      location: '/'
+    }
+  }
+  ` : ''}
+
   if (req.session.problems) {
     let { problems, ${singular}, ...session } = req.session
     return {
@@ -19,29 +30,39 @@ export async function get (req) {
 }
 
 export async function post (req) {
+  ${includeAuth ? `
+  const admin = canI(req, '${authRole}')
+  if (!admin) {
+    return {
+      statusCode: 401
+    }
+  }
+  ` : ''}
   const id = req.pathParameters?.id
 
+  const session = req.session
   // Validate
   let { problems, ${singular} } = await validate.update(req)
   if (problems) {
     return {
-      session: { problems, ${singular} },
+      session: {...session, problems, ${singular} },
       json: { problems, ${singular} },
       location: \`/${plural}/\${${singular}.key}\`
     }
   }
 
+  let { problems: removedProblems, ${singular}: removed, ...newSession } = session
   try {
-    const result = await upsert${capSingular}({key: id, ...${singular}})
+    const result = await upsert${capSingular}({ key: id, ...${singular} })
     return {
-      session: {},
+      session: newSession,
       json: { ${singular}: result },
       location: '/${plural}'
     }
   }
   catch (err) {
     return {
-      session: { error: err.message },
+      session: { ...newSession, error: err.message },
       json: { error: err.message },
       location: '/${plural}'
     }
