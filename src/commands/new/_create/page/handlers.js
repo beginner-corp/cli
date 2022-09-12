@@ -1,10 +1,14 @@
 let copy = {
   en: {
-    view_docs: 'View documentation at: https://docs.begin.com',
+    view_docs: 'View documentation at: https://enhance.dev/docs/learn/starter-project/pages',
   }
 }
 
 let javascript = lang => `// ${copy[lang].view_docs}
+
+/**
+ * @type {import('@enhance/types').EnhanceElemFn}
+ */
 export default function Html ({ html, state }) {
   // eslint-disable-next-line
   const { attrs, store } = state

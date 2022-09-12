@@ -60,6 +60,7 @@ module.exports = async function (params, utils) {
       'lint': 'eslint ./app/**/*.mjs --fix'
     },
     'devDependencies': {
+      '@enhance/types': 'latest',
       'eslint': 'latest'
     },
     'dependencies': {
