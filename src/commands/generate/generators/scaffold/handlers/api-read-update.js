@@ -1,6 +1,5 @@
 module.exports = function ({ plural, singular, capSingular, includeAuth = false, authRole = 'admin'    }) {
-  return `/* eslint-disable filenames/match-regex */
-// View documentation at: https://docs.begin.com
+  return `// View documentation at: https://docs.begin.com
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
