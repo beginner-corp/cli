@@ -20,12 +20,18 @@ module.exports = async function action (params, utils, command) {
   }
   else if (!authType || authType === 'magic-link') {
 
+    const { routeName, modelName, schema } = require('./users-table')
     const prefsFile = project.localPreferencesFile
     const { readFileSync } = require('fs')
     let prefs = readFileSync(prefsFile, 'utf8')
-    if (!/@sandbox-startup/.test(prefs)) {
+    if (!project.localPreferences?.['sandbox-startup']) {
       prefs += `@sandbox-startup
 node ./scripts/seed-users.js`
+      writeFile(prefsFile, prefs)
+    }
+    else if (!project.localPreferences['sandbox-startup'].includes('node ./scripts/seed-users.js')){
+      prefs = prefs.replace('@sandbox-startup', `@sandbox-startup
+node ./scripts/seed-users.js`)
       writeFile(prefsFile, prefs)
     }
 
@@ -35,61 +41,6 @@ node ./scripts/seed-users.js`
     let manifest = require('./magic-manifest')
 
     let { writeJsonSchema } = require('../scaffold/jsonschema')
-
-
-    const modelName = {
-      singular: 'user',
-      capSingular: 'User',
-      plural: 'users',
-      capPlural: 'Users'
-    }
-    const routeName = 'users'
-    const schema = {
-      id: 'User',
-      type: 'object',
-      required: [ 'email' ],
-      properties: {
-        firstname: {
-          type: 'string'
-        },
-        lastname: {
-          type: 'string'
-        },
-        email: {
-          type: 'string',
-          format: 'email'
-        },
-        roles: {
-          type: 'object',
-          properties: {
-            role1: {
-              type: 'string',
-              enum: [
-                '',
-                'admin',
-                'member'
-              ]
-            },
-            role2: {
-              type: 'string',
-              enum: [
-                '',
-                'admin',
-                'member'
-              ]
-            },
-            role3: {
-              type: 'string',
-              enum: [
-                '',
-                'admin',
-                'member'
-              ]
-            }
-          }
-        }
-      }
-    }
 
     writeJsonSchema(modelName, schema, writeFile)
     generate({ manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })

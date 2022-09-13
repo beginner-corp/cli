@@ -1,0 +1,55 @@
+const modelName = {
+  singular: 'user',
+  capSingular: 'User',
+  plural: 'users',
+  capPlural: 'Users'
+}
+const routeName = 'users'
+const schema = {
+  id: 'User',
+  type: 'object',
+  required: [ 'email' ],
+  properties: {
+    firstname: {
+      type: 'string'
+    },
+    lastname: {
+      type: 'string'
+    },
+    email: {
+      type: 'string',
+      format: 'email'
+    },
+    roles: {
+      type: 'object',
+      properties: {
+        role1: {
+          type: 'string',
+          enum: [
+            '',
+            'admin',
+            'member'
+          ]
+        },
+        role2: {
+          type: 'string',
+          enum: [
+            '',
+            'admin',
+            'member'
+          ]
+        },
+        role3: {
+          type: 'string',
+          enum: [
+            '',
+            'admin',
+            'member'
+          ]
+        }
+      }
+    }
+  }
+}
+
+module.exports = { modelName, routeName, schema }
