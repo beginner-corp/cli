@@ -1,6 +1,8 @@
 const manifest = {
   arcMutations: [
-    { pragma: 'events', item: 'auth-link' },
+    {
+      pragma: 'events', item: `auth-link
+  src jobs/events/auth-link` },
   ],
   sourceFiles: [
     // API
@@ -21,7 +23,7 @@ const manifest = {
     // Shared code (inside models directory)
     { src: 'handlers/magic/models/auth/can-i.js', target: 'models/auth/can-i.mjs' },
     // Events
-    { src: 'handlers/magic/events/auth-link/index.js', target: 'src/events/auth-link/index.mjs' },
+    { src: 'handlers/magic/events/auth-link/index.js', target: 'jobs/events/auth-link/index.mjs' },
     // Seed database
     { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.js' },
     // Users Table
