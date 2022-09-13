@@ -2,6 +2,9 @@ module.exports = function () {
   return `import crypto from 'crypto'
 import arc from '@architect/functions'
 
+/**
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
 export async function post (req) {
   const session = req?.session
 

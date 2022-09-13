@@ -11,7 +11,9 @@ module.exports = function () {
   */
 
 
-
+/**
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
 export async function get(req) {
   const providerAccount = req?.session?.oauth
   const session = req?.session

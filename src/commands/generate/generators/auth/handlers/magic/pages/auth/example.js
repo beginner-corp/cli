@@ -1,7 +1,10 @@
 module.exports = function () {
-  return `export default function ({ html, state }) {
+  return `/**
+  * @type {import('@enhance/types').EnhanceElemFn}
+  */
+export default function ({ html, state }) {
   const user = state?.store?.account?.user
-  return html\` 
+  return html\`
   <form action=/auth/logout method=POST>
     <button>Logout</button>
   </form>

@@ -1,5 +1,7 @@
 module.exports = function () {
-  return `// View documentation at: https://docs.begin.com
+  return `/**
+  * @type {import('@enhance/types').EnhanceElemFn}
+  */
 export default function Html ({ html, state }) {
   const { store } = state
   const registration = store.registration || {}

@@ -16,6 +16,9 @@ module.exports = function ({ plural, singular, capPlural, schema }) {
   let list = schemaToList({ schema })
 
   return `// View documentation at: https://docs.begin.com
+/**
+  * @type {import('@enhance/types').EnhanceElemFn}
+  */
 export default function Html ({ html, state }) {
   const { store } = state
   let ${plural} = store.${plural} || []

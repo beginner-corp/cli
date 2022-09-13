@@ -1,7 +1,13 @@
 module.exports = function () {
   return `// View documentation at: https://docs.begin.com
+/**
+  * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
+  */
 import { getUsers, upsertUser, validate } from '../../../models/users.mjs'
 
+/**
+ * @type {EnhanceApiFn}
+ */
 export async function get (req) {
   const session = req.session
   const { verifiedEmail } = session
@@ -25,6 +31,9 @@ export async function get (req) {
   }
 }
 
+/**
+ * @type {EnhanceApiFn}
+ */
 export async function post (req) {
   const session = req.session
   const verifiedEmail = session?.verifiedEmail

@@ -1,19 +1,24 @@
 module.exports = function ({ plural, singular, capSingular, includeAuth = false, authRole = 'admin'    }) {
   return `/* eslint-disable filenames/match-regex */
 // View documentation at: https://docs.begin.com
+/**
+  * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
+  */
 import { get${capSingular}, upsert${capSingular}, validate } from '../../../models/${plural}.mjs'
-import canI from '../../../models/auth/can-i.mjs'
+${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
 
-export async function get (req) {
-  ${includeAuth ? `
+/**
+ * @type {EnhanceApiFn}
+ */
+export async function get (req) {${includeAuth ? `
   const admin = canI(req, '${authRole}')
   if (!admin) {
     return {
       location: '/'
     }
   }
-  ` : ''}
 
+  ` : ''}
   if (req.session.problems) {
     let { problems, ${singular}, ...session } = req.session
     return {
@@ -29,14 +34,17 @@ export async function get (req) {
   }
 }
 
-export async function post (req) {
-  ${includeAuth ? `
+/**
+ * @type {EnhanceApiFn}
+ */
+export async function post (req) {${includeAuth ? `
   const admin = canI(req, '${authRole}')
   if (!admin) {
     return {
       statusCode: 401
     }
   }
+
   ` : ''}
   const id = req.pathParameters?.id
 
@@ -51,6 +59,7 @@ export async function post (req) {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
   let { problems: removedProblems, ${singular}: removed, ...newSession } = session
   try {
     const result = await upsert${capSingular}({ key: id, ...${singular} })

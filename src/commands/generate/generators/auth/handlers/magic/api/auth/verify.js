@@ -2,6 +2,9 @@ module.exports = function () {
   return `import db from '@begin/data'
 import { getUsers } from '../../../models/users.mjs'
 
+/**
+ * @type {import('@enhance/types').EnhanceApiFn}
+ */
 export async function get (req){
   const token = req.query?.token
   const verifySession = await db.get({ table: 'session', key: token })
