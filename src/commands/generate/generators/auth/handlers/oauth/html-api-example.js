@@ -3,16 +3,16 @@ module.exports = function () {
 const checkAuth = arcOauth.checkAuth
 
 export async function get(req) {
-    const authenticated = checkAuth(req)
-    if (authenticated) {
-      return {
-        json: { account: authenticated }
-      }
-    } else {
-      return {
-        session:{redirectAfterAuth:"/auth/html-example"},
-        location: "/login"
-      }
+  const authenticated = checkAuth(req)
+  if (authenticated) {
+    return {
+      json: { account: authenticated }
     }
+  } else {
+    return {
+      session:{redirectAfterAuth:"/auth/html-example"},
+      location: "/login"
+    }
+  }
 }`
 }
