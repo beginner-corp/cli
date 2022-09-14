@@ -1,7 +1,7 @@
 module.exports = function ({ plural, capSingular, singular, includeAuth = false, authRole = 'admin'   }) {
   return `// View documentation at: https://docs.begin.com
 import { delete${capSingular} } from '../../../../models/${plural}.mjs'
-${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
+${includeAuth ? `import canI from '../../../../models/auth/can-i.mjs'` : ''}
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}

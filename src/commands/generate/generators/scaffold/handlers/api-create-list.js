@@ -4,7 +4,7 @@ module.exports = function ({ plural, capPlural, singular, capSingular, includeAu
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
 import { get${capPlural}, upsert${capSingular}, validate } from '../../models/${plural}.mjs'
-${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
+${includeAuth ? `import canI from '../../models/auth/can-i.mjs'` : ''}
 
 /**
  * @type {EnhanceApiFn}
