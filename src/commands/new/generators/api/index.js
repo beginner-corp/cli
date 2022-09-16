@@ -20,6 +20,10 @@ module.exports = {
           {
             name: 'Create a new api route',
             example: 'begin new api --path /notes',
+          },
+          {
+            name: 'Create a new api route with path parameter',
+            example: `begin new api --path '/notes/$id'`,
           }
         ]
       }
