@@ -25,6 +25,10 @@ module.exports = {
           {
             name: 'Create a new page route',
             example: 'begin new page --path /notes',
+          },
+          {
+            name: 'Create a new page route with path parameter',
+            example: `begin new page --path '/notes/$id'`,
           }
         ]
       }
