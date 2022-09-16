@@ -20,9 +20,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "~9.0.9",
-    "@architect/inventory": "3.2.1",
+    "@architect/inventory": "3.3.0",
     "@architect/parser": "6.0.0",
-    "@architect/sandbox": "5.3.2",
+    "@architect/sandbox": "5.3.4",
     "@begin/api": "1.4.1",
     "@begin/chunker": "1.1.2",
     "@enhance/starter-project": "1.1.3",
