@@ -6,6 +6,11 @@ module.exports = {
       header: 'Dev server options',
       items: [
         {
+          name: '--host',
+          description: `Configure the host the dev server will listen on`,
+          optional: true,
+        },
+        {
           name: '-p, --port',
           description: `Configure the dev server's HTTP port`,
           optional: true,
