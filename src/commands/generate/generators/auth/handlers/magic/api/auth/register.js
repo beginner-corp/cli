@@ -3,7 +3,7 @@ module.exports = function () {
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
-import { getUsers, upsertUser, validate } from '../../../models/users.mjs'
+import { getUsers, upsertUser, validate } from '../../models/users.mjs'
 
 /**
  * @type {EnhanceApiFn}

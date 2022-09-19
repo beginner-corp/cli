@@ -1,6 +1,6 @@
 module.exports = function () {
   return `import db from '@begin/data'
-import { getUsers } from '../../../models/users.mjs'
+import { getUsers } from '../../models/users.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}

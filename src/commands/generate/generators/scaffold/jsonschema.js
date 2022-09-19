@@ -53,12 +53,12 @@ function createProp (type) {
 
 function writeJsonSchema (modelName, schema, writeFile) {
   schema = addKeyPropertyToSchema(schema)
-  mkdirSync(`models/schemas`, { recursive: true })
-  writeFile(`models/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
+  mkdirSync(`app/models/schemas`, { recursive: true })
+  writeFile(`app/models/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
 }
 
 function existsJsonSchema (modelName) {
-  return existsSync(`models/schemas/${modelName.singular}.mjs`)
+  return existsSync(`app/models/schemas/${modelName.singular}.mjs`)
 }
 
 function generateSchemaWithId (schema) {

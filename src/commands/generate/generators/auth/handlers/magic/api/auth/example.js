@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `import canI from '../../../models/auth/can-i.mjs'
+  return `import canI from '../../models/auth/can-i.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}

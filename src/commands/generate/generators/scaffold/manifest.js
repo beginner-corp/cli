@@ -2,7 +2,7 @@ const manifest = {
   arcMutations: [],
   sourceFiles: [
     // Utils
-    { src: 'handlers/model.js', target: 'models/<ROUTE_NAME>.mjs' },
+    { src: 'handlers/model.js', target: 'app/models/<ROUTE_NAME>.mjs' },
     // API
     { src: 'handlers/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
     { src: 'handlers/api-delete.js', target: 'app/api/<ROUTE_NAME>/$id/delete.mjs' },

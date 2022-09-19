@@ -3,8 +3,8 @@ module.exports = function ({ plural, singular, capSingular, includeAuth = false,
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
-import { get${capSingular}, upsert${capSingular}, validate } from '../../../models/${plural}.mjs'
-${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
+import { get${capSingular}, upsert${capSingular}, validate } from '../../models/${plural}.mjs'
+${includeAuth ? `import canI from '../../models/auth/can-i.mjs'` : ''}
 
 /**
  * @type {EnhanceApiFn}

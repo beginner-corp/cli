@@ -7,8 +7,8 @@ const manifest = {
   ],
   sourceFiles: [
     // Utils
-    { src: 'handlers/oauth/allow.js', target: 'models/auth/allow.mjs' },
-    { src: 'handlers/oauth/mock-allow.js', target: 'models/auth/mock-allow.mjs' },
+    { src: 'handlers/oauth/allow.js', target: 'app/models/auth/allow.mjs' },
+    { src: 'handlers/oauth/mock-allow.js', target: 'app/models/auth/mock-allow.mjs' },
     // API
     { src: 'handlers/oauth/html-api-example.js', target: 'app/api/auth/html-example.mjs' },
     { src: 'handlers/oauth/json-api-example.js', target: 'app/api/auth/json-example.mjs' },

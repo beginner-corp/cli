@@ -21,14 +21,14 @@ const manifest = {
     { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.html' },
     { src: 'handlers/magic/pages/auth/welcome.js', target: 'app/pages/auth/welcome.mjs' },
     // Shared code (inside models directory)
-    { src: 'handlers/magic/models/auth/can-i.js', target: 'models/auth/can-i.mjs' },
+    { src: 'handlers/magic/models/auth/can-i.js', target: 'app/models/auth/can-i.mjs' },
     // Events
     { src: 'handlers/magic/events/auth-link/index.js', target: 'jobs/events/auth-link/index.mjs' },
     // Seed database
     { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.js' },
     // Users Table
     // Utils
-    { src: '../scaffold/handlers/model.js', target: 'models/<ROUTE_NAME>.mjs' },
+    { src: '../scaffold/handlers/model.js', target: 'app/models/<ROUTE_NAME>.mjs' },
     // API
     { src: '../scaffold/handlers/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
     { src: '../scaffold/handlers/api-delete.js', target: 'app/api/<ROUTE_NAME>/$id/delete.mjs' },
