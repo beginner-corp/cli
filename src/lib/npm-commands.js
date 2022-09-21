@@ -20,7 +20,10 @@ function installDependencies (dependencies) {
 }
 
 function initialInstall () {
-  return spawn.sync('npm', [ 'install', '--silent' ], { encoding: 'utf-8' })
+  if (process.env.NODE_ENV !== 'testing') {
+    return spawn.sync('npm', [ 'install', '--silent' ], { encoding: 'utf-8' })
+  }
+  return { status: 0 } // Assume tests successfully npm "installed" project deps
 }
 
 module.exports = {

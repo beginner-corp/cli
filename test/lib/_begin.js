@@ -1,4 +1,5 @@
 let { existsSync, mkdirSync, rmSync } = require('fs')
+let { copySync: copy } = require('fs-extra')
 let { join } = require('path')
 let { exec: _exec } = require('child_process')
 let { promisify } = require('util')
@@ -8,6 +9,7 @@ let capture = require('./_capture')
 let tmp = require('./_tmp-dir')
 
 let cwd = process.cwd()
+let enhanceModules = join('node_modules', '@enhance')
 let isWin = process.platform.startsWith('win')
 let mod = require(cwd)
 let binPath = join(cwd, 'build', `begin${isWin ? '.exe' : ''}`)
@@ -29,6 +31,10 @@ function setup (t, dir, reuse) {
     if (existsSync(dir)) t.fail(`Found existing tmp dir: ${dir}`)
     mkdirSync(dir, { recursive: true })
     if (!existsSync(dir)) t.fail(`Failed to create ${dir}`)
+
+    // The Enhance Arc plugin is necessary for starting Sandbox in test runs
+    let enhancePlugin = join(enhanceModules, 'arc-plugin-enhance')
+    copy(join(cwd, enhancePlugin), join(dir, enhancePlugin))
   }
 }
 
