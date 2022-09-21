@@ -9,7 +9,7 @@ let capture = require('./_capture')
 let tmp = require('./_tmp-dir')
 
 let cwd = process.cwd()
-let enhanceModules = join('node_modules', '@enhance')
+let enhancePlugin = join('node_modules', '@enhance', 'arc-plugin-enhance')
 let isWin = process.platform.startsWith('win')
 let mod = require(cwd)
 let binPath = join(cwd, 'build', `begin${isWin ? '.exe' : ''}`)
@@ -33,7 +33,6 @@ function setup (t, dir, reuse) {
     if (!existsSync(dir)) t.fail(`Failed to create ${dir}`)
 
     // The Enhance Arc plugin is necessary for starting Sandbox in test runs
-    let enhancePlugin = join(enhanceModules, 'arc-plugin-enhance')
     copy(join(cwd, enhancePlugin), join(dir, enhancePlugin))
   }
 }
