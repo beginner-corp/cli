@@ -9,6 +9,7 @@ module.exports = async function action (params, utils) {
   if (!appID) {
     let created = await createApp(params, utils)
     app = created.app
+    appID = app.appID
   }
 
   // Go get the app (if we didn't just create one)
