@@ -26,6 +26,10 @@ let help = {
           description: 'Log into Begin',
         },
         {
+          name: 'logs',
+          description: 'Retrieve logs from Begin',
+        },
+        {
           name: 'update',
           description: 'Update Begin to the latest version',
         },

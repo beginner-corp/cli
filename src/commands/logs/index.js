@@ -1,4 +1,4 @@
-let names = { en: [ 'logs' ] }
+let names = { en: [ 'logs', 'log' ] }
 let help = require('./help')
 let appAction = require('../app/list')
 
