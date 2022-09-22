@@ -14,8 +14,12 @@ let help = {
           description: 'Start the local development server',
         },
         {
-          name: 'new',
-          description: 'Locally create a new project or resource',
+          name: 'env',
+          description: `List your Begin app's environment variables`,
+        },
+        {
+          name: 'generate',
+          description: 'A code generator for common functionality',
         },
         {
           name: 'help',
@@ -28,6 +32,10 @@ let help = {
         {
           name: 'logs',
           description: 'Retrieve logs from Begin',
+        },
+        {
+          name: 'new',
+          description: 'Locally create a new project or resource',
         },
         {
           name: 'update',
