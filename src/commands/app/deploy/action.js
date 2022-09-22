@@ -90,8 +90,8 @@ async function getUpdates (params) {
         reject(Error(msg))
       }
       else if (timeout) {
-        process.stderr.write('\n')
-        reject('Build timed out')
+        // Build timeout error text should have come through in the build update stream
+        reject()
       }
       else if ([ 'success', 'failed' ].includes(buildStatus)) {
         process.stderr.write('\n')
