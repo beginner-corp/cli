@@ -11,7 +11,8 @@ async function action (params) {
     let lib = require('../../lib')
     let utils = {
       ...lib,
-      writeFile: lib.writeFile(params)
+      writeFile: lib.writeFile(params),
+      validate: require(`../new/_validate`)(params)
     }
     return generator.action(params, utils, subcommand)
   }

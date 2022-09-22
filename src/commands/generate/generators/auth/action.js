@@ -1,12 +1,14 @@
 
 module.exports = async function action (params, utils, command) {
   let { args } = params
-  let { writeFile, npmCommands } = utils
+  let { writeFile, npmCommands, validate } = utils
   let { installAwsSdk } = npmCommands
   let error = require('./errors')(params, utils)
   let project = params.inventory.inv._project
   let generate = require('../_generate')
 
+  const invalid = await validate.project()
+  if (invalid) return invalid
 
   let plugins = project.arc.plugins
   if (plugins.includes('arc-plugin-oauth')) {
