@@ -3,6 +3,7 @@ let help = require('./help')
 
 async function action (params) {
   let { appVersion, args, cliDir } = params
+  let { use } = args
   let plat = process.platform
   let isWin = plat.startsWith('win')
 
@@ -17,7 +18,11 @@ async function action (params) {
 
   let versions = await getVersions()
   return new Promise((resolve, reject) => {
-    let channel = appVersion.startsWith('main') ? 'main' : 'latest'
+    let appChannel = appVersion.startsWith('main') ? 'main' : 'latest'
+
+    // Allow CLI override when specifying channel
+    let override = use && use !== appChannel ? use : false
+    let channel = override || appChannel
 
     let platform = plat === 'darwin' && 'darwin' ||
                    plat === 'linux' && 'linux' ||
@@ -27,15 +32,13 @@ async function action (params) {
     let url = release.releases[platform].x64 // TODO: check for arm64 here
     let https = url.startsWith('https://') ? _https : _http
 
-    // Allow CLI override when specifying channel
-    let override = args.use !== channel && args.use
+    // Compare versions if we're doing a plain update
     let doNotUpdate
     if (!override && channel === 'main') doNotUpdate = appVersion === version
     if (!override && channel === 'latest') doNotUpdate = semver.gte(appVersion, version)
     if (doNotUpdate) {
       return resolve('Begin already running the latest version, nice!')
     }
-    if (override) channel = override
 
     https.get(url, res => {
       let mib = i => Math.round((i / 1000 / 1000) * 100) / 100
