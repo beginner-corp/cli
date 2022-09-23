@@ -18,9 +18,6 @@ async function action (params) {
   let versions = await getVersions()
   return new Promise((resolve, reject) => {
     let channel = appVersion.startsWith('main') ? 'main' : 'latest'
-    // Allow CLI override
-    if (args.use === 'main') channel = 'main'
-    if (args.use === 'latest') channel = 'latest'
 
     let platform = plat === 'darwin' && 'darwin' ||
                    plat === 'linux' && 'linux' ||
@@ -30,8 +27,11 @@ async function action (params) {
     let url = release.releases[platform].x64 // TODO: check for arm64 here
     let https = url.startsWith('https://') ? _https : _http
 
-    let doNotUpdate = (channel === 'main' && appVersion === version) ||
-                      (channel === 'latest' && semver.gte(appVersion, version))
+    // Allow CLI override when specifying channel
+    let override = args.use !== channel && args.use
+    let doNotUpdate
+    if (!override && channel === 'main') doNotUpdate = appVersion === version
+    if (!override && channel === 'latest') doNotUpdate = semver.gte(appVersion, version)
     if (doNotUpdate) {
       return resolve('Begin already running the latest version, nice!')
     }
