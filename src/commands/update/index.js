@@ -35,6 +35,7 @@ async function action (params) {
     if (doNotUpdate) {
       return resolve('Begin already running the latest version, nice!')
     }
+    if (override) channel = override
 
     https.get(url, res => {
       let mib = i => Math.round((i / 1000 / 1000) * 100) / 100
