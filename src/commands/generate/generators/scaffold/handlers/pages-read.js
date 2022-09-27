@@ -1,7 +1,7 @@
 const { schemaToForm } = require('../schema-to-form')
 
 module.exports = function ({ plural, singular, schema }) {
-  return `// View documentation at: https://docs.begin.com
+  return `// View documentation at: https://enhance.dev/docs/learn/starter-project/pages
 /**
   * @type {import('@enhance/types').EnhanceElemFn}
   */

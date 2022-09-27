@@ -1,5 +1,5 @@
 module.exports = function ({ plural, capSingular, singular, includeAuth = false, authRole = 'admin'   }) {
-  return `// View documentation at: https://docs.begin.com
+  return `// View documentation at: https://enhance.dev/docs/learn/starter-project/api
 import { delete${capSingular} } from '../../../models/${plural}.mjs'
 ${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
 

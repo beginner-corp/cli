@@ -1,6 +1,6 @@
 let copy = {
   en: {
-    view_docs: 'View documentation at: https://docs.begin.com',
+    view_docs: 'View documentation at: https://docs.begin.com/en/event-functions/provisioning',
   }
 }
 

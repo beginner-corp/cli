@@ -1,5 +1,5 @@
 module.exports = function ({ plural, singular, capSingular, includeAuth = false, authRole = 'admin'    }) {
-  return `// View documentation at: https://docs.begin.com
+  return `// View documentation at: https://enhance.dev/docs/learn/starter-project/api
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
