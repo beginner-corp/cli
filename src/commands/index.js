@@ -58,13 +58,15 @@ module.exports = async function runCommand (params) {
         return
       }
       catch (err) {
-        if (err.type === '__help__' && help) {
+        if (err?.type === '__help__' && help) {
           printer(err)
           if (args.json) return
           helper(params, await getHelp(help))
           return
         }
-        else throw err
+        else if (err) throw err
+        process.exitCode = 1 // Rejecting without an error is probably a failed build
+        return
       }
     }
   }
