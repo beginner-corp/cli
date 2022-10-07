@@ -55,12 +55,11 @@ module.exports = async function action (params, utils) {
 
   console.error(`Deploying '${name}'`)
   console.error(`(You can now exit this process and check in on its status with \`begin app deploy --status\`)`)
-  await getUpdates({ token, appID, envID, buildID: build.buildID })
-  console.error(`Deployed '${name}' to: ${url}`)
+  await getUpdates({ token, appID, envID, buildID: build.buildID }, { name, url })
 }
 
 // Recursive update getter
-async function getUpdates (params) {
+async function getUpdates (params, { name, url }) {
   let client = require('@begin/api')
   return new Promise((resolve, reject) => {
     let lastPrinted = false
@@ -90,12 +89,14 @@ async function getUpdates (params) {
         process.stderr.write('\n')
         reject(Error(msg))
       }
-      else if (timeout) {
-        // Build timeout error text should have come through in the build update stream
+      else if (buildStatus === 'failed' || timeout) {
+        // Assume failure / timeout error info printed in the build / deploy update stream
+        process.stderr.write('\n')
         reject()
       }
-      else if ([ 'success', 'failed' ].includes(buildStatus)) {
+      else if (buildStatus === 'success') {
         process.stderr.write('\n')
+        console.error(`Deployed '${name}' to: ${url}`)
         resolve()
       }
     }
