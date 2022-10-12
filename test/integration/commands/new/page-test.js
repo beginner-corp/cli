@@ -4,7 +4,7 @@ let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
 let { begin: _begin, getInv, newFolder, run } = require(lib)
 
-test.only('Run new tests', async t => {
+test('Run new tests', async t => {
   await run(runTests, t)
   t.end()
 })
@@ -27,14 +27,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
-    // TODO ↓ remove me! ↓
-    console.log(`i.inv.lambdaSrcDirs:`, i.inv.lambdaSrcDirs)
-    console.dir(i.inv, { depth: null })
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
 
     r = await begin('new page -p test', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project still has one Lambda')
     t.ok(existsSync(join(cwd, './app/pages/test.html')), 'Wrote API handler')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
@@ -42,7 +39,7 @@ async function runTests (runType, t) {
 
     r = await begin('new page -p test -t js', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project still has one Lambda')
     t.ok(existsSync(join(cwd, './app/pages/test.mjs')), 'Wrote API handler')
     t.notOk(r.stdout, 'Did not print to stdout')
     t.notOk(r.stderr, 'Did not print to stderr')
@@ -91,11 +88,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
 
     r = await begin('new page -p test --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project still has one Lambda')
     t.ok(existsSync(join(cwd, './app/pages/test.html')), 'Wrote API handler')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true')
@@ -104,7 +101,7 @@ async function runTests (runType, t) {
 
     r = await begin('new page -p test -t js --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project still has one Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project still has one Lambda')
     t.ok(existsSync(join(cwd, './app/pages/test.mjs')), 'Wrote API handler')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true')

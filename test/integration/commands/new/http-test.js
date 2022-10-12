@@ -30,11 +30,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
 
     r = await begin('new http -m get -p /js', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project now has two Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
     lambda = i.get.http('get /js')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(!existsSync(lambda.configFile), 'Did not write Lambda config')
@@ -45,7 +45,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -57,7 +57,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -m PUT -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has four Lambdas')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -125,11 +125,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
 
     r = await begin('new http -m get -p /js --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project now has two Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
     lambda = i.get.http('get /js')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(!existsSync(lambda.configFile), 'Did not write Lambda config')
@@ -141,7 +141,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has three Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -154,7 +154,7 @@ async function runTests (runType, t) {
 
     r = await begin('new http -m PUT -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has four Lambdas')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')

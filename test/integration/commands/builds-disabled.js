@@ -36,7 +36,7 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
     // Fake app ID
     appendAppID(i)
     r = await begin('builds', cwd, true)
@@ -61,7 +61,7 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
     // Fake app ID
     appendAppID(i)
     r = await begin('builds --json', cwd, true)
