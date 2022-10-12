@@ -4,7 +4,7 @@ let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
 let { begin: _begin, getInv, newFolder, run } = require(lib)
 
-test('Run new tests', async t => {
+test.only('Run new tests', async t => {
   await run(runTests, t)
   t.end()
 })
