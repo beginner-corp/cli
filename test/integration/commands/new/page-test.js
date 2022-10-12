@@ -28,6 +28,9 @@ async function runTests (runType, t) {
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, 1, 'Project has a single Lambda')
+    // TODO ↓ remove me! ↓
+    console.log(`i.inv.lambdaSrcDirs:`, i.inv.lambdaSrcDirs)
+    console.dir(i.inv, { depth: null })
 
     r = await begin('new page -p test', cwd, true)
     i = await getInv(t, cwd)
