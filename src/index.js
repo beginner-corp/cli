@@ -7,7 +7,7 @@ let commands = require('./commands')
 let _printer = require('./printer')
 
 async function begin (params = {}) {
-  let { clientIDs, version } = params
+  let { version } = params
   let alias = {
     debug: 'd',
     help: 'h',
@@ -17,10 +17,12 @@ async function begin (params = {}) {
   let args = minimist(process.argv.slice(2), { alias })
   if (process.env.DEBUG) args.debug = true
   try {
-    if (!clientIDs) {
-      let clientIDFile = join(__dirname, '..', 'client-ids.json')
-      if (existsSync(clientIDFile)) clientIDs = JSON.parse(readFileSync(clientIDFile))
+    let clientIDs
+    let clientIDFile = join(__dirname, '..', 'client-ids.json')
+    if (existsSync(clientIDFile)) {
+      clientIDs = JSON.parse(readFileSync(clientIDFile))
     }
+
     if (!version) {
       let pkg = join(__dirname, '..', 'package.json')
       version = JSON.parse(readFileSync(pkg)).version

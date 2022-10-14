@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-let { writeFileSync } = require('fs')
+let { existsSync, writeFileSync } = require('fs')
 let { execSync } = require('child_process')
 let { join } = require('path')
 let { DEPLOY, BUILD_ALL } = process.env
@@ -37,6 +37,7 @@ let config = {
   }
 }
 
+// Main version is derived from the latest git commit
 if (DEPLOY === 'main') {
   let cmd = 'git rev-parse HEAD'
   let result = execSync(cmd)
@@ -47,16 +48,23 @@ if (DEPLOY === 'main') {
   let appVersion = `main-${sha}`
   let commitFile = join(__dirname, '..', 'commit')
   writeFileSync(commitFile, appVersion)
+  config.bin.cli = '../src/_main.js'
+  config.pkg.assets.push('../commit')
+}
+
+// Handle client IDs in main or prod (and optionally locally)
+// However, client IDs should not be required for local testing
+let clientIDFile = join(__dirname, '..', 'client-ids.json')
+if (DEPLOY) {
   let staging = process.env.BEGIN_CLI_CLIENT_ID_STAGING
   let production = process.env.BEGIN_CLI_CLIENT_ID_PRODUCTION
   if (!staging || !production) {
     throw ReferenceError('Missing staging and/or production client ID')
   }
   let clientIDs = JSON.stringify({ staging, production })
-  let clientIDFile = join(__dirname, '..', 'client-ids.json')
   writeFileSync(clientIDFile, clientIDs)
-  config.bin.cli = '../src/_main.js'
-  config.pkg.assets.push('../commit')
+}
+if (existsSync(clientIDFile)) {
   config.pkg.assets.push('../client-ids.json')
 }
 
