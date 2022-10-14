@@ -1,5 +1,6 @@
 module.exports = async function action (params, utils) {
-  let { args, appID, envName, inventory, token } = params
+  let { args, appID, config, envName, inventory } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let { writeFile } = utils
 
   if (!appID) return Error('No Begin app found to destroy')
@@ -7,7 +8,7 @@ module.exports = async function action (params, utils) {
   let { promptOptions } = require('../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
-  let app = await client.find({ token, appID })
+  let app = await client.find({ token, appID, _staging })
   let envs = app.environments
   let envQty = envs.length
 
@@ -33,7 +34,7 @@ module.exports = async function action (params, utils) {
     }
 
     console.error(`Destroying Begin app ID '${appID}'`)
-    await client.destroy({ token, appID })
+    await client.destroy({ token, appID, _staging })
     let { raw } = inventory.inv._project
     raw = raw.split('\n').filter(l => l !== `appID ${appID}`).join('\n')
     await writeFile(inventory.inv._project.manifest, raw)
@@ -78,7 +79,7 @@ module.exports = async function action (params, utils) {
     }
 
     console.error(`Destroying Begin app environment`)
-    await client.env.remove({ token, appID, envID })
+    await client.env.remove({ token, appID, envID, _staging })
     return `Destroyed Begin app environment (env name: '${name}', env ID: '${envID}')`
   }
   else {

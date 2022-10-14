@@ -36,11 +36,11 @@ async function action (params) {
   else {
     config = JSON.parse(readFileSync(configFile))
   }
-  let clientID = config.stagingAPI ? clientIDs.staging : clientIDs.production
+  let { access_token, device_code, stagingAPI } = config
   let domain = process.env.__BEGIN_TEST__
     ? 'http://localhost:3333'
-    : `https://${config.stagingAPI ? 'staging-' : ''}api.begin.com`
-  let { access_token, device_code } = config
+    : `https://${stagingAPI ? 'staging-' : ''}api.begin.com`
+  let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
 
   // User is logged in
   if (access_token && device_code) {

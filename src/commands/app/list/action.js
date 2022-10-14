@@ -1,7 +1,8 @@
 module.exports = async function action (params) {
-  let { token } = params
+  let { config } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
-  let apps = await client.list({ token })
+  let apps = await client.list({ token, _staging })
 
   if (!apps.length) return console.error('No apps found. Create your first by running: `begin app create`')
   let item = '  ├──'

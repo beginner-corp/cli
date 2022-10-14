@@ -9,14 +9,15 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getCreds } = lib
+  let { checkManifest, getConfig } = lib
   let { args } = params
 
-  let token = getCreds(params)
-  if (!token) {
+  let config = getConfig(params)
+  if (!config.access_token) {
     let msg = 'You must be logged in to interact with logs, please run: begin login'
     return Error(msg)
   }
+  let { access_token: token, stagingAPI: _staging } = config
 
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
@@ -28,7 +29,7 @@ async function action (params) {
   // Make sure the appID is valid
   let app = null
   try {
-    app = await client.find({ token, appID })
+    app = await client.find({ token, appID, _staging })
   }
   catch (err) {
     return error([ 'no_appid_found' ])
@@ -56,7 +57,7 @@ async function action (params) {
   console.log(`'${name}' (app ID: ${appID})`)
   console.log(`${last} '${env.name}' (env ID: ${env.envID}): ${env.url}`)
 
-  let logs = await client.env.logs({ token, appID, envID, query: `fields @log, @logStream, @timestamp, @message | sort @timestamp desc` })
+  let logs = await client.env.logs({ token, appID, envID, query: `fields @log, @logStream, @timestamp, @message | sort @timestamp desc`, _staging })
   if (!logs.length) {
     return `  ${last} (no logs)`
   }

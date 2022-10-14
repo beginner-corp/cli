@@ -14,16 +14,22 @@ function checkManifest (inventory) {
   }
 }
 
-function getCreds (params) {
+let config
+function getConfig (params) {
+  if (config) return config
+
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
   let { cliDir, printer } = params
   let configPath = join(cliDir, 'config.json')
-  if (!existsSync(configPath)) return false
+  if (!existsSync(configPath)) return {}
   try {
-    let { access_token } = JSON.parse(readFileSync(configPath))
-    if (!access_token) return false
-    return access_token
+    let result = JSON.parse(readFileSync(configPath))
+    config = result
+    if (config.stagingAPI) {
+      printer('Begin staging enabled')
+    }
+    return config
   }
   catch (err) {
     printer(err)
@@ -74,7 +80,7 @@ function writeFile (params) {
 module.exports = {
   backtickify,
   checkManifest,
-  getCreds,
+  getConfig,
   getRelativeCwd,
   httpMethods,
   mutateArc,

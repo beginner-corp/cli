@@ -24,14 +24,15 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getCreds, promptOptions } = lib
+  let { checkManifest, getConfig, promptOptions } = lib
   let { args } = params
 
-  let token = getCreds(params)
-  if (!token) {
+  let config = getConfig(params)
+  if (!config.access_token) {
     let msg = 'You must be logged in to interact with builds, please run: begin login'
     return Error(msg)
   }
+  let { access_token: token, stagingAPI: _staging } = config
 
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
@@ -43,7 +44,7 @@ async function action (params) {
   // Make sure the appID is valid
   let app = null
   try {
-    app = await client.find({ token, appID })
+    app = await client.find({ token, appID, _staging })
   }
   catch (err) {
     return error([ 'no_appid_found' ])

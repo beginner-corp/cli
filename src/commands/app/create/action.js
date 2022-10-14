@@ -1,5 +1,6 @@
 module.exports = async function action (params, utils) {
-  let { appID, envName, token } = params
+  let { appID, config, envName } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let { createApp, promptOptions, validateEnvName } = require('../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
@@ -27,7 +28,7 @@ module.exports = async function action (params, utils) {
   }
   // Create a new environment
   else {
-    let app = await client.find({ token, appID })
+    let app = await client.find({ token, appID, _staging })
     let envs = app.environments
     let envNameProvided = !!(envName)
     if (envNameProvided) {
@@ -53,7 +54,7 @@ module.exports = async function action (params, utils) {
     }
 
     // Create the app environment
-    app = await client.env.add({ token, appID, envName })
+    app = await client.env.add({ token, appID, envName, _staging })
     let env = app.environments.find(({ name }) => name === envName)
     console.error(`App environment '${envName}' created at ${env.url}`)
 
