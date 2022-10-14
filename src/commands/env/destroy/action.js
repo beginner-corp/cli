@@ -1,5 +1,6 @@
 module.exports = async function action (params, utils) {
-  let { appID, args, token } = params
+  let { appID, args, config } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
   let error = require('../errors')(params, utils)
   let errors = []
@@ -21,9 +22,9 @@ module.exports = async function action (params, utils) {
   }
 
   try {
-    let { name, environments } = await client.find({ token, appID })
+    let { name, environments } = await client.find({ token, appID, _staging })
     let environment = environments.find(item => item.envID === env)
-    await client.env.vars.remove({ token, appID, envID: env, vars: [ key ] } )
+    await client.env.vars.remove({ token, appID, envID: env, vars: [ key ], _staging } )
     console.log(`Successfully destroyed environment variable ${key} in '${name}' (app ID: ${appID})' '${environment.name}' (env ID: ${env})`)
   }
   catch (err) {

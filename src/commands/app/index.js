@@ -10,10 +10,10 @@ async function action (params) {
     let _inventory = require('@architect/inventory')
     params.inventory = await _inventory()
     let lib = require('../../lib')
-    let { checkManifest, getCreds } = lib
+    let { checkManifest, getConfig } = lib
 
-    let token = getCreds(params)
-    if (!token) {
+    let config = getConfig(params)
+    if (!config.access_token) {
       let msg = 'You must be logged in to deploy to Begin, please run: begin login'
       return Error(msg)
     }
@@ -35,8 +35,8 @@ async function action (params) {
     }
     return appAction.action({
       appID,
+      config,
       envName,
-      token,
       ...params
     }, utils)
   }

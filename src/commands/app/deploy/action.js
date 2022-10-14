@@ -1,5 +1,6 @@
 module.exports = async function action (params, utils) {
-  let { args, appID, envName, token } = params
+  let { args, appID, config, envName } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let { createApp, promptOptions } = require('../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
@@ -14,7 +15,7 @@ module.exports = async function action (params, utils) {
 
   // Go get the app (if we didn't just create one)
   if (!app) {
-    app = await client.find({ token, appID })
+    app = await client.find({ token, appID, _staging })
   }
 
   let envs = app.environments
@@ -45,17 +46,17 @@ module.exports = async function action (params, utils) {
 
   // Just return the status of the latest build
   if (args.status) {
-    let builds = await client.env.builds({ token, appID, envID })
+    let builds = await client.env.builds({ token, appID, envID, _staging })
     if (!builds.length) return Error('No builds found for this environment')
     return `Latest build status: ${builds[0].buildStatus}`
   }
 
-  let build = await client.env.deploy({ token, appID, envID, verbose: true })
+  let build = await client.env.deploy({ token, appID, envID, verbose: true, _staging })
   if (!build?.buildID) return ReferenceError('Deployment failed, did not receive buildID')
 
   console.error(`Deploying '${name}'`)
   console.error(`(You can now exit this process and check in on its status with \`begin app deploy --status\`)`)
-  await getUpdates({ token, appID, envID, buildID: build.buildID }, { name, url })
+  await getUpdates({ token, appID, envID, buildID: build.buildID, _staging }, { name, url })
 }
 
 // Recursive update getter

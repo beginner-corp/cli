@@ -7,10 +7,10 @@ let lib = require('../../lib')
 async function action (params) {
   let { args } = params
   params.inventory = await _inventory()
-  let { checkManifest, getCreds } = lib
+  let { checkManifest, getConfig } = lib
 
-  let token = getCreds(params)
-  if (!token) {
+  let config = getConfig(params)
+  if (!config.access_token) {
     let msg = 'You must be logged in to deploy to Begin, please run: begin login'
     return Error(msg)
   }
@@ -33,7 +33,7 @@ async function action (params) {
   return appAction.action({
     appID,
     envName,
-    token,
+    config,
     ...params
   }, utils)
 }

@@ -1,11 +1,12 @@
 module.exports = async function action (params, utils) {
-  let { appID, token } = params
+  let { appID, config } = params
+  let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
   let error = require('../errors')(params, utils)
 
   let app = null
   try {
-    app = await client.find({ token, appID })
+    app = await client.find({ token, appID, _staging })
   }
   catch (err) {
     return error([ 'no_appid_found' ])

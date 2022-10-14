@@ -1,7 +1,8 @@
 // Create first app + environment flow, used in both `app create` + `app deploy`
 module.exports = async function createApp (params, utils) {
-  let { args, inventory, token } = params
+  let { args, config, inventory } = params
   let { env } = args
+  let { access_token: token, stagingAPI: _staging } = config
   let { mutateArc, writeFile } = utils
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
@@ -45,7 +46,7 @@ module.exports = async function createApp (params, utils) {
   }
 
   // Create the app
-  let app = await client.create({ token, name, envName })
+  let app = await client.create({ token, name, envName, _staging })
   let appID = app?.appID
   let envID = app?.environments[0]
   if (!app || !appID || !envID) {
