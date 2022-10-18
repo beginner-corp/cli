@@ -24,7 +24,7 @@
     "@architect/parser": "6.0.0",
     "@architect/sandbox": "5.3.4",
     "@begin/api": "1.4.4",
-    "@enhance/starter-project": "1.1.5",
+    "@enhance/starter-project": "2.0.0",
     "cron-validate": "1.4.4",
     "cross-spawn": "7.0.3",
     "enquirer": "2.3.6",
