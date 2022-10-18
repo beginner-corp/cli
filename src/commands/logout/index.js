@@ -27,6 +27,9 @@ async function action (params) {
     : `https://${stagingAPI ? 'staging-' : ''}api.begin.com`
   let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
 
+  if (!clientID && process.env.__BEGIN_TEST__) {
+    clientID = 'test'
+  }
   if (!clientID) {
     return Error('Cannot log out without a valid client ID')
   }
