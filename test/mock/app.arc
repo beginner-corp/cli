@@ -13,6 +13,11 @@ mock
   method post
   src token
 
+# logout command
+/clients/:clientID/token/delete
+  method post
+  src token-delete
+
 # upgrade command
 /versions-upgrade
   method get
