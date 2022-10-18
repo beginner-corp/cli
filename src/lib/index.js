@@ -45,11 +45,13 @@ function getRelativeCwd (path) {
 
 let httpMethods = [ 'get', 'post', 'put', 'patch', 'delete', 'options', 'head', 'any' ]
 
-let runtimes = [ 'node', 'deno', 'ruby', 'python' ]
-
 let mutateArc = require('./mutate-arc')
 
 let npmCommands = require('./npm-commands')
+
+let runtimes = [ 'node', 'deno', 'ruby', 'python' ]
+
+let spinner = require('./spinner')
 
 function writeFile (params) {
   let { existsSync, mkdirSync, writeFileSync } = require('fs')
@@ -86,5 +88,6 @@ module.exports = {
   mutateArc,
   npmCommands,
   runtimes,
+  spinner,
   writeFile,
 }

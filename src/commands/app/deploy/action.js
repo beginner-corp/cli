@@ -2,6 +2,7 @@ module.exports = async function action (params, utils) {
   let { args, appID, config, envName } = params
   let { access_token: token, stagingAPI: _staging } = config
   let { createApp, promptOptions } = require('../lib')
+  let { spinner } = require('../../../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
   let app, env
@@ -53,17 +54,17 @@ module.exports = async function action (params, utils) {
 
   let { verbose } = args
   if (!verbose) {
-    console.error(`Archiving and uploading project to Begin...`)
+    spinner(`Archiving and uploading project to Begin...`)
   }
   let build = await client.env.deploy({ token, appID, envID, verbose, _staging })
   if (!build?.buildID) return ReferenceError('Deployment failed, did not receive buildID')
 
-  console.error(`Beginning deployment of '${name}'; you can now exit this process and check in on its status with \`begin deploy --status\``)
-  await getUpdates({ token, appID, envID, buildID: build.buildID, _staging }, { args, name, url })
+  spinner(`Beginning deployment of '${name}'; you can now exit this process and check in on its status with begin deploy --status`)
+  await getUpdates({ token, appID, envID, buildID: build.buildID, _staging }, { args, name, spinner, url })
 }
 
 // Recursive update getter
-async function getUpdates (params, { args, name, url }) {
+async function getUpdates (params, { args, name, spinner, url }) {
   let client = require('@begin/api')
   return new Promise((resolve, reject) => {
     let lastPrinted = false
@@ -88,7 +89,7 @@ async function getUpdates (params, { args, name, url }) {
         let update = concatMsgs(latest)
         if (update) {
           lastPrinted = new Date().toISOString()
-          process.stderr.write('\n' + update.trim())
+          spinner(update.trim())
         }
       }
 
@@ -98,16 +99,16 @@ async function getUpdates (params, { args, name, url }) {
       }
       else if (error) {
         let msg = Buffer.from(error.msg, 'base64').toString()
-        process.stderr.write('\n')
+        spinner.done()
         reject(Error(msg))
       }
       else if (buildStatus === 'failed' || timeout) {
         // Assume failure / timeout error info printed in the build / deploy update stream
-        process.stderr.write('\n')
+        spinner.done()
         reject()
       }
       else if (buildStatus === 'success') {
-        process.stderr.write('\n')
+        spinner.done()
         console.error(`Deployed '${name}' to: ${url}`)
         resolve()
       }
