@@ -51,11 +51,14 @@ module.exports = async function action (params, utils) {
     return `Latest build status: ${builds[0].buildStatus}`
   }
 
-  let build = await client.env.deploy({ token, appID, envID, verbose: true, _staging })
+  let { verbose } = args
+  if (!verbose) {
+    console.error(`Archiving and uploading project to Begin...`)
+  }
+  let build = await client.env.deploy({ token, appID, envID, verbose, _staging })
   if (!build?.buildID) return ReferenceError('Deployment failed, did not receive buildID')
 
-  console.error(`Deploying '${name}'`)
-  console.error(`(You can now exit this process and check in on its status with \`begin app deploy --status\`)`)
+  console.error(`Beginning deployment of '${name}'; you can now exit this process and check in on its status with \`begin deploy --status\``)
   await getUpdates({ token, appID, envID, buildID: build.buildID, _staging }, { args, name, url })
 }
 
