@@ -44,4 +44,11 @@ if (require.main === module) {
   begin()
 }
 
+// For whatever reason signal-exit doesn't catch SIGINT, so do this in case we have a running spinner that hid the cursor
+process.on('SIGINT', () => {
+  require('restore-cursor')()
+  process.stderr.write('\n')
+  process.exit()
+})
+
 module.exports = begin
