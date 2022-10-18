@@ -30,6 +30,10 @@ let help = {
           description: 'Log into Begin',
         },
         {
+          name: 'logout',
+          description: 'Log out of Begin',
+        },
+        {
           name: 'logs',
           description: 'Retrieve logs from Begin',
         },

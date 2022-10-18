@@ -10,7 +10,7 @@ let { begin: _begin, newFolder, run } = require(lib)
 let filePath = folder => join(folder, 'config.json')
 let reset = folder => rmSync(folder, { recursive: true, force: true })
 
-test('Run update tests', async t => {
+test('Run login tests', async t => {
   await run(runTests, t)
   t.end()
 })
