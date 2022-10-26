@@ -16,13 +16,23 @@ function checkManifest (inventory) {
 
 let config
 function getConfig (params) {
-  if (config) return config
+  if (config && !params._refresh) return config
 
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
   let { cliDir, printer } = params
   let configPath = join(cliDir, 'config.json')
-  if (!existsSync(configPath)) return {}
+
+  // Local config file wins over env vars
+  if (!existsSync(configPath)) {
+    let { BEGIN_TOKEN, BEGIN_STAGING_API } = process.env
+    let result = {
+      access_token: BEGIN_TOKEN,
+      stagingAPI: BEGIN_STAGING_API ? true : undefined,
+    }
+    config = result.access_token ? result : {}
+    return config
+  }
   try {
     let result = JSON.parse(readFileSync(configPath))
     config = result

@@ -1,13 +1,71 @@
 let { join, sep } = require('path')
 let test = require('tape')
 let { sync: rm } = require('rimraf')
-let { readFileSync } = require('fs')
-let sut = join(process.cwd(), 'src', 'lib')
+let { mkdirSync, readFileSync, rmSync, writeFileSync } = require('fs')
+let cwd = process.cwd()
+let testLib = join(cwd, 'test', 'lib')
+let { newFolder } = require(testLib)
+let sut = join(cwd, 'src', 'lib')
 let lib = require(sut)
+let reset = folder => rmSync(folder, { recursive: true, force: true })
 
 test('Set up env', t => {
   t.plan(1)
   t.ok(lib, 'Arc mutator is present')
+})
+
+test('backtickify', t => {
+  t.plan(1)
+  let { backtickify } = lib
+  let list = [ 'ok', 'whatever' ]
+  let target = '`ok`, `whatever`'
+  let result = backtickify(list)
+  t.equal(result, target, 'Backtified that list')
+})
+
+test('getConfig', t => {
+  t.plan(9)
+  let { getConfig } = lib
+  let cliDir, config, token
+  let _refresh = true
+
+  cliDir = newFolder('getConfig')
+  mkdirSync(cliDir, { recursive: true })
+
+  // Control
+  config = getConfig({ cliDir, _refresh })
+  t.deepEqual(config, {}, 'Got empty config')
+
+  // Env var token population
+  token = 'env-token'
+  process.env.BEGIN_TOKEN = token
+  config = getConfig({ cliDir, _refresh })
+  t.equal(config.access_token, token, 'Got correct access_token')
+  t.equal(config.stagingAPI, undefined, 'stagingAPI property is undefined')
+
+  process.env.BEGIN_STAGING_API = true
+  config = getConfig({ cliDir, _refresh })
+  t.equal(config.access_token, token, 'Got correct access_token')
+  t.equal(config.stagingAPI, true, 'Got stagingAPI property')
+
+  // Config file
+  // Note: we haven't (yet) destroyed the above env vars, so successfully running the tests below infers the intended behavior that the presence of a config file wins over env vars
+  token = 'file-token'
+  let configJson = join(cliDir, 'config.json')
+
+  writeFileSync(configJson, JSON.stringify({ access_token: token }))
+  config = getConfig({ cliDir, _refresh })
+  t.equal(config.access_token, token, 'Got correct access_token')
+  t.equal(config.stagingAPI, undefined, 'stagingAPI property is undefined')
+
+  writeFileSync(configJson, JSON.stringify({ access_token: token, stagingAPI: true }))
+  config = getConfig({ cliDir, _refresh, printer: () => {} })
+  t.equal(config.access_token, token, 'Got correct access_token')
+  t.equal(config.stagingAPI, true, 'Got stagingAPI property')
+
+  delete process.env.BEGIN_TOKEN
+  delete process.env.BEGIN_STAGING_API
+  reset(cliDir)
 })
 
 test('getRelativeCwd', t => {
@@ -21,15 +79,6 @@ test('getRelativeCwd', t => {
   t.equal(result, target, 'Got relative working dir')
   result = getRelativeCwd(target)
   t.equal(result, target, 'Got relative working dir')
-})
-
-test('backtickify', t => {
-  t.plan(1)
-  let { backtickify } = lib
-  let list = [ 'ok', 'whatever' ]
-  let target = '`ok`, `whatever`'
-  let result = backtickify(list)
-  t.equal(result, target, 'Backtified that list')
 })
 
 test('writeFile', t => {
