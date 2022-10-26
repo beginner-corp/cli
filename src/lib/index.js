@@ -18,6 +18,12 @@ let config
 function getConfig (params) {
   if (config && !params._refresh) return config
 
+  function done (via) {
+    if (config.stagingAPI) printer(`Begin staging enabled`)
+    if (config.access_token) printer.debug(`Using Begin token via ${via}`)
+    return config
+  }
+
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
   let { cliDir, printer } = params
@@ -31,15 +37,12 @@ function getConfig (params) {
       stagingAPI: BEGIN_STAGING_API ? true : undefined,
     }
     config = result.access_token ? result : {}
-    return config
+    return done('environment variable')
   }
   try {
     let result = JSON.parse(readFileSync(configPath))
     config = result
-    if (config.stagingAPI) {
-      printer('Begin staging enabled')
-    }
-    return config
+    return done('config file')
   }
   catch (err) {
     printer(err)

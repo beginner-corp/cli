@@ -28,23 +28,25 @@ test('getConfig', t => {
   let { getConfig } = lib
   let cliDir, config, token
   let _refresh = true
+  let printer = () => {}
+  printer.debug = () => {}
 
   cliDir = newFolder('getConfig')
   mkdirSync(cliDir, { recursive: true })
 
   // Control
-  config = getConfig({ cliDir, _refresh })
+  config = getConfig({ cliDir, _refresh, printer })
   t.deepEqual(config, {}, 'Got empty config')
 
   // Env var token population
   token = 'env-token'
   process.env.BEGIN_TOKEN = token
-  config = getConfig({ cliDir, _refresh })
+  config = getConfig({ cliDir, _refresh, printer })
   t.equal(config.access_token, token, 'Got correct access_token')
   t.equal(config.stagingAPI, undefined, 'stagingAPI property is undefined')
 
   process.env.BEGIN_STAGING_API = true
-  config = getConfig({ cliDir, _refresh })
+  config = getConfig({ cliDir, _refresh, printer })
   t.equal(config.access_token, token, 'Got correct access_token')
   t.equal(config.stagingAPI, true, 'Got stagingAPI property')
 
@@ -54,12 +56,12 @@ test('getConfig', t => {
   let configJson = join(cliDir, 'config.json')
 
   writeFileSync(configJson, JSON.stringify({ access_token: token }))
-  config = getConfig({ cliDir, _refresh })
+  config = getConfig({ cliDir, _refresh, printer })
   t.equal(config.access_token, token, 'Got correct access_token')
   t.equal(config.stagingAPI, undefined, 'stagingAPI property is undefined')
 
   writeFileSync(configJson, JSON.stringify({ access_token: token, stagingAPI: true }))
-  config = getConfig({ cliDir, _refresh, printer: () => {} })
+  config = getConfig({ cliDir, _refresh, printer })
   t.equal(config.access_token, token, 'Got correct access_token')
   t.equal(config.stagingAPI, true, 'Got stagingAPI property')
 
