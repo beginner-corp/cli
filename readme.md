@@ -70,7 +70,11 @@ Begin has two release channels:
 - `latest` (default) - well-hardened production releases following [semver](https://semver.org/)
 - `main` - the newest stuff (on the `main` branch, hence the name), not yet released to production
 
-To switch to `main` from `latest`, run: `begin update --use main`.
+To install main directly, run:
+- Mac, Linux: `curl -s https://dl.begin.com/install.sh | sh -s main`
+- Windows: `$env:v="main"; iwr https://dl.begin.com/install.ps1 -useb | iex`
+
+If you already have Begin installed, to switch to `main` from `latest` run: `begin update --use main`.
 
 Similarly, to switch back to `latest` from `main`, run: `begin update --use latest`.
 
