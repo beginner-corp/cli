@@ -22,6 +22,7 @@ const manifest = {
     { src: 'handlers/magic/pages/auth/welcome.js', target: 'app/pages/auth/welcome.mjs' },
     // Shared code (inside models directory)
     { src: 'handlers/magic/models/auth/can-i.js', target: 'app/models/auth/can-i.mjs' },
+    { src: 'handlers/magic/models/auth/allow-list.js', target: 'app/models/auth/allow-list.mjs' },
     // Events
     { src: 'handlers/magic/events/auth-link/index.js', target: 'jobs/events/auth-link/index.mjs' },
     // Seed database

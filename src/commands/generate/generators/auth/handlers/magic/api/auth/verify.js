@@ -25,9 +25,18 @@ export async function get (req){
     try {
       users = await getUsers()
       user = users.find(i => i.email === sessionInfo.email)
-    }
+    } 
     catch (e) {
       console.log(e)
+    }
+    if (!user) {
+      try {
+        const allowList = await import('../../models/auth/allow-list.mjs')
+        user = allowList.default.find(i => i.email === sessionInfo.email)
+      } 
+      catch(e) {
+        console.log('no allow list found')
+      }
     }
 
     if (user) {
