@@ -20,7 +20,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -44,7 +44,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -67,7 +67,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -92,7 +92,7 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project -p .', cwd)
+    r = await begin('new', cwd)
     t.pass('Project is valid')
     await begin('generate scaffold Books title:string author:string', cwd, true)
     r = await begin('generate scaffold Books title:string author:string', cwd, true)
@@ -106,7 +106,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -130,7 +130,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -154,7 +154,7 @@ async function runTests (runType, t) {
     t.plan(13)
     let i, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
@@ -180,7 +180,7 @@ async function runTests (runType, t) {
 
     cwd = newFolder(newAppDir)
     // Create a fresh project
-    r = await begin('new project -p .', cwd)
+    r = await begin('new', cwd)
     t.pass('Project is valid')
 
     await begin('generate scaffold Books title:string author:string --json', cwd, true)

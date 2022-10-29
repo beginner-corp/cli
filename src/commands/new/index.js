@@ -1,36 +1,39 @@
-let names = { en: [ 'new', 'gen' ] }
-let subcommands = [ 'api', 'page', 'project', 'http', 'element', 'event', 'scheduled' ]
-let help = require('./help').bind({}, subcommands)
-
-async function runAction (actionName, params) {
-  let generator = require(`./generators/${actionName}`)
-  let _inventory = require('@architect/inventory')
-  params.inventory = await _inventory()
-  let lib = require('../../lib')
-  let utils = {
-    create: require('./_create')(params),
-    validate: require(`./_validate`)(params),
-    ...lib,
-    writeFile: lib.writeFile(params),
-  }
-  return generator.action(params, utils)
-}
-
-async function action (params) {
-  let subcommand = params.args._[1]
-  if (subcommands.includes(subcommand)) {
-    return runAction(subcommand, params)
-  }
-  else {
-    let err = Error('Please specify a resource type to create')
-    if (subcommand) err = Error(`Please specify a resource type to create`)
-    err.type = '__help__'
-    throw err
-  }
-}
+let names = { en: [ 'new', 'init' ] }
+let action = require('./action')
 
 module.exports = {
   names,
   action,
-  help,
+  help: () => {
+    return {
+      en: {
+        usage: [ 'new', '[folder] [options]' ],
+        description: 'Initialize a new Begin project',
+        contents: {
+          header: 'New project parameters',
+          items: [
+            {
+              name: '-n, --name',
+              description: 'Project name, must be: [a-z0-9-_]',
+              optional: true,
+            },
+          ],
+        },
+        examples: [
+          {
+            name: 'Create a new project in the current folder',
+            example: 'begin new',
+          },
+          {
+            name: 'Create a new project in the ./my-proj folder',
+            example: 'begin new my-proj',
+          },
+          {
+            name: 'Create a new project with the name my-app',
+            example: 'begin new project -n my-app',
+          },
+        ]
+      },
+    }
+  }
 }

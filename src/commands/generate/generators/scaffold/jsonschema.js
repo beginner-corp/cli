@@ -1,16 +1,3 @@
-const { existsSync, mkdirSync, readFileSync } = require('fs')
-const { createModelName } = require('./model-utils')
-const $RefParser = require('@apidevtools/json-schema-ref-parser')
-
-const standardJsonTypes = [
-  'string',
-  'number',
-  'integer',
-  'object',
-  'array',
-  'boolean'
-]
-
 function addKeyPropertyToSchema (schema) {
   if (!Object.keys(schema.properties).includes('key')) {
     schema.properties.key = {
@@ -21,6 +8,7 @@ function addKeyPropertyToSchema (schema) {
 }
 
 function createJsonSchema (id, ...properties) {
+  let { createModelName } = require('./model-utils')
   let schema = {
     id: `${createModelName(id).capSingular}`,
     type: 'object',
@@ -28,16 +16,23 @@ function createJsonSchema (id, ...properties) {
   }
 
   properties.forEach(prop => {
-    const [ name, type = 'string' ] = prop.split(':')
+    let [ name, type = 'string' ] = prop.split(':')
     schema.properties[name] = createProp(type)
   })
 
   schema = addKeyPropertyToSchema(schema)
-
   return schema
 }
 
 function createProp (type) {
+  let standardJsonTypes = [
+    'string',
+    'number',
+    'integer',
+    'object',
+    'array',
+    'boolean'
+  ]
   if (standardJsonTypes.includes(type)) {
     return {
       type: type
@@ -52,12 +47,14 @@ function createProp (type) {
 }
 
 function writeJsonSchema (modelName, schema, writeFile) {
+  let { mkdirSync } = require('fs')
   schema = addKeyPropertyToSchema(schema)
   mkdirSync(`app/models/schemas`, { recursive: true })
   writeFile(`app/models/schemas/${modelName.singular}.mjs`, `export const ${modelName.capSingular} = ${JSON.stringify(schema, null, 2)}`)
 }
 
 function existsJsonSchema (modelName) {
+  let { existsSync } = require('fs')
   return existsSync(`app/models/schemas/${modelName.singular}.mjs`)
 }
 
@@ -71,6 +68,7 @@ function generateSchemaWithId (schema) {
 }
 
 async function dereferenceSchema (schema) {
+  let $RefParser = require('@apidevtools/json-schema-ref-parser')
   try {
     return await $RefParser.dereference(schema)
   }
@@ -80,7 +78,10 @@ async function dereferenceSchema (schema) {
 }
 
 async function readSchemaFile (file) {
-  const schema = await dereferenceSchema(generateSchemaWithId(JSON.parse(readFileSync(file))))
+  let { readFileSync } = require('fs')
+  let data = JSON.parse(readFileSync(file))
+  let rawSchema = generateSchemaWithId(data)
+  let schema = await dereferenceSchema(rawSchema)
   return schema
 }
 

@@ -1,13 +1,13 @@
 let names = { en: [ 'deploy' ] }
 let help = require('./help')
-let appAction = require('../app/deploy')
-let _inventory = require('@architect/inventory')
-let lib = require('../../lib')
 
 async function action (params) {
   let { args } = params
-  params.inventory = await _inventory()
+  let appAction = require('../app/deploy')
+  let _inventory = require('@architect/inventory')
+  let lib = require('../../lib')
   let { checkManifest, getConfig } = lib
+  params.inventory = await _inventory()
 
   let config = getConfig(params)
   if (!config.access_token) {

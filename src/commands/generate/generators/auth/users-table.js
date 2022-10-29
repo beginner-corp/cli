@@ -1,11 +1,11 @@
-const modelName = {
+let modelName = {
   singular: 'user',
   capSingular: 'User',
   plural: 'users',
   capPlural: 'Users'
 }
-const routeName = 'users'
-const schema = {
+let routeName = 'users'
+let schema = {
   id: 'User',
   type: 'object',
   required: [ 'email' ],

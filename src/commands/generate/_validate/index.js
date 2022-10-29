@@ -1,9 +1,8 @@
-let { parse } = require('path')
-let errors = require('./errors')
-
 function project (params) {
   return async function () {
     let { lang } = params
+    let { parse } = require('path')
+    let errors = require('./errors')
     let _inventory = require('@architect/inventory')
     let inventory = await _inventory()
     let { inv } = inventory

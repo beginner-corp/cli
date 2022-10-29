@@ -19,10 +19,10 @@ function installDependencies (dependencies) {
   }
 }
 
-function initialInstall () {
+function initialInstall (cwd) {
   if (process.env.NODE_ENV !== 'testing') {
     const spawn = require('cross-spawn')
-    return spawn.sync('npm', [ 'install', '--silent' ], { encoding: 'utf-8' })
+    return spawn.sync('npm', [ 'install', '--silent' ], { cwd })
   }
   return { status: 0 } // Assume tests successfully npm "installed" project deps
 }

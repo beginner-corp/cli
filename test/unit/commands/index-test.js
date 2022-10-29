@@ -60,9 +60,9 @@ test('Show help on a known command', async t => {
 
 test('Show help on a known subcommand', async t => {
   t.plan(1)
-  let args = getArgs('new project help')
+  let args = getArgs('new help')
   await commands({ args, lang, printer })
-  t.ok(printed[0].includes('begin new project'), 'Ran help')
+  t.ok(printed[0].includes('begin new'), 'Ran help')
   t.teardown(reset)
 })
 
@@ -79,10 +79,10 @@ test('Show help on an unknown command', async t => {
 
 test('Show command help on an invalid subcommand', async t => {
   t.plan(2)
-  let args = getArgs(`new`)
+  let args = getArgs('generate')
   await commands({ args, lang, printer })
   t.ok(printed[0] instanceof Error, 'Printed an error')
-  t.ok(printed[1].includes('begin new'), 'Got command help')
+  t.ok(printed[1].includes('begin generate'), 'Got command help')
   t.teardown(reset)
 })
 

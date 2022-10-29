@@ -1,5 +1,5 @@
 let names = { en: [ 'gen', 'generate' ] }
-let subcommands = [ 'scaffold', 'auth' ]
+let subcommands = [ 'api', 'auth', 'page', 'http', 'element', 'event', 'scaffold', 'scheduled' ]
 let help = require('./help').bind({}, subcommands)
 
 async function action (params) {
@@ -11,13 +11,14 @@ async function action (params) {
     let lib = require('../../lib')
     let utils = {
       ...lib,
+      create: require('./_create')(params),
+      validate: require(`./_validate`)(params),
       writeFile: lib.writeFile(params),
-      validate: require(`../new/_validate`)(params)
     }
     return generator.action(params, utils, subcommand)
   }
   else {
-    let err = Error('Please specify a generator type to run')
+    let err = Error('Please specify a generator to run')
     if (subcommand) err = Error(`Invalid generator type: ${subcommand}`)
     err.type = '__help__'
     throw err

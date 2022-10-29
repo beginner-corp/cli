@@ -1,4 +1,3 @@
-
 module.exports = async function action (params, utils, command) {
   let { args } = params
   let { writeFile, npmCommands, validate } = utils
@@ -7,7 +6,7 @@ module.exports = async function action (params, utils, command) {
   let project = params.inventory.inv._project
   let generate = require('../_generate')
 
-  const invalid = await validate.project()
+  let invalid = await validate.project()
   if (invalid) return invalid
 
   let plugins = project.arc.plugins
@@ -21,10 +20,9 @@ module.exports = async function action (params, utils, command) {
     generate({ manifest, command, project, utils })
   }
   else if (!authType || authType === 'magic-link') {
-
-    const { routeName, modelName, schema } = require('./users-table')
-    const prefsFile = project.localPreferencesFile
-    const { readFileSync } = require('fs')
+    let { routeName, modelName, schema } = require('./users-table')
+    let prefsFile = project.localPreferencesFile
+    let { readFileSync } = require('fs')
     let prefs = readFileSync(prefsFile, 'utf8')
     if (!project.localPreferences?.['sandbox-startup']) {
       prefs += `@sandbox-startup
@@ -47,6 +45,4 @@ node ./scripts/seed-users.js`)
     writeJsonSchema(modelName, schema, writeFile)
     generate({ manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })
   }
-
-
 }

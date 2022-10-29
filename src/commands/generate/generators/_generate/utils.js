@@ -1,12 +1,11 @@
-let { mkdirSync } = require('fs')
-
 function addRouteSource ({ manifest, replacements = {}, writeFile, command }) {
-  let path = require('path')
-  const { routeName = '' } = replacements
-  const { sourceFiles } = manifest
+  let { mkdirSync } = require('fs')
+  let { dirname } = require('path')
+  let { routeName = '' } = replacements
+  let { sourceFiles } = manifest
   sourceFiles.forEach(file => {
-    let dirname = path.dirname(file.target).replace('<ROUTE_NAME>', routeName)
-    mkdirSync(dirname, { recursive: true })
+    let dir = dirname(file.target).replace('<ROUTE_NAME>', routeName)
+    mkdirSync(dir, { recursive: true })
     // eslint-disable-next-line
     let source = require(`../${command}/${file.src}`)
     writeFile(file.target.replace('<ROUTE_NAME>', routeName), source(replacements))
@@ -14,10 +13,11 @@ function addRouteSource ({ manifest, replacements = {}, writeFile, command }) {
 }
 
 function addElements (elements, writeFile) {
-  let path = require('path')
+  let { mkdirSync } = require('fs')
+  let { dirname } = require('path')
   elements.forEach(element => {
-    let dirname = path.dirname('app/elements')
-    mkdirSync(dirname, { recursive: true })
+    let dir = dirname('app/elements')
+    mkdirSync(dir, { recursive: true })
     writeFile(`app/elements/${element.tagName}.mjs`, `import { ${element.name} } from "${element.package}"
 export default ${element.name}
 `)

@@ -1,6 +1,5 @@
 let names = { en: [ 'dev', 'sandbox', 'start' ] }
 let help = require('./help')
-let c = require('picocolors')
 
 async function action (params) {
   let { appVersion, args } = params
@@ -12,6 +11,7 @@ async function action (params) {
   if (manifestErr) return manifestErr
 
   let cli = require('@architect/sandbox/src/cli')
+  let c = require('picocolors')
   let { debug, quiet, verbose } = args
   // TODO: output Sandbox start via printer
   let logLevel = debug ? 'debug' : undefined || verbose ? 'verbose' : undefined

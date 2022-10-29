@@ -1,4 +1,4 @@
-const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
+let capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
 function getType (key, property) {
   if (key === 'key') {
@@ -93,8 +93,8 @@ function selectTemplate (key, property, data, required = [], keyPrefix = '') {
 }
 
 function input (key, schema, data, prefix = '') {
-  const property = schema.properties[key]
-  const type = getType(key, property)
+  let property = schema.properties[key]
+  let type = getType(key, property)
   let elem = ''
   if (property.enum) {
     elem = selectTemplate(key, property, data, schema.required, prefix)

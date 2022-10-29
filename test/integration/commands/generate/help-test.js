@@ -13,9 +13,9 @@ async function runTests (runType, t) {
   let begin = _begin[runType].bind({}, t)
 
   let globalOptions = /Global options\:/
-  let noType = /Please specify a generator type to run/
+  let noType = /Please specify a generator to run/
   let invalidType = /Invalid generator type: foo/
-  let newApp = /begin generate \[type\] \[options\]/
+  let generateScaffold = /begin generate scaffold <parameters> \[options\]/
 
   // `generate` is unusual in Begin commands in that it has subcommands, so test the subcommand help
   t.test(`${mode} generate help`, async t => {
@@ -28,7 +28,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     r = await begin('generate scaffold help')
-    t.match(r.stdout, newApp, 'Got subcommand help')
+    t.match(r.stdout, generateScaffold, 'Got subcommand help')
     t.match(r.stdout, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
@@ -65,7 +65,7 @@ async function runTests (runType, t) {
     r = await begin('generate scaffold help --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true for help')
-    t.match(json.message, newApp, 'Got subcommand help')
+    t.match(json.message, globalOptions, 'Got subcommand help')
     t.match(json.message, globalOptions, 'Got help')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')

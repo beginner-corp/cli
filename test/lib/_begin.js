@@ -3,6 +3,7 @@ let { copySync: copy } = require('fs-extra')
 let { join } = require('path')
 let { exec: _exec } = require('child_process')
 let { promisify } = require('util')
+let { parseArgsStringToArgv: getArgs } = require('string-argv')
 let exec = promisify(_exec)
 
 let capture = require('./_capture')
@@ -17,9 +18,8 @@ let bin = join(binPath)
 
 let argv = process.argv
 let json = i => JSON.stringify(i)
-let getArgs = str => [ ...str.split(' ').filter(Boolean) ]
 
-function setup (t, dir, reuse) {
+function setup (t, dir, reuse, options) {
   process.exitCode = 0
   if (!reuse) {
     rmSync(tmp, { recursive: true, force: true })
@@ -33,7 +33,8 @@ function setup (t, dir, reuse) {
     if (!existsSync(dir)) t.fail(`Failed to create ${dir}`)
 
     // The Enhance Arc plugin is necessary for starting Sandbox in test runs
-    copy(join(cwd, enhancePlugin), join(dir, enhancePlugin))
+    let dest = options?.dest || dir
+    copy(join(cwd, enhancePlugin), join(dest, enhancePlugin))
   }
 }
 
@@ -48,8 +49,8 @@ function reset (t) {
 }
 
 module.exports = {
-  module: async (t, args, dir, reuse) => {
-    setup(t, dir, reuse)
+  module: async (t, args, dir, reuse, options) => {
+    setup(t, dir, reuse, options)
     process.chdir(dir || tmp)
     process.argv = [ 'fake-env', 'fake-file', ...getArgs(args) ]
     capture.start()
@@ -64,8 +65,8 @@ module.exports = {
       code: process.exitCode
     }
   },
-  binary: async (t, args, dir, reuse) => {
-    setup(t, dir, reuse)
+  binary: async (t, args, dir, reuse, options) => {
+    setup(t, dir, reuse, options)
     let opts = { cwd: dir || tmp, shell: true }
     let cmd = `${bin} ${args}`
     let result, code
