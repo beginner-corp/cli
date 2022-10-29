@@ -1,5 +1,3 @@
-let { resolve } = require('path')
-let cronValidator = require('cron-validate')
 let cwd = process.cwd()
 let units = [ 'minute', 'minutes', 'hour', 'hours', 'day', 'days' ]
 
@@ -16,6 +14,8 @@ function rateValidator (rate) {
 module.exports = async function action (params, utils) {
   let { args } = params
   let { create, validate } = utils
+  let { resolve } = require('path')
+  let cronValidator = require('cron-validate')
   let error = require('./errors')(params, utils)
 
   let invalid = await validate.project()

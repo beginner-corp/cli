@@ -2,7 +2,7 @@ let action = require('./action')
 
 module.exports = {
   name: 'api',
-  description: 'Create a new api route',
+  description: 'Create a new API route',
   action,
   help: () => {
     return {
@@ -18,11 +18,11 @@ module.exports = {
         },
         examples: [
           {
-            name: 'Create a new api route',
+            name: 'Create a new API route',
             example: 'begin new api --path /notes',
           },
           {
-            name: 'Create a new api route with path parameter',
+            name: 'Create a new API route with path parameter',
             example: `begin new api --path '/notes/$id'`,
           }
         ]

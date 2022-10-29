@@ -4,14 +4,13 @@ let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
 let { begin: _begin, getInv, newFolder, run } = require(lib)
 
-test('Run new tests', async t => {
+test('Run generate tests', async t => {
   await run(runTests, t)
   t.end()
 })
 
 async function runTests (runType, t) {
-  let mode = `[New / ${runType}]`
-  if (runType !== 'binary') return false
+  let mode = `[Generate / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
   let nameNotFound = /Scheduled name not found/
@@ -29,12 +28,12 @@ async function runTests (runType, t) {
     t.plan(17)
     let i, lambda, r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
-    r = await begin('new scheduled -n js-rate -r "4 days"', cwd, true)
+    r = await begin('generate scheduled -n js-rate -r "4 days"', cwd, true)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
     lambda = i.get.scheduled('js-rate')
@@ -45,7 +44,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new scheduled -n js-cron -c "0 18 ? * MON-FRI *"', cwd, true)
+    r = await begin('generate scheduled -n js-cron -c "0 18 ? * MON-FRI *"', cwd, true)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
     lambda = i.get.scheduled('js-cron')
@@ -57,70 +56,70 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
   })
 
-  t.test(`${mode} new event (errors)`, async t => {
+  t.test(`${mode} new scheduled (errors)`, async t => {
     t.plan(27)
     let r
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
 
-    r = await begin('new scheduled', cwd, true)
+    r = await begin('generate scheduled', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n', cwd, true)
+    r = await begin('generate scheduled -n', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n 1', cwd, true)
+    r = await begin('generate scheduled -n 1', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameInvalid, 'Errored on invalid name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n foo -r whatev', cwd, true)
+    r = await begin('generate scheduled -n foo -r whatev', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidRate, 'Errored on invalid runtime')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n foo -c whatev', cwd, true)
+    r = await begin('generate scheduled -n foo -c whatev', cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidCron, 'Errored on invalid runtime')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo`, cwd, true)
+    r = await begin(`generate scheduled -n foo`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, missingRateOrCron, 'Errored on missing rate or cron')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo -r "1 day" -c "0 18 ? * MON-FRI *"`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day" -c "0 18 ? * MON-FRI *"`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, onlyOneInterval, 'Errored on missing rate or cron')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo -r "1 day" --src ${oob}`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day" --src ${oob}`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project -p .', cwd)
-    await begin(`new scheduled -n foo -r "1 day"`, cwd, true)
-    r = await begin(`new scheduled -n foo -r "1 day"`, cwd, true)
+    await begin('new', cwd)
+    await begin(`generate scheduled -n foo -r "1 day"`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day"`, cwd, true)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, duplicateSchedule, 'Errored on duplicate schedule')
     t.equal(r.code, 1, 'Exited 1')
   })
 
-  t.test(`${mode} new event (JSON)`, async t => {
+  t.test(`${mode} new scheduled (JSON)`, async t => {
     t.plan(17)
     let i, lambda, r, json
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
-    r = await begin('new scheduled -n js-rate -r "4 days" --json', cwd, true)
+    r = await begin('generate scheduled -n js-rate -r "4 days" --json', cwd, true)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
     lambda = i.get.scheduled('js-rate')
@@ -132,7 +131,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('new scheduled -n js-cron -c "0 18 ? * MON-FRI *" --json', cwd, true)
+    r = await begin('generate scheduled -n js-cron -c "0 18 ? * MON-FRI *" --json', cwd, true)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
     lambda = i.get.scheduled('js-cron')
@@ -145,71 +144,71 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
   })
 
-  t.test(`${mode} new event (errors / JSON)`, async t => {
+  t.test(`${mode} new scheduled (errors / JSON)`, async t => {
     t.plan(36)
     let r, json
     let cwd = newFolder(newAppDir)
-    await begin('new project -p .', cwd)
+    await begin('new', cwd)
 
-    r = await begin('new scheduled --json', cwd, true)
+    r = await begin('generate scheduled --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n --json', cwd, true)
+    r = await begin('generate scheduled -n --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n 1 --json', cwd, true)
+    r = await begin('generate scheduled -n 1 --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameInvalid, 'Errored on invalid name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n foo -r whatev --json', cwd, true)
+    r = await begin('generate scheduled -n foo -r whatev --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidRate, 'Errored on invalid runtime')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('new scheduled -n foo -c whatev --json', cwd, true)
+    r = await begin('generate scheduled -n foo -c whatev --json', cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidCron, 'Errored on invalid runtime')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo --json`, cwd, true)
+    r = await begin(`generate scheduled -n foo --json`, cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, missingRateOrCron, 'Errored on missing rate or cron')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo -r "1 day" -c "0 18 ? * MON-FRI *" --json`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day" -c "0 18 ? * MON-FRI *" --json`, cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, onlyOneInterval, 'Errored on missing rate or cron')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`new scheduled -n foo -r "1 day" --src ${oob} --json`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day" --src ${oob} --json`, cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidSrcPath, 'Errored on invalid src path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    await begin('new project -p .', cwd)
-    await begin(`new scheduled -n foo -r "1 day" --json`, cwd, true)
-    r = await begin(`new scheduled -n foo -r "1 day" --json`, cwd, true)
+    await begin('new', cwd)
+    await begin(`generate scheduled -n foo -r "1 day" --json`, cwd, true)
+    r = await begin(`generate scheduled -n foo -r "1 day" --json`, cwd, true)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, duplicateSchedule, 'Errored on duplicate schedule')

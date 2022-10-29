@@ -1,7 +1,6 @@
-let { runtimes, runtimeVersions } = require('lambda-runtimes')
-
 module.exports = async function addItem (params) {
   let { item, lang, name, pragma, runtime, handlers } = params
+  let { runtimes, runtimeVersions } = require('lambda-runtimes')
   let _inventory = require('@architect/inventory')
   let inventory = await _inventory()
   let { _project } = inventory.inv

@@ -1,6 +1,5 @@
-const { schemaToForm } = require('../schema-to-form')
-
 module.exports = function ({ plural, singular, schema }) {
+  let { schemaToForm } = require('../schema-to-form')
   return `// View documentation at: https://enhance.dev/docs/learn/starter-project/pages
 /**
   * @type {import('@enhance/types').EnhanceElemFn}

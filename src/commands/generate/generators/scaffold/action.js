@@ -1,7 +1,6 @@
-let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
-let { createModelName } = require('./model-utils')
-
 module.exports = async function action (params, utils, command) {
+  let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
+  let { createModelName } = require('./model-utils')
   let { writeFile, npmCommands, validate } = utils
   let { installAwsSdk } = npmCommands
   let { args } = params
@@ -10,7 +9,7 @@ module.exports = async function action (params, utils, command) {
   let project = params.inventory.inv._project
   let generate = require('../_generate')
 
-  const invalid = await validate.project()
+  let invalid = await validate.project()
   if (invalid) return invalid
 
   // Step 1: load manifest file
@@ -28,9 +27,9 @@ module.exports = async function action (params, utils, command) {
     schema = await readSchemaFile(file)
   }
 
-  const { id } = schema
-  const modelName = createModelName(id)
-  const routeName = modelName.plural
+  let { id } = schema
+  let modelName = createModelName(id)
+  let routeName = modelName.plural
 
   if (existsJsonSchema(modelName)) {
     return error('schema_already_exists')

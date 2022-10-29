@@ -1,11 +1,12 @@
 function createImportName (path) {
+  let capitalize = s => s && s[0].toUpperCase() + s.slice(1)
   let tokens = path.replace(/\$/g, '').split('/')
   return tokens.map(token => capitalize(token)).join('')
 }
 
 // TODO: This should be shared code with arc-enhance-plugin
 function createPageTagName (path) {
-  const pluralize = require('pluralize')
+  let pluralize = require('pluralize')
   let rawPath = path.startsWith('/') ? path.slice(1) : path
   let raw = 'page-' + rawPath.replace(/\.mjs/g, '').replace('/', '-').replace(/\//g, '-')
   // if there are dynamic parts we need to do some additional formatting
@@ -33,8 +34,6 @@ function createPageTagName (path) {
   }
   return raw.replace('-index', '')
 }
-
-const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
 function addImport ({ tokens, path, name }) {
   let { join } = require('path')

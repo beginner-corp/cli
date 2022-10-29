@@ -1,5 +1,3 @@
-const { schemaToForm } = require('../schema-to-form')
-
 function schemaToList ({ schema = {}, prefix = '' }) {
   return Object.keys(schema.properties).map(key => {
     if (schema.properties[key].type === 'object') {
@@ -13,6 +11,7 @@ function schemaToList ({ schema = {}, prefix = '' }) {
 }
 
 module.exports = function ({ plural, singular, capPlural, schema }) {
+  let { schemaToForm } = require('../schema-to-form')
   let list = schemaToList({ schema })
 
   return `// View documentation at: https://enhance.dev/docs/learn/starter-project/pages

@@ -1,4 +1,4 @@
-const manifest = {
+let manifest = {
   arcMutations: [],
   sourceFiles: [
     // Utils

@@ -1,4 +1,4 @@
-const manifest = {
+let manifest = {
   arcMutations: [
     { pragma: 'plugins', item: 'arc-plugin-oauth' },
     { pragma: 'oauth', item: 'use-mock true' },

@@ -1,9 +1,8 @@
-const pluralize = require('pluralize')
-
-const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
+let capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
 function createModelName (modelName) {
-  const name = modelName.toLowerCase()
+  let pluralize = require('pluralize')
+  let name = modelName.toLowerCase()
   return {
     singular: pluralize.singular(name),
     capSingular: capitalize(pluralize.singular(name)),

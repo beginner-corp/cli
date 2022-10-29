@@ -1,7 +1,7 @@
 let newHelp = () => ({
   en: {
-    usage: [ 'generate [type]', '[options]' ],
-    description: 'Generate new code',
+    usage: [ 'generate <type> <parameters>', '[options]' ],
+    description: 'Locally generate new code and project resources',
     contents: [
       {
         header: 'Types of generators',

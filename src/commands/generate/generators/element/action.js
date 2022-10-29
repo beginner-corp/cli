@@ -1,21 +1,21 @@
-const reservedNames = new Set([
-  'annotation-xml',
-  'color-profile',
-  'font-face',
-  'font-face-src',
-  'font-face-uri',
-  'font-face-format',
-  'font-face-name',
-  'missing-glyph'
-])
-
 /*
  * validateElementName adapted from https://github.com/sindresorhus/validate-element-name
  * MIT License
  * Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
  */
 function validateElementName (name) {
-  const isPotentialCustomElementName = require('is-potential-custom-element-name')
+  let reservedNames = new Set([
+    'annotation-xml',
+    'color-profile',
+    'font-face',
+    'font-face-src',
+    'font-face-uri',
+    'font-face-format',
+    'font-face-name',
+    'missing-glyph'
+  ])
+
+  let isPotentialCustomElementName = require('is-potential-custom-element-name')
 
   if (/[A-Z]/.test(name)) {
     return false
