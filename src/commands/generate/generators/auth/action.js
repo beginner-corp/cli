@@ -17,7 +17,7 @@ module.exports = async function action (params, utils, command) {
   let authType = args.t || args.type
   if (authType === 'oauth') {
     let manifest = require('./oauth-manifest')
-    generate({ manifest, command, project, utils })
+    await generate(params, { manifest, command, project, utils })
   }
   else if (!authType || authType === 'magic-link') {
     let { routeName, modelName, schema } = require('./users-table')
@@ -36,13 +36,13 @@ node ./scripts/seed-users.js`)
     }
 
     // Install Dependencies
-    installAwsSdk()
+    await installAwsSdk(params)
 
     let manifest = require('./magic-manifest')
 
     let { writeJsonSchema } = require('../scaffold/jsonschema')
 
     writeJsonSchema(modelName, schema, writeFile)
-    generate({ manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })
+    await generate(params, { manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })
   }
 }

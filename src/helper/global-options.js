@@ -4,19 +4,19 @@ module.exports = [
     description: 'Display help',
   },
   {
-    name: '-d, --debug',
-    description: 'Output debug info',
+    name: '-q, --quiet',
+    description: 'Set output log level to quiet',
   },
   {
-    name: '--plain',
-    description: 'Output with machine-readable plaintext',
+    name: '-v, --verbose',
+    description: 'Set output log level to verbose',
+  },
+  {
+    name: '-d, --debug',
+    description: 'Set output log level to debug',
   },
   {
     name: '--json',
-    description: 'Output with JSON',
-  },
-  {
-    name: '-q, --quiet',
-    description: 'Disable console output',
+    description: 'Enable JSON output',
   },
 ]
