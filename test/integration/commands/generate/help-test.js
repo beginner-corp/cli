@@ -9,7 +9,7 @@ test('Run generate tests', async t => {
 })
 
 async function runTests (runType, t) {
-  let mode = `[New / ${runType}]`
+  let mode = `[Generate / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
   let globalOptions = /Global options\:/

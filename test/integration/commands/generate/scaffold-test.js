@@ -4,13 +4,13 @@ let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
 let { begin: _begin, getInv, newFolder, run } = require(lib)
 
-test('Run new tests', async t => {
+test('Run generate tests', async t => {
   await run(runTests, t)
   t.end()
 })
 
 async function runTests (runType, t) {
-  let mode = `[New / ${runType}]`
+  let mode = `[Generate / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
   let newAppDir = 'crud-app'
