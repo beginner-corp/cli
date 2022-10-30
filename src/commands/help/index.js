@@ -23,11 +23,6 @@ let help = {
       {
         header: 'App & environment management',
         items: [
-          // TODO remove ↓
-          {
-            name: 'app',
-            description: 'Manage Begin apps',
-          },
           {
             name: 'builds',
             description: 'View build logs from app deployments',
@@ -35,6 +30,10 @@ let help = {
           {
             name: 'deploy',
             description: 'Deploy an app to Begin',
+          },
+          {
+            name: 'destroy',
+            description: 'Destroy a Begin app or environment',
           },
           {
             name: 'env',

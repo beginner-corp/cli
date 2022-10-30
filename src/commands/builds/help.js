@@ -1,6 +1,6 @@
 module.exports = {
   en: {
-    usage: [ 'builds' ],
+    usage: [ 'builds', '[parameters]' ],
     description: 'List your Begin apps builds',
     contents: {
       header: 'List Builds',

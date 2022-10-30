@@ -3,11 +3,11 @@ let help = require('./help')
 
 async function action (params) {
   let { args } = params
-  let appAction = require('../app/deploy')
+  let deploy = require('./action')
   let _inventory = require('@architect/inventory')
+  params.inventory = await _inventory()
   let lib = require('../../lib')
   let { checkManifest, getConfig } = lib
-  params.inventory = await _inventory()
 
   let config = getConfig(params)
   if (!config.access_token) {
@@ -16,7 +16,7 @@ async function action (params) {
   }
 
   let manifestErr = checkManifest(params.inventory)
-  if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
+  if (manifestErr) return manifestErr
 
   // See if the project manifest contains an app ID
   let { begin } = params.inventory.inv._project.arc
@@ -30,7 +30,7 @@ async function action (params) {
     ...lib,
     writeFile: lib.writeFile(params),
   }
-  return appAction.action({
+  return deploy({
     appID,
     envName,
     config,

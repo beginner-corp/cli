@@ -1,8 +1,8 @@
 module.exports = async function action (params, utils) {
   let { args, appID, config, envName } = params
   let { access_token: token, stagingAPI: _staging } = config
-  let { createApp, promptOptions } = require('../lib')
-  let { spinner } = require('../../../lib')
+  let { createApp, promptOptions } = require('../../lib/app')
+  let { spinner } = require('../../lib')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
   let app, env
@@ -24,7 +24,7 @@ module.exports = async function action (params, utils) {
   // Rely on the passed environment name
   if (envName) {
     env = envs.find(({ name }) => name === envName)
-    if (!env) return ReferenceError(`Environment name ${envName} not found. You can create it by running: \`begin app create --env ${envName}\``)
+    if (!env) return ReferenceError(`Environment name ${envName} not found. You can create it by running: \`begin create --env ${envName}\``)
   }
   // Manually select the environment to deploy
   else if (envs.length > 1) {
@@ -59,7 +59,8 @@ module.exports = async function action (params, utils) {
   let build = await client.env.deploy({ token, appID, envID, verbose, _staging })
   if (!build?.buildID) return ReferenceError('Deployment failed, did not receive buildID')
 
-  spinner(`Beginning deployment of '${name}'; you can now exit this process and check in on its status with begin deploy --status`)
+  spinner('Project uploaded, you can now exit this process and check its status with: begin deploy --status')
+  spinner(`Beginning deployment of '${name}'`)
   await getUpdates({ token, appID, envID, buildID: build.buildID, _staging }, { args, name, spinner, url })
 }
 

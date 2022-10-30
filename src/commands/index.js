@@ -1,4 +1,3 @@
-let app = require('./app')
 let builds = require('./builds')
 let create = require('./create')
 let deploy = require('./deploy')
@@ -14,7 +13,7 @@ let logout = require('./logout')
 let newProj = require('./new')
 let update = require('./update')
 let version = require('./version')
-let commands = [ app, builds, create, deploy, destroy, dev, envar, generate, help, list, login, logout, logs, newProj, update, version ]
+let commands = [ builds, create, deploy, destroy, dev, envar, generate, help, list, login, logout, logs, newProj, update, version ]
 
 let helper = require('../helper')
 

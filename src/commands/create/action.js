@@ -1,7 +1,7 @@
 module.exports = async function action (params, utils) {
   let { appID, config, envName } = params
   let { access_token: token, stagingAPI: _staging } = config
-  let { createApp, promptOptions, validateEnvName } = require('../lib')
+  let { createApp, promptOptions, validateEnvName } = require('../../lib/app')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
   let deploy = require('../deploy')
@@ -23,7 +23,7 @@ module.exports = async function action (params, utils) {
       return deploy.action({ ...params, appID: app.appID, envName }, utils)
     }
     else {
-      console.error(`You can deploy at any time by running: \`begin app deploy\``)
+      console.error(`You can deploy at any time by running: \`begin deploy\``)
     }
   }
   // Create a new environment
@@ -71,7 +71,7 @@ module.exports = async function action (params, utils) {
       return deploy.action({ ...params, appID: app.appID, envName }, utils)
     }
     else {
-      console.error(`You can deploy this environment by running: \`begin app deploy --env ${envName}\``)
+      console.error(`You can deploy this environment by running: \`begin deploy --env ${envName}\``)
     }
   }
 }
