@@ -26,7 +26,6 @@
     "@begin/api": "1.4.4",
     "@enhance/starter-project": "2.0.0",
     "cron-validate": "1.4.4",
-    "cross-spawn": "7.0.3",
     "enquirer": "2.3.6",
     "escodegen": "2.0.0",
     "esprima": "4.0.1",

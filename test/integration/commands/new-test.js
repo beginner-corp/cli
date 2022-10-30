@@ -29,8 +29,8 @@ async function runTests (runType, t) {
     lambda = i.get.http('any /*')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
-    t.ok(r.stdout, 'Prints to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
+    t.notOk(r.stdout, 'Did not print to stdout')
+    t.ok(r.stderr, 'Prints to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
 
@@ -48,8 +48,8 @@ async function runTests (runType, t) {
     lambda = i.get.http('any /*')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
-    t.ok(r.stdout, 'Prints to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
+    t.notOk(r.stdout, 'Did not print to stdout')
+    t.ok(r.stderr, 'Prints to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
 
@@ -67,8 +67,8 @@ async function runTests (runType, t) {
     lambda = i.get.http('any /*')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
-    t.ok(r.stdout, 'Prints to stdout')
-    t.notOk(r.stderr, 'Did not print to stderr')
+    t.notOk(r.stdout, 'Did not print to stdout')
+    t.ok(r.stderr, 'Prints to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
 
@@ -103,7 +103,7 @@ async function runTests (runType, t) {
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(lambda.handlerFile.endsWith('.mjs'), 'Lambda handler is JavaScript')
     t.equal(json.ok, true, 'Got ok: true')
-    t.notOk(r.stderr, 'Did not print to stderr')
+    t.ok(r.stderr, 'Prints to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
 

@@ -1,10 +1,3 @@
-let looseName = /^[a-z][a-zA-Z0-9-_]+$/
-
-function log (text, json = false) {
-  if (!json) {
-    console.log(text)
-  }
-}
 
 function shortenPath (filePath) {
   let { sep } = require('path')
@@ -23,6 +16,7 @@ module.exports = async function (params) {
   let error = require('./errors')(params, utils)
   let _inventory = require('@architect/inventory')
   let c = require('picocolors')
+  let looseName = /^[a-z][a-zA-Z0-9-_]+$/
 
   // Project path
   let path = args.p || args.path || args._[1] || '.'
@@ -121,19 +115,9 @@ package-lock.json
   writeFile(p('.gitignore'), gitIgnore)
 
   // Need to install enhance/arc-plugin-enhance or 💥
-  log('Installing npm dependencies', args.json)
-  let { status } = initialInstall(projectPath)
-  if (status !== 0) {
-    log(`${c.bold(c.green('npm install'))} failed. Please re-run ${c.bold(c.green('npm install'))} to see a detailed error message.`)
-  }
+  await initialInstall(params, projectPath)
 
   // Success message
-  if (args['_'][0] === 'init') {
-    log(`Project ${appName} successfully initialized`, args.json)
-    log(`Run ${c.bold(c.green('begin dev'))} to get started`, args.json)
-  }
-  else {
-    log(`Project ${appName} successfully created`, args.json)
-    log(`Change into directory ${path} and run ${c.bold(c.green('begin dev'))} to get started`, args.json)
-  }
+  let cdPath = path === '.' ? '' : `cd ${path} && `
+  console.error(`Project ${appName} successfully created! To get started run: ${c.bold(c.green(`${cdPath}begin dev`))}`)
 }

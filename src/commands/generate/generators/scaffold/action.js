@@ -35,12 +35,12 @@ module.exports = async function action (params, utils, command) {
     return error('schema_already_exists')
   }
 
-  // write JSON Schema file
+  // Write JSON Schema file
   writeJsonSchema(modelName, schema, writeFile)
 
-  // Install Dependencies
-  installAwsSdk()
+  // Install dependencies
+  await installAwsSdk(params)
 
   // Step 3: Run the generic generator
-  generate({ manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
+  await generate(params, { manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
 }

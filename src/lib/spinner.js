@@ -16,6 +16,7 @@ function resetSpinner () {
     // Check to see if the line wrapped, otherwise we won't overwrite all old characters from the terminal buffer
     let trail = lastLine.length > process.stdout.columns ? '    ' : ''
     console.error(`${lastLine}${trail}`)
+    lastLine = undefined
   }
 }
 
