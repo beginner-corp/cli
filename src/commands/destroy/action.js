@@ -3,9 +3,9 @@ module.exports = async function action (params, utils) {
   let { access_token: token, stagingAPI: _staging } = config
   let { writeFile } = utils
 
-  if (!appID) return Error('No Begin app found to destroy')
+  if (!appID) return Error('No Begin app found in this directory to destroy')
 
-  let { promptOptions } = require('../lib')
+  let { promptOptions } = require('../../lib/app')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
   let app = await client.find({ token, appID, _staging })

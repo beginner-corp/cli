@@ -1,6 +1,5 @@
 let names = { en: [ 'logs', 'log' ] }
 let help = require('./help')
-let appAction = require('../app/list')
 
 async function action (params) {
   let c = require('picocolors')
@@ -20,7 +19,7 @@ async function action (params) {
   let { access_token: token, stagingAPI: _staging } = config
 
   let manifestErr = checkManifest(params.inventory)
-  if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
+  if (manifestErr) return manifestErr
 
   // See if the project manifest contains an app ID
   let { begin } = params.inventory.inv._project.arc
@@ -37,9 +36,12 @@ async function action (params) {
   let { environments, name } = app
   let last = '  └──'
 
-  // Environment (required)
+  // Environment is required if app has more than one
   let envID = args.e || args.env
-  if (!envID || envID === true) {
+  if (!envID && environments.length === 1) {
+    envID = environments[0].envID
+  }
+  else if (!envID || envID === true) {
     return error([ 'no_env' ])
   }
 

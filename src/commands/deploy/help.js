@@ -1,6 +1,7 @@
 module.exports = {
   en: {
-    usage: [ 'deploy' ],
+    usage: [ 'deploy', '[parameters] [options]' ],
+    description: 'Deploy an app environment to Begin',
     contents: {
       header: 'Deployment parameters',
       items: [

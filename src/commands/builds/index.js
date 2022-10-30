@@ -1,6 +1,5 @@
 let names = { en: [ 'builds' ] }
 let help = require('./help')
-let appAction = require('../app/list')
 
 let warningStatus = [ 'pending', 'in_progress' ]
 let errorStatus = [ 'failed' | 'fault' | 'timed_out' | 'stopped' ]
@@ -35,7 +34,7 @@ async function action (params) {
   let { access_token: token, stagingAPI: _staging } = config
 
   let manifestErr = checkManifest(params.inventory)
-  if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
+  if (manifestErr) return manifestErr
 
   // See if the project manifest contains an app ID
   let { begin } = params.inventory.inv._project.arc
@@ -50,11 +49,14 @@ async function action (params) {
     return error([ 'no_appid_found' ])
   }
   let { environments, name } = app
-  let last = '  └──'
+  let last = '└──'
 
-  // Environment (required)
+  // Environment is required if app has more than one
   let envID = args.e || args.env
-  if (!envID || envID === true) {
+  if (!envID && environments.length === 1) {
+    envID = environments[0].envID
+  }
+  else if (!envID || envID === true) {
     return error([ 'no_env' ])
   }
 
@@ -63,13 +65,13 @@ async function action (params) {
     return error([ 'invalid_env' ])
   }
 
-  console.log(`'${name}' (app ID: ${appID})`)
-  console.log(`${last} '${env.name}' (env ID: ${env.envID}): ${env.url}`)
+  console.log(`${c.white(c.bold(name))} (app ID: ${appID})`)
+  console.log(`${last} ${env.name} (env ID: ${env.envID}): ${c.green(env.url)}`)
 
   let builds = await client.env.builds({ token, appID, envID })
   let choices = []
   if (!builds.length) {
-    return `  ${last} (no builds)`
+    return `    ${last} (no builds)`
   }
   builds.forEach(({ deployHash, created, buildID, buildStatus }) => {
     let status = colorizeBuildStatus(buildStatus, c)

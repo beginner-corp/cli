@@ -3,7 +3,7 @@ let help = require('./help')
 
 async function action (params) {
   let { args } = params
-  let appAction = require('../app/destroy')
+  let action = require('./action')
   let _inventory = require('@architect/inventory')
   let lib = require('../../lib')
   let { checkManifest, getConfig } = lib
@@ -16,7 +16,12 @@ async function action (params) {
   }
 
   let manifestErr = checkManifest(params.inventory)
-  if (manifestErr && !appAction.manifestNotNeeded) return manifestErr
+  if (manifestErr) {
+    let notFound = 'No Begin project found!'
+    // Don't instruct on app creation when you're trying to destroy an app
+    if (manifestErr.message.startsWith(notFound)) manifestErr.message = notFound
+    return manifestErr
+  }
 
   // See if the project manifest contains an app ID
   let { begin } = params.inventory.inv._project.arc
@@ -30,7 +35,7 @@ async function action (params) {
     ...lib,
     writeFile: lib.writeFile(params),
   }
-  return appAction.action({
+  return action({
     appID,
     envName,
     config,

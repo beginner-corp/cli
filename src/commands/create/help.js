@@ -1,6 +1,7 @@
 module.exports = {
   en: {
-    usage: [ 'create' ],
+    usage: [ 'create', '[parameters] [options]' ],
+    description: 'Create a Begin app or environment',
     contents: {
       header: 'Create parameters',
       items: [

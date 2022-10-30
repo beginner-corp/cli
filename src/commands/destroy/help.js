@@ -1,6 +1,7 @@
 module.exports = {
   en: {
-    usage: [ 'destroy' ],
+    usage: [ 'destroy', '[parameters]' ],
+    description: 'Destroy a Begin app or app environment',
     contents: {
       header: 'Destroy parameters',
       items: [
