@@ -21,7 +21,7 @@ let help = {
         ],
       },
       {
-        header: 'App & environment management',
+        header: 'Manage Begin apps &\nenvironments',
         items: [
           {
             name: 'builds',
