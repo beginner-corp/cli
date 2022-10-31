@@ -6,7 +6,7 @@ async function action (params) {
   let action = require('./action')
   let _inventory = require('@architect/inventory')
   let lib = require('../../lib')
-  let { checkManifest, getConfig } = lib
+  let { getConfig } = lib
   params.inventory = await _inventory()
 
   let config = getConfig(params)
@@ -15,21 +15,12 @@ async function action (params) {
     return Error(msg)
   }
 
-  let manifestErr = checkManifest(params.inventory)
-  if (manifestErr) {
-    let notFound = 'No Begin project found!'
-    // Don't instruct on app creation when you're trying to destroy an app
-    if (manifestErr.message.startsWith(notFound)) manifestErr.message = notFound
-    return manifestErr
-  }
-
-  // See if the project manifest contains an app ID
-  let { begin } = params.inventory.inv._project.arc
-  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
-
-  // Pass along any specified environment IDs
+  // Populate any specified app / environment IDs
+  let appID = args.app || args.a
+  appID = appID !== true && appID || undefined
   let env = args.env || args.e
-  let envName = env !== true && env || undefined
+
+  if (!appID) return Error('Please specify an appID to destroy')
 
   let utils = {
     ...lib,
@@ -37,7 +28,7 @@ async function action (params) {
   }
   return action({
     appID,
-    envName,
+    env,
     config,
     ...params
   }, utils)

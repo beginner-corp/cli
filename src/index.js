@@ -31,7 +31,8 @@ async function begin (params = {}) {
     let lang = 'en' // This should / will be configurable
     let printer = _printer(args)
     let cliDir = process.env.BEGIN_INSTALL || join(homedir(), '.begin')
-    let params = { args, appVersion: version, cliDir, clientIDs, lang, printer }
+    let isCI = (process.env.CI || !process.stdout.isTTY) || false
+    let params = { args, appVersion: version, cliDir, clientIDs, isCI, lang, printer }
     await commands(params)
   }
   catch (err) {
