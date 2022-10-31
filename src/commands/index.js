@@ -18,7 +18,7 @@ let commands = [ builds, create, deploy, destroy, dev, envar, generate, help, li
 let helper = require('../helper')
 
 module.exports = async function runCommand (params) {
-  let { args, lang, printer } = params
+  let { args, isCI, lang, printer } = params
   let { _ } = args
   if (_.includes('help')) {
     let i = _.findIndex(c => c === 'help')
@@ -33,7 +33,7 @@ module.exports = async function runCommand (params) {
     `  which: ${process.argv[0]}\n` +
     `  args: ${JSON.stringify(args)}\n` +
     `  cmd: ${cmd}\n` +
-    `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows`
+    `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows, ci: ${isCI}`
   )
 
   let getHelp = async help => typeof help === 'function' ? help(params) : help

@@ -1,18 +1,22 @@
 module.exports = {
   en: {
-    usage: [ 'destroy', '[parameters]' ],
+    usage: [ 'destroy <parameters>', '[options]' ],
     description: 'Destroy a Begin app or app environment',
     contents: {
       header: 'Destroy parameters',
       items: [
         {
-          name: '-a, --app',
-          description: `Destroy the app and all of its environments`,
+          name: '-a, --app <ID>',
+          description: `If used without the \`env\` flag: destroy an app and all its environments. If used with the \`env\` flag: destroy a single app environment`
+        },
+        {
+          name: '-e, --env [name|ID]',
+          description: `Select an app environment to destroy; optionally specify the environment name or ID to destroy`,
           optional: true,
         },
         {
-          name: '-e, --env',
-          description: `Environment name to destroy`,
+          name: '--force',
+          description: `Immediately destroy without prompting for confirmation`,
           optional: true,
         },
       ],
