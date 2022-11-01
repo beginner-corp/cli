@@ -12,6 +12,7 @@ module.exports = function error (params) {
         src_must_be_in_project: 'Function source path must be within your project',
       }
     }
-    return Error(err.map(error => errors[lang][error]).join('\n'))
+    let error = typeof err === 'string' ? err : err.map(e => errors[lang][e]).join('\n')
+    return Error(error)
   }
 }

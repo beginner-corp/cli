@@ -14,7 +14,15 @@ function checkManifest (inventory) {
   }
 }
 
+// See if the project manifest contains an app ID
+function getAppID (inventory) {
+  let { begin } = inventory.inv._project.arc
+  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
+  return appID
+}
+
 let config
+// Get Begin API creds and related config
 function getConfig (params) {
   if (config && !params._refresh) return config
 
@@ -95,6 +103,7 @@ function writeFile (params) {
 module.exports = {
   backtickify,
   checkManifest,
+  getAppID,
   getConfig,
   getRelativeCwd,
   httpMethods,

@@ -6,7 +6,7 @@ async function action (params) {
   let action = require('./action')
   let _inventory = require('@architect/inventory')
   let lib = require('../../lib')
-  let { getConfig } = lib
+  let { getAppID, getConfig } = lib
   params.inventory = await _inventory()
 
   let config = getConfig(params)
@@ -16,7 +16,7 @@ async function action (params) {
   }
 
   // Populate any specified app / environment IDs
-  let appID = args.app || args.a
+  let appID = args.app || args.a || getAppID(params.inventory)
   appID = appID !== true && appID || undefined
   let env = args.env || args.e
 

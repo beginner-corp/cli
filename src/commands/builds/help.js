@@ -6,9 +6,13 @@ module.exports = {
       header: 'List Builds',
       items: [
         {
+          name: '-a, --app <ID>',
+          description: `App containing the environment`,
+          optional: true,
+        },
+        {
           name: '-e, --env',
           description: `Environment to get builds from`,
-          optional: false,
         },
       ],
     },

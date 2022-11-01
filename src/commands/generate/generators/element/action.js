@@ -48,13 +48,13 @@ function validateElementName (name) {
 module.exports = async function action (params, utils) {
   let { args } = params
   let { create, validate } = utils
-  let error = require('./errors')(params, utils)
+  let error = require('./errors')(params)
 
   let invalid = await validate.project()
   if (invalid) return invalid
 
   // Name (required)
-  let name = args.n || args.name
+  let name = args.name || args.n
   if (!name || name === true) {
     return error('no_name')
   }

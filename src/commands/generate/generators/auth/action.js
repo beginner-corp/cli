@@ -2,7 +2,7 @@ module.exports = async function action (params, utils, command) {
   let { args } = params
   let { writeFile, npmCommands, validate } = utils
   let { installAwsSdk } = npmCommands
-  let error = require('./errors')(params, utils)
+  let error = require('./errors')(params)
   let project = params.inventory.inv._project
   let generate = require('../_generate')
 
@@ -14,7 +14,7 @@ module.exports = async function action (params, utils, command) {
     return error('oauth_plugin_already_installed')
   }
 
-  let authType = args.t || args.type
+  let authType = args.type || args.t
   if (authType === 'oauth') {
     let manifest = require('./oauth-manifest')
     await generate(params, { manifest, command, project, utils })
@@ -43,6 +43,18 @@ node ./scripts/seed-users.js`)
     let { writeJsonSchema } = require('../scaffold/jsonschema')
 
     writeJsonSchema(modelName, schema, writeFile)
-    await generate(params, { manifest, replacements: { ...modelName, schema, routeName, includeAuth: true, authRole: 'admin' }, command, project, utils })
+    await generate(params, {
+      manifest,
+      project,
+      replacements: {
+        ...modelName,
+        authRole: 'admin',
+        includeAuth: true,
+        routeName,
+        schema,
+      },
+      command,
+      utils
+    })
   }
 }

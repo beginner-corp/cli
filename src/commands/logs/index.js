@@ -8,7 +8,7 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getConfig } = lib
+  let { checkManifest, getAppID, getConfig } = lib
   let { args } = params
 
   let config = getConfig(params)
@@ -21,47 +21,46 @@ async function action (params) {
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr) return manifestErr
 
-  // See if the project manifest contains an app ID
-  let { begin } = params.inventory.inv._project.arc
-  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
+  let appID =  args.app || args.a || getAppID(params.inventory)
+  if (!appID) return Error('Please specify an appID')
 
   // Make sure the appID is valid
-  let app = null
   try {
-    app = await client.find({ token, appID, _staging })
+    var app = await client.find({ token, appID, _staging })
   }
   catch (err) {
-    return error([ 'no_appid_found' ])
+    if (err.message === 'app_not_found') return error(err.message)
+    return err
   }
-  let { environments, name } = app
-  let last = '  └──'
+  let { environments: envs } = app
+  let last = '└──'
 
   // Environment is required if app has more than one
-  let envID = args.e || args.env
-  if (!envID && environments.length === 1) {
-    envID = environments[0].envID
+  let env = args.env || args.e
+  if (!env && envs.length === 1) {
+    var environment = envs[0]
   }
-  else if (!envID || envID === true) {
-    return error([ 'no_env' ])
+  else if (!env || env === true) {
+    return error('no_env')
   }
+  else if (env) {
+    var environment = envs.find(({ name, envID }) => [ name, envID ].includes(env))
+    if (!environment) return error('invalid_env')
+  }
+  let { envID, name, url } = environment
 
   // Filter (optional)
-  let filter = args.f || args.filter
+  let filter = args.filter || args.f
   if (!filter || filter === true) {
     filter = ''
   }
 
-  let env = environments.find(item => item.envID === envID)
-  if (!env) {
-    return error([ 'invalid_env' ])
-  }
-
-  console.log(`'${name}' (app ID: ${appID})`)
-  console.log(`${last} '${env.name}' (env ID: ${env.envID}): ${env.url}`)
+  console.error(`${c.white(c.bold(app.name))} (app ID: ${appID})`)
+  console.error(`${last} ${name} (env ID: ${envID}): ${c.green(url)}`)
 
   let logs = await client.env.logs({ token, appID, envID, query: `fields @log, @logStream, @timestamp, @message | sort @timestamp desc`, _staging })
   if (!logs.length) {
-    return `  ${last} (no logs)`
+    return `    ${last} (no logs)`
   }
 
   return logs.filter(log => log.message.includes(filter)).reverse().map(({ timestamp, message }) => `${c.cyan(timestamp)}: ${message}`).join('\n')

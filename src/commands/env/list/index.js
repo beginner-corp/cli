@@ -2,7 +2,7 @@ let action = require('./action')
 
 module.exports = {
   name: 'list',
-  description: 'List an environment variables',
+  description: `List an environment's variables`,
   action,
   help: {
     en: {
@@ -11,7 +11,7 @@ module.exports = {
         items: [
           {
             name: '-e, --env',
-            description: `Environment to create the variable in`,
+            description: 'Environment to list variables of',
           },
         ],
       },

@@ -6,7 +6,7 @@ function isValidPageType (type) {
 module.exports = async function action (params, utils) {
   let { args } = params
   let { create, validate } = utils
-  let error = require('./errors')(params, utils)
+  let error = require('./errors')(params)
   let { existsSync } = require('fs')
   let { join } = require('path')
 
@@ -14,7 +14,7 @@ module.exports = async function action (params, utils) {
   if (invalid) return invalid
 
   // Path (required)
-  let path = args.p || args.path
+  let path = args.path || args.p
   if (!path || path === true) {
     return error('no_path')
   }
@@ -23,7 +23,7 @@ module.exports = async function action (params, utils) {
   }
 
   // Type (optional)
-  let type = args.t || args.type
+  let type = args.type || args.t
   if (!type || type === true) {
     type = 'html'
   }

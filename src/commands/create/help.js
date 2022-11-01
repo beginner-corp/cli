@@ -6,6 +6,11 @@ module.exports = {
       header: 'Create parameters',
       items: [
         {
+          name: '-a, --app <ID>',
+          description: `Existing app to add a new environment to`,
+          optional: true,
+        },
+        {
           name: '-e, --env',
           description: `Environment name to create`,
           optional: true,
