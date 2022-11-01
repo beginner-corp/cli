@@ -12,7 +12,6 @@ module.exports = function error (params) {
         destroy_fail: 'Failed to destroy environment variable',
       }
     }
-    let error = typeof err === 'string' ? err : err.map(e => errors[lang][e]).join('\n')
-    return Error(error)
+    return Error(errors[lang][err])
   }
 }

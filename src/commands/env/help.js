@@ -1,6 +1,6 @@
 let newEnv = () => ({
   en: {
-    usage: [ 'env <action> [parameters]', '[options]' ],
+    usage: [ 'env <action> <parameters>', '[options]' ],
     description: `List your Begin app's environment variables`,
     contents: [
       {
@@ -12,13 +12,16 @@ let newEnv = () => ({
   }
 })
 
-module.exports = async function generateHelp (subcommands, params) {
+module.exports = async function generateHelp (subcommands, aliases, params) {
   let lib = require('../../lib')
   let { lang } = params
   let help = newEnv()
 
   // Try to scope help to just a single app action subcommand
   let action = params.args._[1]
+  let alias = Object.keys(aliases).includes(action) && aliases[action]
+  action = alias || action
+
   let isSubcommand = subcommands.includes(action)
   if (isSubcommand) {
     subcommands = [ action ]
@@ -42,4 +45,3 @@ module.exports = async function generateHelp (subcommands, params) {
   }
   return help
 }
-
