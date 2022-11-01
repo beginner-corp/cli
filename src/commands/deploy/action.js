@@ -119,4 +119,4 @@ async function getUpdates (params, { args, name, spinner, url }) {
 }
 
 let sortBuilds = ({ ts: ts1 }, { ts: ts2 }) => ts1 - ts2
-let concatMsgs = arr => arr.map(({ msg }) => Buffer.from(msg, 'base64').toString()).join('')
+let concatMsgs = arr => arr.map(({ msg }) => Buffer.from(msg, 'base64').toString()).join('\n')

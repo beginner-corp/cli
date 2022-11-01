@@ -20,7 +20,7 @@ async function action (params) {
   appID = appID !== true && appID || undefined
   let env = args.env || args.e
 
-  if (!appID) return Error('Please specify an appID to destroy')
+  if (!appID) return Error('Please specify an app ID to destroy')
 
   let utils = {
     ...lib,
