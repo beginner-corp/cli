@@ -1,24 +1,30 @@
-module.exports = async function action (params, utils) {
-  let { appID, args, config } = params
+module.exports = async function action (params) {
+  let { app, appID, args, config } = params
   let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
-  let error = require('../errors')(params, utils)
+  let error = require('../errors')(params)
   let errors = []
 
   // Environment (required)
-  let env = args.e || args.env
+  let env = args.env || args.e
   if (!env || env === true) {
     errors.push('no_env')
   }
+  else {
+    let envs = app.environments
+    var environment = envs.find(({ name, envID }) => [ name, envID ].includes(env))
+    if (!environment) return Error(`Environment ${env} not found`)
+  }
+  let { envID } = environment
 
-  // Key (required)
-  let key = args.k || args.key
-  if (!key || key === true) {
-    errors.push('no_key')
+  // Name (required)
+  let name = args.name || args.n || args.key || args.k
+  if (!name || name === true) {
+    errors.push('no_name')
   }
 
   // Value (required)
-  let value = args.v || args.value
+  let value = args.value || args.v
   if (!value || value === true) {
     errors.push('no_value')
   }
@@ -27,16 +33,11 @@ module.exports = async function action (params, utils) {
     return error(errors)
   }
 
-  let vars = {}
-  vars[key] = value
-
   try {
-    let { name, environments } = await client.find({ token, appID, _staging })
-    let environment = environments.find(item => item.envID === env)
-    await client.env.vars.add({ token, appID, envID: env, vars, _staging } )
-    console.log(`Successfully created environment variable ${key} in '${name}' (app ID: ${appID})' '${environment.name}' (env ID: ${env})`)
+    await client.env.vars.add({ _staging, appID, envID, token, vars: { [name]: value } })
+    return `Successfully created environment variable ${name} in '${environment.name}'`
   }
   catch (err) {
-    return error([ 'create_fail' ])
+    return error('create_fail')
   }
 }

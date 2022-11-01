@@ -10,7 +10,7 @@ module.exports = async function action (params, utils) {
   if (invalid) return invalid
 
   // Name (required)
-  let name = args.n || args.name
+  let name = args.name || args.n
   if (!name || name === true) {
     return error('no_name')
   }
@@ -19,7 +19,7 @@ module.exports = async function action (params, utils) {
   }
 
   // Source dir (optional)
-  let src = args.s || args.src
+  let src = args.src || args.s
   if (src && !resolve(src).startsWith(cwd)) {
     return error('src_must_be_in_project')
   }

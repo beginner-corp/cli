@@ -10,7 +10,7 @@ module.exports = async function action (params, utils) {
   if (invalid) return invalid
 
   // Path (required)
-  let path = args.p || args.path
+  let path = args.path || args.p
   if (!path || path === true) {
     return error('no_path')
   }
@@ -22,7 +22,7 @@ module.exports = async function action (params, utils) {
   }
 
   // Method (optional)
-  let method = args.m || args.method
+  let method = args.method || args.m
   if (!method || method === true) {
     method = 'get'
   }
@@ -33,7 +33,7 @@ module.exports = async function action (params, utils) {
   method = method.toLowerCase()
 
   // Source dir (optional)
-  let src = args.s || args.src
+  let src = args.src || args.s
   if (src && !resolve(src).startsWith(cwd)) {
     return error('src_must_be_in_project')
   }

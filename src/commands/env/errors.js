@@ -3,15 +3,16 @@ module.exports = function error (params) {
     let { lang } = params
     let errors = {
       en: {
-        no_appid_found: 'No app found with that app ID',
+        app_not_found: 'No app found with that app ID',
         no_appid: 'App ID not found, please run with -a or --appID',
-        no_env: 'Env ID not found, please run with -e or --envID',
-        no_key: 'Key not found, please run with -k or --key',
-        no_value: 'Value not found, please run with -v or --value',
+        no_env: 'Environment ID not found, please run with -e or --envID',
+        no_name: 'Variable name not found, please run with -n or --name',
+        no_value: 'Variable value not found, please run with -v or --value',
         create_fail: 'Failed to create environment variable',
         destroy_fail: 'Failed to destroy environment variable',
       }
     }
-    return Error(err.map(error => errors[lang][error]).join('\n'))
+    let error = typeof err === 'string' ? err : err.map(e => errors[lang][e]).join('\n')
+    return Error(error)
   }
 }

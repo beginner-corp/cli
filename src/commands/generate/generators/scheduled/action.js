@@ -16,7 +16,7 @@ module.exports = async function action (params, utils) {
   let { create, validate } = utils
   let { resolve } = require('path')
   let cronValidator = require('cron-validate')
-  let error = require('./errors')(params, utils)
+  let error = require('./errors')(params)
 
   let invalid = await validate.project()
   if (invalid) return invalid
@@ -24,7 +24,7 @@ module.exports = async function action (params, utils) {
   let errors = []
 
   // Name (required)
-  let name = args.n || args.name
+  let name = args.name || args.n
   if (!name || name === true) {
     errors.push('no_name')
   }
@@ -33,8 +33,8 @@ module.exports = async function action (params, utils) {
   }
 
   // Must have one of rate or cron but not both
-  let rate = args.r || args.rate
-  let cron = args.c || args.cron
+  let rate = args.rate || args.r
+  let cron = args.cron || args.c
   if (!cron && !rate) {
     errors.push('must_specify_rate_or_cron')
   }
@@ -55,7 +55,7 @@ module.exports = async function action (params, utils) {
   }
 
   // Source dir (optional)
-  let src = args.s || args.src
+  let src = args.src || args.s
   if (src && !resolve(src).startsWith(cwd)) {
     errors.push('src_must_be_in_project')
   }

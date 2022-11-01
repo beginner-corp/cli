@@ -1,14 +1,18 @@
 module.exports = {
   en: {
     usage: [ 'logs' ],
-    description: 'List your Begin apps logs',
+    description: 'List your Begin app logs',
     contents: {
       header: 'List Logs',
       items: [
         {
+          name: '-a, --app <ID>',
+          description: `App containing the environment`,
+          optional: true,
+        },
+        {
           name: '-e, --env',
           description: `Environment to get logs from`,
-          optional: false,
         },
         {
           name: '-f, --filter',

@@ -19,7 +19,7 @@ module.exports = async function (params) {
   let looseName = /^[a-z][a-zA-Z0-9-_]+$/
 
   // Project path
-  let path = args.p || args.path || args._[1] || '.'
+  let path = args.path || args.p || args._[1] || '.'
   if (path === true) {
     return error('no_path')
   }
@@ -38,7 +38,7 @@ module.exports = async function (params) {
   }
 
   // App name (optional)
-  let appName = args.n || args.name ? args.n || args.name  : 'begin-app'
+  let appName = args.name || args.n ? args.name || args.n  : 'begin-app'
   if (!looseName.test(appName)) {
     return error('invalid_appname')
   }

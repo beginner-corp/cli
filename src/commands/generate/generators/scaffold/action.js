@@ -4,7 +4,7 @@ module.exports = async function action (params, utils, command) {
   let { writeFile, npmCommands, validate } = utils
   let { installAwsSdk } = npmCommands
   let { args } = params
-  let error = require('./errors')(params, utils)
+  let error = require('./errors')(params)
   let input = args._.slice(2)
   let project = params.inventory.inv._project
   let generate = require('../_generate')
@@ -42,5 +42,11 @@ module.exports = async function action (params, utils, command) {
   await installAwsSdk(params)
 
   // Step 3: Run the generic generator
-  await generate(params, { manifest, replacements: { ...modelName, schema, routeName }, command, project, utils })
+  await generate(params, {
+    command,
+    manifest,
+    project,
+    replacements: { ...modelName, schema, routeName },
+    utils
+  })
 }

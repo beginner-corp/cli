@@ -11,28 +11,21 @@ module.exports = {
         items: [
           {
             name: '-e, --env',
-            description: `Environment to create the variable in`,
-            optional: false,
+            description: 'Environment in which to create the variable',
           },
           {
-            name: '-k, --key',
-            description: `Variable name to create`,
-            optional: false,
+            name: '-n, --name',
+            description: 'Env variable name; alternately use -k, --key',
           },
           {
             name: '-v, --value',
-            description: `Variable value to create`,
-            optional: false,
+            description: `Env variable value`,
           },
         ],
       },
       examples: [
         {
-          name: 'Create a variable',
-          example: 'begin env create',
-        },
-        {
-          name: `Create a variable in the environment named 'staging'`,
+          name: `Create a variable named 'foo' in 'staging'`,
           example: 'begin env create --env staging --name foo --value bar',
         },
       ]

@@ -7,7 +7,7 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getConfig } = lib
+  let { checkManifest, getAppID, getConfig } = lib
 
   let config = getConfig(params)
   if (!config.access_token) {
@@ -19,8 +19,7 @@ async function action (params) {
   if (manifestErr) return manifestErr
 
   // See if the project manifest contains an app ID
-  let { begin } = params.inventory.inv._project.arc
-  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
+  let appID = args.app || args.a || getAppID(params.inventory)
 
   // Pass along any specified environment IDs
   let env = args.env || args.e

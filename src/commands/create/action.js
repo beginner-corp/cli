@@ -28,7 +28,13 @@ module.exports = async function action (params, utils) {
   }
   // Create a new environment
   else {
-    let app = await client.find({ token, appID, _staging })
+    try {
+      var app = await client.find({ token, appID, _staging })
+    }
+    catch (err) {
+      if (err.message === 'app_not_found') return Error(`No app found with app ID '${appID}'`)
+      return
+    }
     let envs = app.environments
     let envNameProvided = !!(envName)
     if (envNameProvided) {

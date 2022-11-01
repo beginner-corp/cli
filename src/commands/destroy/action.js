@@ -49,7 +49,7 @@ module.exports = async function action (params, utils) {
   // A specific environment name or ID was supplied
   if (env !== true) {
     environment = envs.find(({ name, envID }) => [ name, envID ].includes(env))
-    if (!environment) return ReferenceError(`Environment ${env} not found`)
+    if (!environment) return Error(`Environment ${env} not found`)
   }
   // No environment was supplied, but multiple are available
   else if (envQty > 1) {
