@@ -2,20 +2,26 @@ module.exports = async function action (params, utils) {
   let { args, appID, config, env, inventory, isCI } = params
   let { access_token: token, stagingAPI: _staging } = config
   let { writeFile } = utils
-
   let { promptOptions } = require('../../lib/app')
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
-  let app = await client.find({ token, appID, _staging })
-  let envs = app.environments
-  let envQty = envs.length
-  let force = args.force
 
   function checkForce () {
     if (!force && isCI) {
       throw Error('`--force` flag is required to destroy in non-interactive mode')
     }
   }
+
+  try {
+    var app = await client.find({ token, appID, _staging })
+  }
+  catch (err) {
+    if (err.message === 'app_not_found') return Error(`No app found with app ID '${appID}'`)
+    return err
+  }
+  let envs = app.environments
+  let envQty = envs.length
+  let force = args.force
 
   // Destroy the whole app
   if (appID && !env) {
@@ -26,7 +32,7 @@ module.exports = async function action (params, utils) {
         type: 'input',
         name: 'doubleCheck',
         hint: 'To confirm, enter the Begin app ID (no quotes)',
-        message: `Are you sure you want to destroy this Begin app (app name: '${app.name}', app ID: '${appID}') and its ${envQty} environment${plural}?`,
+        message: `Are you sure you want to destroy this Begin app (name: '${app.name}', ID: '${appID}') and its ${envQty} environment${plural}?`,
         validate: input => input === appID,
       }, promptOptions)
 

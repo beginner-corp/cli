@@ -11,7 +11,7 @@ module.exports = {
           optional: true,
         },
         {
-          name: '-e, --env',
+          name: '-e, --env <name|ID>',
           description: `Environment name to create`,
           optional: true,
         },

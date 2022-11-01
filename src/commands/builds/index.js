@@ -89,9 +89,15 @@ async function action (params) {
   let selectedBuildID = choices.find(item => item.name === answer).value
   let selectedBuild = builds.find(item => item.buildID === selectedBuildID)
 
-  let output = []
-  selectedBuild.updates.forEach(item => output.push(`${c.cyan(item.ts)}: ${Buffer.from(item.msg, 'base64').toString()}`))
-  return output.join('\n')
+  let lastUpdate = selectedBuild.updates.length - 1
+  let format = (item, i) => {
+    let out = `${c.cyan(item.ts)}:\n` +
+              `${Buffer.from(item.msg, 'base64').toString().trim()}`
+    if (i !== lastUpdate) out += '\n'
+    return out
+  }
+  let output = selectedBuild.updates.map(format).join('\n')
+  return output
 }
 
 module.exports = {

@@ -58,12 +58,16 @@ async function action (params) {
   console.error(`${c.white(c.bold(app.name))} (app ID: ${appID})`)
   console.error(`${last} ${name} (env ID: ${envID}): ${c.green(url)}`)
 
-  let logs = await client.env.logs({ token, appID, envID, query: `fields @log, @logStream, @timestamp, @message | sort @timestamp desc`, _staging })
+  let query = `fields @log, @logStream, @timestamp, @message | sort @timestamp desc`
+  let logs = await client.env.logs({ token, appID, envID, query, _staging })
   if (!logs.length) {
     return `    ${last} (no logs)`
   }
 
-  return logs.filter(log => log.message.includes(filter)).reverse().map(({ timestamp, message }) => `${c.cyan(timestamp)}: ${message}`).join('\n')
+  let isFiltered = ({ message }) => message?.includes(filter)
+  let format = ({ timestamp, message }) => `${c.cyan(timestamp)}:\n${message.trim()}`
+  let output = logs.filter(isFiltered).reverse().map(format).join('\n')
+  return output
 }
 
 module.exports = {

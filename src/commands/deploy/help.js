@@ -6,7 +6,7 @@ module.exports = {
       header: 'Deployment parameters',
       items: [
         {
-          name: '-e, --env',
+          name: '-e, --env <name|ID>',
           description: `Environment name to deploy`,
           optional: true,
         },
