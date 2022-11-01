@@ -25,8 +25,8 @@ module.exports = {
       },
       examples: [
         {
-          name: `Create a variable named 'foo' in 'staging'`,
-          example: 'begin env create --env staging --name foo --value bar',
+          name: `Create a variable named 'FOO' in 'staging'`,
+          example: 'begin env create --env staging --name FOO --value bar',
         },
       ]
     }

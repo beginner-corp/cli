@@ -1,5 +1,5 @@
 module.exports = async function action (params) {
-  let { app, appID } = params
+  let { app, appID, args } = params
   let { environments, name } = app
   let c = require('picocolors')
 
@@ -11,8 +11,15 @@ module.exports = async function action (params) {
     output.push(`${last} (no app environments)`)
   }
   else {
-    let lastEnv = environments.length - 1
-    environments.forEach(({ name, envID, url, vars }, i) => {
+    let envs = app.environments
+
+    let env = args.env || args.e
+    if (env && env !== true) {
+      envs = envs.filter(({ name, envID }) => [ name, envID ].includes(env))
+      if (!envs.length) return Error(`Environment ${env} not found`)
+    }
+    let lastEnv = envs.length - 1
+    envs.forEach(({ name, envID, url, vars }, i) => {
       let draw = lastEnv === i ? last : item
       output.push(`${draw} ${name} (env ID: ${envID}): ${c.green(url)}`)
       if (!Object.keys(vars).length) {
@@ -23,7 +30,7 @@ module.exports = async function action (params) {
         let lastVar = keys.length - 1
         keys.forEach((key, i) => {
           // Ceci n'est pas une pipe
-          let marg = environments.length > 1 ? '│' : ' '
+          let marg = envs.length > 1 ? '│' : ' '
           let draw = lastVar === i ? last : item
           output.push(`${marg}   ${draw} ${key}=${vars[key][0]}****`)
         })

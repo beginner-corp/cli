@@ -3,12 +3,11 @@ module.exports = async function action (params) {
   let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
   let error = require('../errors')(params)
-  let errors = []
 
   // Environment (required)
   let env = args.env || args.e
   if (!env || env === true) {
-    errors.push('no_env')
+    return error('no_env')
   }
   else {
     let envs = app.environments
@@ -20,12 +19,9 @@ module.exports = async function action (params) {
   // Name (required)
   let name = args.name || args.n || args.key || args.k
   if (!name || name === true) {
-    errors.push('no_name')
+    return error('no_name')
   }
-
-  if (errors.length) {
-    return error(errors)
-  }
+  name = name.toUpperCase()
 
   try {
     await client.env.vars.remove({ _staging, appID, envID, token, vars: [ name ] })

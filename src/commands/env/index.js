@@ -1,11 +1,14 @@
 let names = { en: [ 'env' ] }
 let subcommands = [ 'create', 'destroy', 'list' ]
 let aliases = {
+  add: 'create',
   delete: 'destroy',
+  del: 'destroy',
   remove: 'destroy',
+  rm: 'destroy',
   ls: 'list',
 }
-let help = require('./help').bind({}, subcommands)
+let help = require('./help').bind({}, subcommands, aliases)
 
 async function action (params) {
   let { args } = params
