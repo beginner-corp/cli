@@ -105,12 +105,12 @@ module.exports = async function (params) {
   // Write .gitignore
   let gitIgnore = `.env
 .DS_Store
+**/static.json
 node_modules
-public/static.json
+package-lock.json
 public/bundles
 sam.json
 sam.yaml
-package-lock.json
 `
   writeFile(p('.gitignore'), gitIgnore)
 
