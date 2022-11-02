@@ -1,11 +1,11 @@
 module.exports = function () {
-  return `import canI from '../../models/auth/can-i.mjs'
+  return `import authCheck from '../../node_modules/@architect/views/models/auth/auth-check.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}
  */
 export async function get (req) {
-  const authenticated = canI(req)
+  const authenticated = authCheck(req)
   if (authenticated) {
     return {
       json: { account: authenticated }
