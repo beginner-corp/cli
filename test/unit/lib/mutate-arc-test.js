@@ -218,3 +218,21 @@ setting 1
     mutateArc.upsert({ item, pragma, raw: before })
   }, '!array/vector/map type blows up in @aws/arc')
 })
+
+test('Item update (quotes)', t => {
+  t.plan(1)
+  let before = `@bundles
+store "node_modules/@enhance/store"
+`
+  const after = `@bundles
+store "node_modules/@enhance/store"
+
+@begin
+appID WHSTS9PT
+`
+
+  let item = 'appID WHSTS9PT'
+  let pragma = 'begin'
+  let result = mutateArc.upsert({ item, pragma, raw: before })
+  t.equal(result, after, 'Mutated arc file with quoted bundle line')
+})
