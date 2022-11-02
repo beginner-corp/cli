@@ -4,6 +4,7 @@ let { execSync } = require('child_process')
 let { join } = require('path')
 let { DEPLOY, BUILD_ALL } = process.env
 let os = process.platform
+let arch = process.arch
 console.log(`Building Begin... (DEPLOY: ${DEPLOY}, BUILD_ALL: ${BUILD_ALL})`)
 
 /**
@@ -30,7 +31,7 @@ let config = {
       '../node_modules/@architect/sandbox/src/invoke-lambda/exec/runtimes/*',
       '../package.json',
       // Enhance stuff
-      '../node_modules/@enhance/**/*'
+      '../node_modules/@enhance/**/*',
     ],
     targets: [],
     outputPath: 'build',
@@ -69,28 +70,33 @@ if (existsSync(clientIDFile)) {
 }
 
 let nodeVer = `node14`
-let arc = 'x64' // TODO: 'arm64'
-
 let platforms = {
-  linux: `${nodeVer}-linux-${arc}`,
-  darwin: `${nodeVer}-macos-${arc}`,
-  win32: `${nodeVer}-win-${arc}`,
+  darwin_x64: `${nodeVer}-macos-x64`,
+  darwin_arm64: `${nodeVer}-macos-arm64`,
+  linux: `${nodeVer}-linux-x64`, // TODO arm64
+  win32: `${nodeVer}-win-x64`,
 }
 
 if (BUILD_ALL === 'true') {
-  config.pkg.targets.push(
-    platforms.linux,
-    platforms.darwin,
-    platforms.win32,
-  )
+  // The self-hosted GHA Runner is currently only responsible for macOS arm64 builds
+  if (os === 'darwin' && arch === 'arm64') {
+    config.pkg.targets.push(
+      platforms.darwin_arm64
+    )
+  }
+  // Everything else can be reliably built from Linux
+  else {
+    config.pkg.targets.push(
+      platforms.darwin_x64,
+      platforms.linux,
+      platforms.win32,
+    )
+  }
 }
 else {
-  let p = str => os.startsWith(str) ? platforms[str] : undefined
-  config.pkg.targets = [
-    p('linux'),
-    p('darwin'),
-    p('win32')
-  ].filter(Boolean)
+  // In theory we could use the 'host' alias, but the Node.js version won't be pinned to 14
+  let target = os === 'darwin' ? platforms[`darwin_${arch}`] : platforms[os]
+  config.pkg.targets.push(target)
 }
 
 let path = join(__dirname, 'package.json')
