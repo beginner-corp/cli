@@ -34,7 +34,7 @@ module.exports = async function action (params, utils) {
   type = type === 'js' ? 'javascript' : type
 
   let ext = type === 'javascript' ? '.mjs' : '.html'
-  if (existsSync(join(process.cwd(), 'app/pages', `${path}${ext}`))) {
+  if (existsSync(join(process.cwd(), 'app', 'pages', `${path}${ext}`))) {
     return error('page_exists')
   }
 

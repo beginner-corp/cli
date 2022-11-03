@@ -16,7 +16,7 @@ module.exports = async function action (params, utils) {
   if (typeof path !== 'string') {
     return error('invalid_path')
   }
-  if (existsSync(join(process.cwd(), 'app/api', `${path}.mjs`))) {
+  if (existsSync(join(process.cwd(), 'app', 'api', `${path}.mjs`))) {
     return error('api_exists')
   }
 
