@@ -5,6 +5,7 @@ async function action (params) {
   let { appVersion, args, cliDir } = params
   let { use } = args
   let plat = process.platform
+  let arch = process.env.__BEGIN_TEST_ARCH__ || process.arch
   let isWin = plat.startsWith('win')
 
   let _http = require('http')
@@ -27,9 +28,11 @@ async function action (params) {
     let platform = plat === 'darwin' && 'darwin' ||
                    plat === 'linux' && 'linux' ||
                    plat === 'win32' && 'win32'
+    // macOS is the only platform with arm64 releases (for now)
+    let architecture = platform === 'darwin' && arch === 'arm64' ? 'arm64' : 'x64'
     let release = versions.cli[channel]
     let version = release.version
-    let url = release.releases[platform].x64 // TODO: check for arm64 here
+    let url = release.releases[platform][architecture]
     let https = url.startsWith('https://') ? _https : _http
 
     // Compare versions if we're doing a plain update

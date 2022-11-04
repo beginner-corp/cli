@@ -3,8 +3,8 @@ let err = console.err
 
 let capture = {
   start: () => {
-    console.log = out => capture.stdout += out + '\n'
-    console.error = out => capture.stderr += out + '\n'
+    console.log = (...out) => capture.stdout += out.join(' ') + '\n'
+    console.error = (...out) => capture.stderr += out.join(' ') + '\n'
     capture.reset()
   },
   stop: () => {

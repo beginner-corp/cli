@@ -19,6 +19,8 @@ async function runTests (runType, t) {
   let begin = _begin[runType].bind({}, t)
 
   let upgraded = 'Successfully upgraded Begin!'
+  let x64Release = /file-x64.zip/
+  let arm64Release = /file-arm64.zip/
   let upgradeVer = /10000\.0\.0/
   let didNotUpgrade = 'Begin already running the latest version, nice!'
   let contents = 'henlo!\n'
@@ -30,8 +32,8 @@ async function runTests (runType, t) {
     t.pass('Started Sandbox')
   })
 
-  t.test(`${mode} Normal`, async t => {
-    t.plan(8)
+  t.test(`${mode} Normal (x64)`, async t => {
+    t.plan(9)
     let file, folder, path, r
 
     folder = newFolder('install')
@@ -44,6 +46,7 @@ async function runTests (runType, t) {
     await isExecutable(t, path)
     t.equal(file.toString(), contents, 'File unzipped into correct location')
     t.equal(r.stdout, upgraded, 'Got upgrade confirmation')
+    t.match(r.stderr, x64Release, 'Printed x64 release to stderr')
     t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.code, 0, 'Exited 0')
@@ -58,6 +61,40 @@ async function runTests (runType, t) {
     t.ok(r.stderr, 'Printed update info stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
+
+  // arm64-specific tests (which means macOS only for now)
+  if (process.platform === 'darwin') {
+    t.test(`${mode} Normal (arm64)`, async t => {
+      t.plan(9)
+      let file, folder, path, r
+
+      folder = newFolder('install')
+      path = filePath(folder)
+      process.env.BEGIN_INSTALL = folder
+      process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-upgrade'
+      process.env.__BEGIN_TEST_ARCH__ = 'arm64'
+      r = await begin('update')
+      if (!existsSync(path)) t.fail(`Did not find unzipped / installed file at ${path}`)
+      file = await readFile(path)
+      await isExecutable(t, path)
+      t.equal(file.toString(), contents, 'File unzipped into correct location')
+      t.equal(r.stdout, upgraded, 'Got upgrade confirmation')
+      t.match(r.stderr, arm64Release, 'Printed arm64 release to stderr')
+      t.match(r.stderr, upgradeVer, 'Printed upgrade version to stderr')
+      t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
+      t.equal(r.code, 0, 'Exited 0')
+
+      folder = newFolder('install')
+      path = filePath(folder)
+      process.env.BEGIN_INSTALL = folder
+      process.env.__BEGIN_TEST_URL__ = 'http://localhost:3333/versions-ok'
+      r = await begin('update')
+      if (existsSync(path)) t.fail(`Found unzipped / installed file at ${path}`)
+      t.equal(r.stdout, didNotUpgrade, `Got confirmation that upgrade wasn't necessary`)
+      t.ok(r.stderr, 'Printed update info stderr')
+      t.equal(r.code, 0, 'Exited 0')
+    })
+  }
 
   t.test(`${mode} Errors`, async t => {
     t.plan(3)
