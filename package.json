@@ -21,7 +21,7 @@
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "9.0.9",
     "@architect/inventory": "3.3.2",
-    "@architect/parser": "6.0.1",
+    "@architect/parser": "6.0.2",
     "@architect/sandbox": "5.3.4",
     "@begin/api": "1.4.5",
     "@enhance/starter-project": "2.0.0",
@@ -32,7 +32,7 @@
     "is-potential-custom-element-name": "1.0.1",
     "jsonschema": "1.4.1",
     "lambda-runtimes": "1.1.2",
-    "minimist": "1.2.6",
+    "minimist": "1.2.7",
     "picocolors": "1.0.0",
     "pluralize": "8.0.0",
     "restore-cursor": "3.1.0",
