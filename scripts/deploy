@@ -24,6 +24,7 @@ let kb = buf => Math.floor(buf.length / 1000)
 ;(async () => {
   try {
     let isProd = DEPLOY === 'prod'
+    let isMacARM = process.platform === 'darwin' && process.arch === 'arm64'
     let version
     if (isProd) {
       let pkg = join(__dirname, '..', 'package.json')
@@ -44,12 +45,19 @@ let kb = buf => Math.floor(buf.length / 1000)
       'begin-linux':    { name, zip: 'begin-x64-linux.zip' },
       'begin-macos':    { name, zip: 'begin-x64-darwin.zip' },
       'begin-win.exe':  { name: 'b.exe', zip: 'begin-x64-windows.zip' },
+      // TODO enable this line when our ARM runner is online
+      // 'begin-macos-arm64': { name, zip: 'begin-arm64-darwin.zip' },
+
       // Coming soon:
       // 'begin-linux-x64': { name, zip: 'begin-x64-linux.zip' },
       // 'begin-macos-x64': { name, zip: 'begin-x64-darwin.zip' },
-      // 'begin-macos-arm64': { name, zip: 'begin-arm64-darwin.zip' },
       // 'begin-win-x64.exe': { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
     }
+    // TODO disable this when our ARM runner is online
+    if (isMacARM) {
+      files = { 'begin-macos': { name, zip: 'begin-arm64-darwin.zip' } }
+    }
+
     let channel = isProd ? 'latest' : 'main'
     let ACL = 'public-read'
     let CacheControl = 's-maxage=3600, max-age=3600, must-revalidate' // 1 hour
@@ -76,6 +84,11 @@ let kb = buf => Math.floor(buf.length / 1000)
       }
     }
 
+    // TODO disable this when our ARM runner is online
+    if (isMacARM) {
+      process.exit(0)
+    }
+
     // Flush CDN release channel
     let releasePath = `/releases/${channel}/*`
     await cf.createInvalidation({
@@ -87,21 +100,21 @@ let kb = buf => Math.floor(buf.length / 1000)
     }).promise()
     console.log(`Invalidated ${releasePath}`)
 
-    let uri = ext => `https://dl.begin.com/releases/${channel}/begin-x64-${ext}`
+    let uri = ext => `https://dl.begin.com/releases/${channel}/begin-${ext}`
     let data = {
       [`ver_${channel}`.toUpperCase()]: version,
       [`releases_${channel}`.toUpperCase()]: JSON.stringify({
         darwin: {
-          arm64: null,
-          x64: uri('darwin.zip'),
+          arm64: uri('arm64-darwin.zip'),
+          x64: uri('x64-darwin.zip'),
         },
         linux: {
           arm64: null,
-          x64: uri('linux.zip'),
+          x64: uri('x64-linux.zip'),
         },
         windows: {
           arm64: null,
-          x64: uri('windows.zip'),
+          x64: uri('x64-windows.zip'),
         }
       })
     }
