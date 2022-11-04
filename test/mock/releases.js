@@ -1,6 +1,10 @@
-// TODO arm64 support!
-let rel = { x64: 'http://localhost:3333/file.zip' }
-let releases = { darwin: rel, linux: rel, win32: rel }
+let arm64 = 'http://localhost:3333/file-arm64.zip'
+let x64 = 'http://localhost:3333/file-x64.zip'
+let releases = {
+  darwin: { arm64, x64 },
+  linux: { x64 },
+  win32: { x64 },
+}
 module.exports = function (version) {
   return {
     cli: {
