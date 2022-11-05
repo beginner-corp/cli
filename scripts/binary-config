@@ -2,6 +2,7 @@
 let { existsSync, writeFileSync } = require('fs')
 let { execSync } = require('child_process')
 let { join } = require('path')
+let { prune } = require('@architect/plugin-node-prune')
 let { DEPLOY, BUILD_ALL } = process.env
 let os = process.platform
 let arch = process.arch
@@ -101,3 +102,9 @@ else {
 
 let path = join(__dirname, 'package.json')
 writeFileSync(path, JSON.stringify(config, null, 2))
+
+// Tidy up node_modules before compiling!
+console.log('Pruning junk from project node_modules:')
+process.env.ARC_PRUNE_IGNORE_CUSTOM = '-not -path *istanbul*'
+prune(join(__dirname, '..'))
+delete process.env.ARC_PRUNE_IGNORE_CUSTOM
