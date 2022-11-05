@@ -4,18 +4,24 @@ let help = require('./help')
 async function action (params) {
   let { appVersion, args, cliDir } = params
   let { use } = args
+
   let plat = process.platform
-  let arch = process.env.__BEGIN_TEST_ARCH__ || process.arch
+  let platform = plat === 'darwin' && 'darwin' ||
+                 plat === 'linux' && 'linux' ||
+                 plat === 'win32' && 'win32'
+  let isMac = platform === 'darwin'
   let isWin = plat.startsWith('win')
+  // I know, test logic in business logic, but process.arch is immutable
+  let arch = process.env.__BEGIN_TEST_ARCH__ || process.arch
+  // macOS is the only platform with arm64 releases (for now)
+  let architecture = isMac && arch === 'arm64' ? 'arm64' : 'x64'
 
   let _http = require('http')
   let _https = require('https')
   let { join } = require('path')
-  let { chmodSync, mkdirSync, writeFileSync } = require('fs')
+  let { chmodSync, existsSync, mkdirSync, renameSync, rmSync, writeFileSync } = require('fs')
   let semver = require('semver')
   let zip = require('adm-zip')
-
-  // TODO: add process.arch checks for arm64
 
   let versions = await getVersions()
   return new Promise((resolve, reject) => {
@@ -25,11 +31,6 @@ async function action (params) {
     let override = use && use !== appChannel ? use : false
     let channel = override || appChannel
 
-    let platform = plat === 'darwin' && 'darwin' ||
-                   plat === 'linux' && 'linux' ||
-                   plat === 'win32' && 'win32'
-    // macOS is the only platform with arm64 releases (for now)
-    let architecture = platform === 'darwin' && arch === 'arm64' ? 'arm64' : 'x64'
     let release = versions.cli[channel]
     let version = release.version
     let url = release.releases[platform][architecture]
@@ -73,6 +74,17 @@ async function action (params) {
         for (let file of Zip.getEntries()) {
           let decompressed = Zip.readFile(file)
           let filename = join(cliDir, file.entryName)
+
+          // Recent versions of macOS implement runtime code signing enforcement
+          // The kernel links and caches code signatures of individual files upon first use; simply overwriting an executable with a new file will result in a `Killed: 9` error
+          // Instead, we must politely move the old binary out of the way, destroy it, and write a new file
+          // See also: https://developer.apple.com/videos/play/wwdc2019/703 @14:00
+          if (isMac && existsSync(filename)) {
+            let old = filename + '-old'
+            renameSync(filename, old)
+            rmSync(old, { force: true })
+          }
+
           writeFileSync(filename, decompressed)
           if (!isWin) {
             chmodSync(filename, exe)

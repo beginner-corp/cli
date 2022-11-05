@@ -165,6 +165,7 @@ async function runTests (runType, t) {
     process.exitCode = 0
     delete process.env.BEGIN_INSTALL
     delete process.env.__BEGIN_TEST_URL__
+    delete process.env.__BEGIN_TEST_ARCH__
     t.pass('Shut down Sandbox')
   })
 }
