@@ -5,15 +5,12 @@ import url from 'url'
 import arc from '@architect/functions'
 import router from '@enhance/arc-plugin-enhance/src/http/any-catchall/router.mjs'
 
-export function createRouter (base) {
-  if (!base) {
-    let here = path.dirname(url.fileURLToPath(import.meta.url))
-    base = here
-  }
-  return arc.http.async(router.bind({}, base))
+export function createRouter () {
+  let here = path.dirname(url.fileURLToPath(import.meta.url))
+  let views = path.join(here, 'node_modules', '@architect', 'views')
+  return arc.http.async(router.bind({}, { basePath: views, altPath: here }))
 }
 
-export const handler = createRouter() 
-
+export const handler = createRouter()
 `
 }
