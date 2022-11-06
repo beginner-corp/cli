@@ -50,7 +50,8 @@ let manifest = {
   ],
   dependencies: [
     '@begin/validator@0.0.10',
-    'github:enhance-dev/form-elements'
+    'github:enhance-dev/form-elements',
+    'github:ryanbethel/arc-plugin-enhance#router-export'
   ]
 }
 

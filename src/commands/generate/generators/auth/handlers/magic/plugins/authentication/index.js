@@ -5,7 +5,7 @@ module.exports = function () {
 module.exports = {
 
   set: {
-    event () {
+    events () {
       return [
         {
           name: 'auth-link',
