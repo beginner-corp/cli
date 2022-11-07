@@ -14,12 +14,39 @@ module.exports = {
       ]
     },
     http () {
-      let authHandler = join(__dirname, 'http', 'any-auth-catchall')
+      let customRoutes = join(__dirname, 'routes')
       return [
         {
           method: 'any',
           path: '/auth/*',
-          src: authHandler,
+          src: join(customRoutes,'any-auth-catchall'),
+          config: {
+            // shared: false,
+            views: false,
+          }
+        },
+        {
+          method: 'any',
+          path: '/login',
+          src: join(customRoutes,'any-login'),
+          config: {
+            // shared: false,
+            views: false,
+          }
+        },
+        {
+          method: 'any',
+          path: '/signup',
+          src: join(customRoutes,'any-signup'),
+          config: {
+            // shared: false,
+            views: false,
+          }
+        },
+        {
+          method: 'post',
+          path: '/logout',
+          src: join(customRoutes,'post-logout'),
           config: {
             // shared: false,
             views: false,

@@ -1,6 +1,6 @@
 module.exports = function () {
   return `import db from '@begin/data'
-import { getUsers } from '../../node_modules/@architect/views/models/users.mjs'
+import { getAccounts } from '../../node_modules/@architect/views/models/accounts.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}
@@ -21,28 +21,28 @@ export async function get (req){
         location: '/auth/register'
       }
     }
-    let users, user
+    let accounts, account
     try {
-      users = await getUsers()
-      user = users.find(i => i.email === sessionInfo.email)
+      accounts = await getAccounts()
+      account = accounts.find(i => i.email === sessionInfo.email)
     } 
     catch (e) {
       console.log(e)
     }
-    if (!user) {
+    if (!account) {
       try {
         const allowList = await import('../../models/auth/allow-list.mjs')
-        user = allowList.default.find(i => i.email === sessionInfo.email)
+        account = allowList.default.find(i => i.email === sessionInfo.email)
       } 
       catch(e) {
         console.log('no allow list found')
       }
     }
 
-    if (user) {
-      // Verified User
+    if (account) {
+      // Verified Account
       return {
-        session: { account: { user } },
+        session: { account: { account } },
         location: sessionInfo?.redirectAfterAuth
       }
     }
@@ -50,11 +50,11 @@ export async function get (req){
   else if (sessionToken && linkUsed){
     return {
       // Link already used
-      location: '/auth/login'
+      location: '/login'
     }
   }
   return {
-    location: '/auth/login'
+    location: '/login'
   }
 }
 

@@ -3,8 +3,8 @@ module.exports = function () {
   * @type {import('@enhance/types').EnhanceElemFn}
   */
 export default function ({ html, state }) {
-  const user = state?.store?.account?.user
-  return html\`<p>Welcome New User \${user?.email} you are Logged In.</p>\`
+  const account = state?.store?.account?.account
+  return html\`<p>Welcome New Account \${account?.email} you are Logged In.</p>\`
 }
 `
 }

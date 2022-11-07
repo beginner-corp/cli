@@ -3,12 +3,12 @@ module.exports = function () {
   * @type {import('@enhance/types').EnhanceElemFn}
   */
 export default function ({ html, state }) {
-  const user = state?.store?.account?.user
+  const account = state?.store?.account?.account
   return html\`
-  <form action=/auth/logout method=POST>
+  <form action=/logout method=POST>
     <button>Logout</button>
   </form>
-  <p>You are logged in with \${user?.email}.</p>
+  <p>You are logged in with \${account?.email}.</p>
   <p>You are \${state.store.admin ? '' : 'not'} an Admin</p>\`
 }
 `

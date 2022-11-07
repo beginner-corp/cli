@@ -1,12 +1,12 @@
 let modelName = {
-  singular: 'user',
-  capSingular: 'User',
-  plural: 'users',
-  capPlural: 'Users'
+  singular: 'account',
+  capSingular: 'Account',
+  plural: 'accounts',
+  capPlural: 'Accounts'
 }
-let routeName = 'users'
+let routeName = 'accounts'
 let schema = {
-  id: 'User',
+  id: 'Accounts',
   type: 'object',
   required: [ 'email' ],
   properties: {

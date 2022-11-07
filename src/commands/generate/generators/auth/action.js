@@ -20,18 +20,18 @@ module.exports = async function action (params, utils, command) {
     await generate(params, { manifest, command, project, utils })
   }
   else if (!authType || authType === 'magic-link') {
-    let { routeName, modelName, schema } = require('./users-table')
+    let { routeName, modelName, schema } = require('./accounts-table')
     let prefsFile = project.localPreferencesFile
     let { readFileSync } = require('fs')
     let prefs = readFileSync(prefsFile, 'utf8')
     if (!project.localPreferences?.['sandbox-startup']) {
       prefs += `@sandbox-startup
-node ./scripts/seed-users.js`
+node ./scripts/seed-accounts.js`
       writeFile(prefsFile, prefs)
     }
-    else if (!project.localPreferences['sandbox-startup'].includes('node ./scripts/seed-users.js')){
+    else if (!project.localPreferences['sandbox-startup'].includes('node ./scripts/seed-accounts.js')){
       prefs = prefs.replace('@sandbox-startup', `@sandbox-startup
-node ./scripts/seed-users.js`)
+node ./scripts/seed-accounts.js`)
       writeFile(prefsFile, prefs)
     }
 

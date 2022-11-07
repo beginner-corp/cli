@@ -4,13 +4,13 @@ module.exports = function ({ plural, capPlural, singular, capSingular, includeAu
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
 import { get${capPlural}, upsert${capSingular}, validate } from '../models/${plural}.mjs'
-${includeAuth ? `import canI from '../models/auth/can-i.mjs'` : ''}
+${includeAuth ? `import {checkRole} from '../models/auth/auth-check.mjs'` : ''}
 
 /**
  * @type {EnhanceApiFn}
  */
 export async function get (req) {${includeAuth ? `
-  const admin = canI(req, '${authRole}')
+  const admin = checkRole(req, '${authRole}')
   if (!admin) {
     return {
       location: '/'
@@ -36,7 +36,7 @@ export async function get (req) {${includeAuth ? `
  * @type {EnhanceApiFn}
  */
 export async function post (req) {${includeAuth ? `
-  const admin = canI(req, '${authRole}')
+  const admin = checkRole(req, '${authRole}')
   if (!admin) {
     return {
       statusCode: 401
