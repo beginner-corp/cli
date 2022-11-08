@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 14.x, 16.x ]
+        node-version: [ 14.x, 16.x, 18.x ]
         os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
         # Node.js does not have a build of 14.x for Apple Silicon
         exclude:

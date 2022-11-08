@@ -70,7 +70,7 @@ if (existsSync(clientIDFile)) {
   config.pkg.assets.push('../client-ids.json')
 }
 
-let nodeVer = `node14`
+let nodeVer = `node18`
 let platforms = {
   darwin_x64: `${nodeVer}-macos-x64`,
   darwin_arm64: `${nodeVer}-macos-arm64`,
