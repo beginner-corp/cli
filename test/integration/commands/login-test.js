@@ -2,11 +2,10 @@ let test = require('tape')
 let { existsSync, mkdirSync, rmSync } = require('fs')
 let { readFile } = require('fs/promises')
 let { join } = require('path')
-let sandbox = require('@architect/sandbox')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run } = require(lib)
+let { begin: _begin, newFolder, run, sandbox } = require(lib)
 let filePath = folder => join(folder, 'config.json')
 let reset = folder => rmSync(folder, { recursive: true, force: true })
 
@@ -20,12 +19,13 @@ async function runTests (runType, t) {
   let begin = _begin[runType].bind({}, t)
 
   let loggedIn = 'Successfully logged in!'
-  let pleaseAuth = 'Please authenticate by visiting: http://localhost:3333/auth?user_code=bar?user_code=bar\nAwaiting authentication...'
   let alreadyLoggedIn = 'You are already logged in, yay!'
+  let port, pleaseAuth
 
   t.test(`${mode} Start Sandbox`, async t => {
     t.plan(1)
-    await sandbox.start({ cwd: mock, quiet: true })
+    port = await sandbox.start({ cwd: mock })
+    pleaseAuth = `Please authenticate by visiting: http://localhost:${port}/auth?user_code=bar?user_code=bar\nAwaiting authentication...`
 
     t.pass('Started Sandbox')
   })
@@ -39,7 +39,7 @@ async function runTests (runType, t) {
     mkdirSync(folder, { recursive: true })
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
-    process.env.__BEGIN_TEST__ = true
+    process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
     r = await begin('login', undefined, true)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
@@ -69,7 +69,7 @@ async function runTests (runType, t) {
     mkdirSync(folder, { recursive: true })
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
-    process.env.__BEGIN_TEST__ = true
+    process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
     r = await begin('login --json', undefined, true)
     json = JSON.parse(r.stdout)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)

@@ -16,10 +16,15 @@ jobs:
     strategy:
       matrix:
         node-version: [ 14.x, 16.x ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
+        # Node.js does not have a build of 14.x for Apple Silicon
+        exclude:
+          - os: self-hosted
+            node-version: 14.x
 
     # Go
     steps:
+
     - name: Check out repo
       uses: actions/checkout@v3
 
@@ -69,7 +74,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-latest ] # TODO add self-hosted
+        os: [ ubuntu-latest, self-hosted ]
 
     # Go
     steps:
@@ -79,7 +84,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Install
         run: npm i

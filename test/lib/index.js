@@ -4,6 +4,7 @@ let inventory = require('@architect/inventory')
 
 let begin = require('./_begin')
 let capture = require('./_capture')
+let sandbox = require('./_sandbox')
 let tmp = require('./_tmp-dir')
 
 // Unlike *nix systems, Windows mysteriously kept file handles open (EBUSY) after completing fs mutations
@@ -36,5 +37,6 @@ module.exports = {
   getInv,
   newFolder,
   run,
+  sandbox,
   tmp,
 }
