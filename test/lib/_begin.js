@@ -22,7 +22,18 @@ let json = i => JSON.stringify(i)
 function setup (t, dir, reuse, options) {
   process.exitCode = 0
   if (!reuse) {
-    rmSync(tmp, { recursive: true, force: true, maxRetries: 10, retryDelay: 50 })
+    // Best effort to clean up the tmp dir; Windows + Node.js 18 mysteriously breaks
+    try {
+      rmSync(tmp, { recursive: true, force: true, maxRetries: 10, retryDelay: 50 })
+    }
+    catch (err) {
+      if (process.platform.startsWith('win') &&
+          process.versions.node.startsWith('18')) { /* noop */ }
+      else {
+        console.log('Test cleanup error!')
+        t.fail(err)
+      }
+    }
   }
   mkdirSync(tmp, { recursive: true })
   if (!existsSync(tmp)) t.fail(`Failed to create ${tmp}`)
