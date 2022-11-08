@@ -13,6 +13,8 @@ jobs:
   test:
     # Setup
     runs-on: ${{ matrix.os }}
+    # Node.js does not have a build of 14.x for Apple Silicon
+  - if: matrix.os != 'self-hosted' && matrix.node-version != '14.x'
     strategy:
       matrix:
         node-version: [ 14.x, 16.x ]
@@ -20,11 +22,6 @@ jobs:
 
     # Go
     steps:
-    - if: matrix.os == 'self-hosted' && matrix.node-version == '14.x'
-      run: |
-        echo "Node.js does not have a build of 14.x for Apple Silicon"
-        exit 0
-      shell: bash
 
     - name: Check out repo
       uses: actions/checkout@v3
