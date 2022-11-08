@@ -1,5 +1,5 @@
 let test = require('tape')
-let { existsSync, mkdirSync, rmSync } = require('fs')
+let { existsSync } = require('fs')
 let { readFile } = require('fs/promises')
 let { join } = require('path')
 let cwd = process.cwd()
@@ -7,7 +7,6 @@ let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
 let { begin: _begin, newFolder, run, sandbox } = require(lib)
 let filePath = folder => join(folder, 'config.json')
-let reset = folder => rmSync(folder, { recursive: true, force: true })
 
 test('Run login tests', async t => {
   await run(runTests, t)
@@ -18,6 +17,7 @@ async function runTests (runType, t) {
   let mode = `[Login / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
+  let loginDir = 'login'
   let loggedIn = 'Successfully logged in!'
   let alreadyLoggedIn = 'You are already logged in, yay!'
   let port, pleaseAuth
@@ -34,9 +34,7 @@ async function runTests (runType, t) {
     t.plan(11)
     let file, folder, path, r
 
-    folder = newFolder('login')
-    // Safe to assume this folder exists, as it's where Begin is running
-    mkdirSync(folder, { recursive: true })
+    folder = newFolder(loginDir)
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
@@ -57,16 +55,13 @@ async function runTests (runType, t) {
     r = await begin('login', undefined, true)
     t.equal(r.stdout, alreadyLoggedIn, 'Got already logged in confirmation')
     t.equal(r.code, 0, 'Exited 0')
-    reset(folder)
   })
 
   t.test(`${mode} JSON`, async t => {
     t.plan(13)
     let file, folder, json, path, r
 
-    folder = newFolder('login')
-    // Safe to assume this folder exists, as it's where Begin is running
-    mkdirSync(folder, { recursive: true })
+    folder = newFolder(loginDir)
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
@@ -91,7 +86,6 @@ async function runTests (runType, t) {
     t.equal(json.ok, true, 'Got ok: true for login confirmation')
     t.equal(json.message, alreadyLoggedIn, 'Got already logged in confirmation')
     t.equal(r.code, 0, 'Exited 0')
-    reset(folder)
   })
 
   /**
