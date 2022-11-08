@@ -17,10 +17,10 @@ jobs:
       matrix:
         node-version: [ 14.x, 16.x ]
         os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
-      # Node.js does not have a build of 14.x for Apple Silicon
-      exclude:
-        os: self-hosted
-        node-version: 14.x
+        # Node.js does not have a build of 14.x for Apple Silicon
+        exclude:
+          os: self-hosted
+          node-version: 14.x
 
     # Go
     steps:
