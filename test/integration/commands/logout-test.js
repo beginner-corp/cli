@@ -1,5 +1,5 @@
 let test = require('tape')
-let { existsSync, mkdirSync, rmSync, writeFileSync } = require('fs')
+let { existsSync, mkdirSync, writeFileSync } = require('fs')
 let { readFile } = require('fs/promises')
 let { join } = require('path')
 let cwd = process.cwd()
@@ -7,7 +7,6 @@ let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
 let { begin: _begin, newFolder, run, sandbox } = require(lib)
 let filePath = folder => join(folder, 'config.json')
-let reset = folder => rmSync(folder, { recursive: true, force: true })
 
 test('Run logout tests', async t => {
   await run(runTests, t)
@@ -18,6 +17,7 @@ async function runTests (runType, t) {
   let mode = `[Logout / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
+  let logoutDir = 'logout'
   let loggedOut = 'Successfully logged out!'
   let alreadyLoggedOut = 'Cannot log out without a valid access token'
   let port
@@ -38,10 +38,8 @@ async function runTests (runType, t) {
     t.plan(6)
     let file, folder, path, r
 
-    folder = newFolder('logout')
-    // Safe to assume this folder exists, as it's where Begin is running
+    folder = newFolder(logoutDir)
     mkdirSync(folder, { recursive: true })
-
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
@@ -58,17 +56,14 @@ async function runTests (runType, t) {
     r = await begin('logout', undefined, true)
     t.equal(r.stderr, 'Error: ' + alreadyLoggedOut, 'Got already logged out error')
     t.equal(r.code, 1, 'Exited 1')
-    reset(folder)
   })
 
   t.test(`${mode} JSON`, async t => {
     t.plan(8)
     let file, folder, json, path, r
 
-    folder = newFolder('logout')
-    // Safe to assume this folder exists, as it's where Begin is running
+    folder = newFolder(logoutDir)
     mkdirSync(folder, { recursive: true })
-
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
@@ -89,7 +84,6 @@ async function runTests (runType, t) {
     t.equal(json.ok, false, 'Got ok: false for logout error')
     t.equal(json.error, alreadyLoggedOut, 'Got already logged out error')
     t.equal(r.code, 1, 'Exited 1')
-    reset(folder)
   })
 
   // /**

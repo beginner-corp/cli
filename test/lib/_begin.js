@@ -22,7 +22,7 @@ let json = i => JSON.stringify(i)
 function setup (t, dir, reuse, options) {
   process.exitCode = 0
   if (!reuse) {
-    rmSync(tmp, { recursive: true, force: true })
+    rmSync(tmp, { recursive: true, force: true, maxRetries: 10, retryDelay: 50 })
   }
   mkdirSync(tmp, { recursive: true })
   if (!existsSync(tmp)) t.fail(`Failed to create ${tmp}`)

@@ -13,7 +13,7 @@ async function runTests (runType, t) {
   let mode = `[New / ${runType}]`
   let begin = _begin[runType].bind({}, t)
 
-  let newAppDir = 'new-app'
+  let newAppDir = 'new'
   let appFound = /Existing Begin app already found in this directory/
 
   t.test(`${mode} new - normal`, async t => {
