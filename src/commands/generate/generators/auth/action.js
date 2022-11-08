@@ -81,6 +81,11 @@ node ./scripts/seed-accounts.js`)
       command,
       utils
     })
+
+
+
+
+
   }
 
 
