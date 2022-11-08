@@ -14,7 +14,7 @@ jobs:
     # Setup
     runs-on: ${{ matrix.os }}
     # Node.js does not have a build of 14.x for Apple Silicon
-  - if: matrix.os != 'self-hosted' && matrix.node-version != '14.x'
+    if: matrix.os != 'self-hosted' && matrix.node-version != '14.x'
     strategy:
       matrix:
         node-version: [ 14.x, 16.x ]
