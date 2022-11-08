@@ -5,14 +5,12 @@ async function action (params) {
   let { appVersion, args, cliDir } = params
   let { use } = args
 
-  let plat = process.platform
+  let { arch, platform: plat } = process
   let platform = plat === 'darwin' && 'darwin' ||
                  plat === 'linux' && 'linux' ||
                  plat === 'win32' && 'win32'
   let isMac = platform === 'darwin'
   let isWin = plat.startsWith('win')
-  // I know, test logic in business logic, but process.arch is immutable
-  let arch = process.env.__BEGIN_TEST_ARCH__ || process.arch
   // macOS is the only platform with arm64 releases (for now)
   let architecture = isMac && arch === 'arm64' ? 'arm64' : 'x64'
 
