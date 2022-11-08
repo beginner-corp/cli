@@ -22,12 +22,13 @@ async function action (params) {
 
   let config = JSON.parse(readFileSync(configFile))
   let { access_token, stagingAPI } = config
-  let domain = process.env.__BEGIN_TEST__
-    ? 'http://localhost:3333'
+  let { __BEGIN_TEST_URL__ } = process.env
+  let domain = __BEGIN_TEST_URL__
+    ? __BEGIN_TEST_URL__
     : `https://${stagingAPI ? 'staging-' : ''}api.begin.com`
   let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
 
-  if (!clientID && process.env.__BEGIN_TEST__) {
+  if (!clientID && __BEGIN_TEST_URL__) {
     clientID = 'test'
   }
   if (!clientID) {

@@ -2,11 +2,10 @@ let test = require('tape')
 let { existsSync, mkdirSync, rmSync, writeFileSync } = require('fs')
 let { readFile } = require('fs/promises')
 let { join } = require('path')
-let sandbox = require('@architect/sandbox')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run } = require(lib)
+let { begin: _begin, newFolder, run, sandbox } = require(lib)
 let filePath = folder => join(folder, 'config.json')
 let reset = folder => rmSync(folder, { recursive: true, force: true })
 
@@ -21,6 +20,7 @@ async function runTests (runType, t) {
 
   let loggedOut = 'Successfully logged out!'
   let alreadyLoggedOut = 'Cannot log out without a valid access token'
+  let port
 
   let config = JSON.stringify({
     access_token: 'foo',
@@ -29,7 +29,7 @@ async function runTests (runType, t) {
 
   t.test(`${mode} Start Sandbox`, async t => {
     t.plan(1)
-    await sandbox.start({ cwd: mock, quiet: true })
+    port = await sandbox.start({ cwd: mock })
 
     t.pass('Started Sandbox')
   })
@@ -45,7 +45,7 @@ async function runTests (runType, t) {
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
-    process.env.__BEGIN_TEST__ = true
+    process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
     r = await begin('logout', undefined, true)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
@@ -72,7 +72,7 @@ async function runTests (runType, t) {
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
-    process.env.__BEGIN_TEST__ = true
+    process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
     r = await begin('logout --json', undefined, true)
     json = JSON.parse(r.stdout)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)

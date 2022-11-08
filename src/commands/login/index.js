@@ -37,8 +37,9 @@ async function action (params) {
     config = JSON.parse(readFileSync(configFile))
   }
   let { access_token, device_code, stagingAPI } = config
-  let domain = process.env.__BEGIN_TEST__
-    ? 'http://localhost:3333'
+  let { __BEGIN_TEST_URL__ } = process.env
+  let domain = __BEGIN_TEST_URL__
+    ? __BEGIN_TEST_URL__
     : `https://${stagingAPI ? 'staging-' : ''}api.begin.com`
   let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
 
