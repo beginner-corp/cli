@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `export function checkRole(req, role) {
+  return `export function checkRole (req, role) {
   const { session = {} } = req
   const account = session.account
   const accountRoles = Object.values(account?.account?.roles || {} )
@@ -13,13 +13,13 @@ module.exports = function () {
   else return false
 }
 
-export function checkAccount(req) {
+export function checkAccount (req) {
   const { session = {} } = req
   const account = session?.account
   return account
 }
 
-export function checkPermissions(req, operation) {
+export function checkPermissions (req, operation) {
   const { session = {} } = req
   const account = session.account
   const accountPermissions = account?.permissions?.filter(Boolean)

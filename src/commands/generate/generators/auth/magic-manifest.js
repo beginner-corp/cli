@@ -20,7 +20,7 @@ let manifest = {
     // Pages
     { src: 'handlers/magic/pages/example-auth.js', target: 'app/pages/example-auth.mjs' },
     { src: 'handlers/magic/pages/login.js', target: 'src/plugins/authentication/routes/any-login/pages/login.html' },
-    { src: 'handlers/magic/pages/signup.js', target: 'src/plugins/authentication/routes/any-login/pages/signup.html' },
+    { src: 'handlers/magic/pages/signup.js', target: 'src/plugins/authentication/routes/any-signup/pages/signup.html' },
     { src: 'handlers/magic/pages/auth/register.js', target: 'src/plugins/authentication/routes/any-auth-catchall/pages/auth/register.mjs' },
     { src: 'handlers/magic/pages/auth/verify.js', target: 'src/plugins/authentication/routes/any-auth-catchall/pages/auth/verify.html' },
     { src: 'handlers/magic/pages/auth/welcome.js', target: 'src/plugins/authentication/routes/any-auth-catchall/pages/auth/welcome.mjs' },

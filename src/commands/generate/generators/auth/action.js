@@ -38,10 +38,28 @@ node ./scripts/seed-accounts.js`)
     // Install Dependencies
     await installAwsSdk(params)
 
-    let manifest = require('./magic-manifest')
-
     let { writeJsonSchema } = require('../scaffold/jsonschema')
 
+
+    let roleManifest = require('./roles-manifest')
+    let roleTable = require('./roles-table')
+    writeJsonSchema(roleTable.modelName, roleTable.schema, writeFile)
+    await generate(params, {
+      manifest: roleManifest,
+      project,
+      replacements: {
+        ...roleTable.modelName,
+        authRole: 'admin',
+        includeAuth: true,
+        routeName: roleTable.routeName,
+        schema: roleTable.schema,
+      },
+      command,
+      utils
+    })
+
+
+    let manifest = require('./magic-manifest')
     writeJsonSchema(modelName, schema, writeFile)
     await generate(params, {
       manifest,
@@ -56,5 +74,10 @@ node ./scripts/seed-accounts.js`)
       command,
       utils
     })
+
+
+
+
+
   }
 }
