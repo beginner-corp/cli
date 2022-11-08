@@ -40,10 +40,13 @@ function getPort (checking) {
 module.exports = {
   async start ({ cwd }) {
     let port = await getPort(3333)
+    // TODO: fix Sandbox (and this) to accept a ports property at some point?
+    process.env.ARC_INTERNAL_PORT = port + 100 // Yeah, this magic number can definitely break, but it's unlikely in a CI context
     await sandbox.start({ cwd, port, quiet: true })
     return port
   },
   async end () {
+    delete process.env.ARC_INTERNAL_PORT
     return sandbox.end()
   }
 }
