@@ -91,13 +91,13 @@ module.exports = async function (params) {
   // Starter project files
   // when you install @enhance/starter-project the manifest.json file is created
   // so we can read it instead of having to maintain a file list here.
-  let manifestPath = require.resolve('@enhance/starter-project/manifest.json')
-  let manifestData = readFileSync(manifestPath).toString()
-  let starterProjectManifest = JSON.parse(manifestData)
+  let nodeModules = join(__dirname, '..', '..', '..', 'node_modules')
+  let manifestPath = join(nodeModules, '@enhance', 'starter-project', 'manifest.json')
+  let starterProjectManifest = JSON.parse(readFileSync(manifestPath))
 
   // Create starter files
   starterProjectManifest.fileList.forEach(file => {
-    let input = require.resolve(file)
+    let input = join(nodeModules, file)
     let data = readFileSync(input)
     writeFile(p(shortenPath(input)), data)
   })
