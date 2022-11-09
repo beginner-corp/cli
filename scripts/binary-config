@@ -32,7 +32,7 @@ let config = {
       '../node_modules/@architect/sandbox/src/invoke-lambda/exec/runtimes/*',
       '../package.json',
       // Enhance stuff
-      '../node_modules/@enhance/**/*',
+      '../node_modules/@enhance/starter-project/**/*',
     ],
     targets: [],
     outputPath: 'build',
