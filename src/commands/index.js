@@ -28,11 +28,13 @@ module.exports = async function runCommand (params) {
   let cmd = params.cmd = _[0]
 
   let { isTTY, columns, rows } = process.stdout
+  let { versions: vers } = process
   printer.debug(
     `invocation\n` +
     `  which: ${process.argv[0]}\n` +
     `  args: ${JSON.stringify(args)}\n` +
     `  cmd: ${cmd}\n` +
+    `  vers: node: ${vers.node}, v8: ${vers.v8}\n` +
     `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows, ci: ${isCI}`
   )
 
