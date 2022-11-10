@@ -54,16 +54,27 @@ let kb = buf => Math.floor(buf.length / 1000)
       // 'begin-win-x64.exe': { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
     }
     // TODO disable this when our ARM runner is online
+    // TODO ↓ remove me! ↓
+    console.log(`isMacARM:`, isMacARM)
     if (isMacARM) {
       files = { 'begin-macos': { name, zip: 'begin-arm64-darwin.zip' } }
     }
+    // TODO ↓ remove me! ↓
+    console.log(`files:`, files)
 
     let channel = isProd ? 'latest' : 'main'
     let ACL = 'public-read'
     let CacheControl = 's-maxage=3600, max-age=3600, must-revalidate' // 1 hour
 
+    // TODO ↓ remove me! ↓
+    console.log(`channel:`, channel)
+
     for (let [ local, { name, zip } ] of Object.entries(files)) {
       let path = join(__dirname, '..', 'build', local)
+      // TODO ↓ remove me! ↓
+      console.log(`path:`, path)
+      // TODO ↓ remove me! ↓
+      console.log(`exists?`, existsSync(path))
       if (existsSync(path)) {
         let Zip = new admZip()
         let buf = await readFile(path)
