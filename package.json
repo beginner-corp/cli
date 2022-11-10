@@ -15,7 +15,8 @@
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
     "build": "cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
-    "deploy": "BUILD_ALL=true npm run build && scripts/deploy"
+    "publish": "BUILD_ALL=true npm run build && scripts/publish",
+    "deploy": "scripts/deploy"
   },
   "license": "Apache-2.0",
   "dependencies": {
