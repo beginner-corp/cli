@@ -57,7 +57,7 @@ let kb = buf => Math.floor(buf.length / 1000)
     // TODO ↓ remove me! ↓
     console.log(`isMacARM:`, isMacARM)
     if (isMacARM) {
-      files = { 'begin-macos': { name, zip: 'begin-arm64-darwin.zip' } }
+      files = { 'begin': { name, zip: 'begin-arm64-darwin.zip' } }
     }
     // TODO ↓ remove me! ↓
     console.log(`files:`, files)
