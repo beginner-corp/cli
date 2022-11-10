@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         node-version: [ 18.x ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
+        os: [ self-hosted ] #windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
 
     # Go
     steps:
