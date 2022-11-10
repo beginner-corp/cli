@@ -78,10 +78,6 @@ let platforms = {
   win32: `${nodeVer}-win-x64`,
 }
 
-// TODO ↓ remove me! ↓
-console.log(`BUILD_ALL:`, BUILD_ALL)
-console.log(`os:`, os)
-console.log(`arch:`, arch)
 if (BUILD_ALL === 'true') {
   // The self-hosted GHA Runner is currently only responsible for macOS arm64 builds
   if (os === 'darwin' && arch === 'arm64') {
@@ -103,8 +99,6 @@ else {
   let target = os === 'darwin' ? platforms[`darwin_${arch}`] : platforms[os]
   config.pkg.targets.push(target)
 }
-// TODO ↓ remove me! ↓
-console.log(`config.pkg.targets:`, config.pkg.targets)
 
 let path = join(__dirname, 'package.json')
 writeFileSync(path, JSON.stringify(config, null, 2))
