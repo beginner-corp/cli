@@ -14,7 +14,7 @@
     "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
-    "build": "cross-env scripts/binary-config && npx pkg scripts && rm -f commit",
+    "build": "cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
     "deploy": "BUILD_ALL=true npm run build && scripts/deploy"
   },
   "license": "Apache-2.0",
