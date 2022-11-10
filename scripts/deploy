@@ -67,7 +67,7 @@ let ssm = new aws.SSM({ region })
     console.log(`Updated dl.begin.com/latest`)
   }
   catch (err) {
-    console.log('Post-deploy failed!', err)
+    console.log('Deploy failed!', err)
     process.exit(1)
   }
 })()

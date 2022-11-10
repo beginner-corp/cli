@@ -63,7 +63,7 @@ let kb = buf => Math.floor(buf.length / 1000)
     }
   }
   catch (err) {
-    console.log('Deploy failed!', err)
+    console.log('Publish failed!', err)
     process.exit(1)
   }
 })()
