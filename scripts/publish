@@ -1,0 +1,69 @@
+#! /usr/bin/env node
+let { existsSync } = require('fs')
+let { readFile } = require('fs/promises')
+let { join } = require('path')
+let admZip = require('adm-zip')
+let aws = require('aws-sdk')
+let { getVersion, region } = require('./lib')
+
+let { DEPLOY, S3_BUCKET: Bucket } = process.env
+if (!Bucket) throw ReferenceError('Missing S3_BUCKET config!')
+if (!DEPLOY) throw ReferenceError('Missing DEPLOY config!')
+let valid = [ 'prod', 'main' ]
+if (!valid.includes(DEPLOY)) throw ReferenceError(`DEPLOY must be one of: ${valid.join(', ')}`)
+
+let s3 = new aws.S3({ region })
+let kb = buf => Math.floor(buf.length / 1000)
+
+;(async () => {
+  try {
+    let isProd = DEPLOY === 'prod'
+    let isMacARM = process.platform === 'darwin' && process.arch === 'arm64'
+    let version = await getVersion()
+
+    console.log(`Deploying Begin... (version: ${version}, DEPLOY: ${DEPLOY})`)
+    let name = 'begin'
+    let files = {
+      'begin-linux':    { name, zip: 'begin-x64-linux.zip' },
+      'begin-macos':    { name, zip: 'begin-x64-darwin.zip' },
+      'begin-win.exe':  { name: 'b.exe', zip: 'begin-x64-windows.zip' },
+
+      // Coming soon:
+      // 'begin-linux-x64': { name, zip: 'begin-x64-linux.zip' },
+      // 'begin-win-x64.exe': { name: 'begin.exe', zip: 'begin-x64-windows.zip' },
+    }
+    if (isMacARM) {
+      files = { 'begin': { name, zip: 'begin-arm64-darwin.zip' } }
+    }
+
+    let channel = isProd ? 'latest' : 'main'
+    let ACL = 'public-read'
+    let CacheControl = 's-maxage=3600, max-age=3600, must-revalidate' // 1 hour
+
+    for (let [ local, { name, zip } ] of Object.entries(files)) {
+      let path = join(__dirname, '..', 'build', local)
+      if (existsSync(path)) {
+        let Zip = new admZip()
+        let buf = await readFile(path)
+        Zip.addFile(name, buf)
+        let Body = Zip.toBuffer()
+        let Key = `releases/${channel}/${zip}`
+
+        console.log(`Loaded ${path}: ${kb(buf)} KB uncompresed`)
+        await s3.putObject({ ACL, Body, Bucket, Key, CacheControl }).promise()
+        console.log(`Uploaded ${path} to ${Key} (${kb(Body)} KB compressed)`)
+
+        if (isProd) {
+          let CopySource = `${Bucket}/releases/${channel}/${zip}`
+          let Key = `releases/${version}/${zip}`
+          await s3.copyObject({ ACL, CopySource, Key, Bucket }).promise()
+          console.log(`Copied ${CopySource} to ${Key}`)
+        }
+      }
+    }
+  }
+  catch (err) {
+    console.log('Deploy failed!', err)
+    process.exit(1)
+  }
+})()
