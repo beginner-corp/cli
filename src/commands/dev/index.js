@@ -11,11 +11,19 @@ async function action (params) {
   if (manifestErr) return manifestErr
 
   let cli = require('@architect/sandbox/src/cli')
+  let { chars } = require('@architect/utils')
   let c = require('picocolors')
-  let { debug, quiet, verbose } = args
+  let { debug, verbose } = args
+
   // TODO: output Sandbox start via printer
+  let ver = `Begin dev server (${appVersion})`
   let logLevel = debug ? 'debug' : undefined || verbose ? 'verbose' : undefined
-  console.error(c.blue(c.bold(`Begin dev server (${appVersion})`) + '\n'))
+  let quiet = logLevel ? false : true
+
+  if (!quiet) {
+    console.error(c.blue(c.bold(`Begin dev server (${appVersion})`) + '\n'))
+  }
+
   await cli({
     disableBanner: true,
     inventory,
@@ -25,6 +33,29 @@ async function action (params) {
     runtimeCheck: 'warn',
     symlink: args['disable-symlinks'],
   })
+
+  if (quiet) {
+    let isWin = process.platform.startsWith('win')
+    let ready = isWin
+      ? chars.done
+      : c.green(c.dim('❤︎'))
+    let readyMsg = c.white(`${ver} ready!`)
+    console.error(`${ready} ${readyMsg}`)
+
+    let { inv } = inventory
+    let { _project: { preferences }, http, ws } = inv
+    if (http || ws || inv.static) {
+      // HTTP port selection logic lifted from Sandbox, this may require occasional maintenance
+      let prefs = preferences?.sandbox?.ports
+      let { ARC_HTTP_PORT, PORT } = process.env
+      let n = idk => Number(idk)
+
+      let port = args.port || 3333
+      let specified = prefs?.http || n(port) || n(ARC_HTTP_PORT) || n(PORT)
+      let link = c.green(c.bold(c.underline(`http://localhost:${specified}\n`)))
+      process.stdout.write(link)
+    }
+  }
 }
 
 module.exports = {
