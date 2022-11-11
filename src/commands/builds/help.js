@@ -8,11 +8,11 @@ module.exports = {
         {
           name: '-a, --app <ID>',
           description: `App containing the environment`,
-          optional: true,
         },
         {
           name: '-e, --env <name|ID>',
           description: `Environment to get builds from`,
+          optional: true,
         },
       ],
     },
