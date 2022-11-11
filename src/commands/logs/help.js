@@ -1,9 +1,9 @@
 module.exports = {
   en: {
-    usage: [ 'logs' ],
+    usage: [ 'logs <parameters>', '[options]' ],
     description: 'List your Begin app logs',
     contents: {
-      header: 'List Logs',
+      header: 'List logs',
       items: [
         {
           name: '-a, --app <ID>',
@@ -11,8 +11,9 @@ module.exports = {
           optional: true,
         },
         {
-          name: '-e, --env',
-          description: `Environment to get logs from`,
+          name: '-e, --env <name|ID>',
+          description: `App environment to list logs from`,
+          optional: true,
         },
         {
           name: '-f, --filter',
@@ -22,12 +23,16 @@ module.exports = {
     },
     examples: [
       {
-        name: 'List logs',
-        example: 'begin logs --env <env-id>',
+        name: 'List logs (from within a single environment app)',
+        example: 'begin logs',
+      },
+      {
+        name: 'List logs (specifying an environment name)',
+        example: 'begin logs --env staging',
       },
       {
         name: 'List logs with filter',
-        example: 'begin logs --env <env-id> --filter "BAD REQUEST"',
+        example: 'begin logs --env staging --filter "GOT HERE"',
       },
     ]
   }
