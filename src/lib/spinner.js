@@ -9,13 +9,17 @@ let frames = [ '   ', '.  ', '.. ', '...' ]
 let timing = 333
 let interval, restore, lastLine
 
-function resetSpinner () {
+function resetSpinner (output) {
   if (interval) clearInterval(interval)
   if (lastLine) {
     out.clearLine()
     // Check to see if the line wrapped, otherwise we won't overwrite all old characters from the terminal buffer
     let trail = lastLine.length > process.stdout.columns ? '    ' : ''
-    console.error(`${lastLine}${trail}`)
+    // Allow a custom ending message; if present, make sure to clear out any leftover lastline chars
+    if (output && lastLine.length > output.length) {
+      trail = new Array(lastLine.length - output.length).join(' ')
+    }
+    console.error(`${output || lastLine}${trail}`)
     lastLine = undefined
   }
 }

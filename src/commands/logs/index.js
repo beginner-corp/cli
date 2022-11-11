@@ -5,11 +5,13 @@ async function action (params) {
   let c = require('picocolors')
   let error = require('./errors')(params)
   let client = require('@begin/api')
+  let { chars } = require('@architect/utils')
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getAppID, getConfig } = lib
+  let { checkManifest, getAppID, getConfig, spinner } = lib
   let { args } = params
+  let { verbose } = args
 
   let config = getConfig(params)
   if (!config.access_token) {
@@ -33,7 +35,6 @@ async function action (params) {
     return err
   }
   let { environments: envs } = app
-  let last = '└──'
 
   // Environment is required if app has more than one
   let env = args.env || args.e
@@ -55,19 +56,53 @@ async function action (params) {
     filter = ''
   }
 
-  console.error(`${c.white(c.bold(app.name))} (app ID: ${appID})`)
-  console.error(`${last} ${name} (env ID: ${envID}): ${c.green(url)}`)
 
-  let query = `fields @log, @logStream, @timestamp, @message | sort @timestamp desc`
-  let logs = await client.env.logs({ token, appID, envID, query, _staging })
-  if (!logs.length) {
-    return `    ${last} (no logs)`
+  spinner(`Loading latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
+  let logs = await client.env.logs({ token, appID, envID, _staging })
+  let logsQty = Object.keys(logs).length
+  if (!logsQty) {
+    spinner.done(`Loaded '${name}' log data from ${c.white(c.bold(app.name))} (${c.green(url)})`)
+    return `No logs found (last 12 hours)`
+  }
+  else {
+    let isWin = process.platform.startsWith('win')
+    let ready = isWin
+      ? chars.done
+      : c.green(c.dim('❤︎'))
+    spinner.done(`${ready} Loaded latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
   }
 
-  let isFiltered = ({ message }) => message?.includes(filter)
-  let format = ({ timestamp, message }) => `${c.cyan(timestamp)}:\n${message.trim()}`
-  let output = logs.filter(isFiltered).reverse().map(format).join('\n')
-  return output
+  let sortByTs = (a, b) => {
+    if (a.start < b.start) return -1
+    if (a.start > b.start) return 1
+    return 0
+  }
+
+  let formatted = logs.map(log => {
+    let { duration, initDuration, lambda, maxMemoryUsed, messages, start } = log
+    if (!messages && !verbose) return
+    let out = ''
+    if (!messages && verbose) {
+      out += `${c.green(c.bold(start))} (duration: ${duration})\n` +
+               `[ ${lambda} invoked, nothing logged ]\n\n`
+    }
+    if (messages) {
+      out += messages.sort(sortByTs).map(({ ts, msg }) => {
+        if (filter && !msg.includes(filter)) return ''
+
+        let date = verbose ? ts : new Date(ts).toLocaleString()
+        let dur = verbose ? ` (duration: ${duration})` : ''
+        let invoke = verbose ? `\n[ ${lambda} invoked; init duration: ${initDuration}, max memory used: ${maxMemoryUsed} ]` : ''
+        let str = `${c.green(c.bold(date))}` + dur + invoke + `\n${msg.trim()}`
+        return str
+      }).filter(Boolean).join('\n\n')
+    }
+    return out
+  }).filter(Boolean).join('')
+
+  if (formatted.length) console.error('')
+
+  return formatted
 }
 
 module.exports = {
