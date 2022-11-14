@@ -9,7 +9,7 @@ async function getVersion () {
   let isProd = DEPLOY === 'prod'
 
   if (isProd) {
-    let pkg = join(__dirname, '..', 'package.json')
+    let pkg = join(__dirname, '..', '..', 'package.json')
     let version = JSON.parse(await readFile(pkg)).version
     if (!version.match(/^\d+.\d+.\d+$/)) {
       let msg = `Only production major, minor, or patch releases can be shipped (got: ${version})`
