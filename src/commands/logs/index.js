@@ -9,7 +9,7 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getAppID, getConfig, spinner } = lib
+  let { checkManifest, getAppID, getConfig, pager, spinner } = lib
   let { args } = params
   let { verbose } = args
 
@@ -56,13 +56,12 @@ async function action (params) {
     filter = ''
   }
 
-
   spinner(`Loading latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
   let logs = await client.env.logs({ token, appID, envID, _staging })
   let logsQty = Object.keys(logs).length
   if (!logsQty) {
     spinner.done(`Loaded '${name}' log data from ${c.white(c.bold(app.name))} (${c.green(url)})`)
-    return `No logs found (last 12 hours)`
+    return `No logs found (last 12 hours; logs may take up to a minute to appear)`
   }
   else {
     let isWin = process.platform.startsWith('win')
@@ -92,17 +91,17 @@ async function action (params) {
 
         let date = verbose ? ts : new Date(ts).toLocaleString()
         let dur = verbose ? ` (duration: ${duration})` : ''
-        let invoke = verbose ? `\n[ ${lambda} invoked; init duration: ${initDuration}, max memory used: ${maxMemoryUsed} ]` : ''
+        let invoke = verbose
+          ? c.gray(`\n[ ${lambda} invoked; init duration: ${initDuration}, max memory used: ${maxMemoryUsed} ]`)
+          : ''
         let str = `${c.green(c.bold(date))}` + dur + invoke + `\n${msg.trim()}`
         return str
       }).filter(Boolean).join('\n\n')
     }
     return out
-  }).filter(Boolean).join('')
+  }).filter(Boolean).join('\n\n')
 
-  if (formatted.length) console.error('')
-
-  return formatted
+  return pager(params, formatted)
 }
 
 module.exports = {
