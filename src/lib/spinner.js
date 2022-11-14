@@ -26,8 +26,9 @@ function resetSpinner (output) {
 
 function spinner (output) {
   let isCI = process.env.CI || !process.stdout.isTTY
+  let isWin = process.platform.startsWith('win')
 
-  if (!isCI) {
+  if (!isCI && !isWin) {
     // Hide cursor, queue up cursor restore for when the process eventually terminates
     write('\u001B[?25l')
     if (!restore) restore = require('restore-cursor')
