@@ -70,6 +70,8 @@ let mutateArc = require('./mutate-arc')
 
 let npmCommands = require('./npm-commands')
 
+let pager = require('./pager')
+
 let runtimes = [ 'node', 'deno', 'ruby', 'python' ]
 
 let spinner = require('./spinner')
@@ -109,6 +111,7 @@ module.exports = {
   httpMethods,
   mutateArc,
   npmCommands,
+  pager,
   runtimes,
   spinner,
   writeFile,
