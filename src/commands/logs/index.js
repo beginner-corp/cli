@@ -56,6 +56,9 @@ async function action (params) {
     filter = ''
   }
 
+  // Send to pager
+  let usePager = args.pager || args.p
+
   spinner(`Loading latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
   let logs = await client.env.logs({ token, appID, envID, _staging })
   let logsQty = Object.keys(logs).length
@@ -101,7 +104,7 @@ async function action (params) {
     return out
   }).filter(Boolean).join('\n\n')
 
-  return pager(params, formatted)
+  return usePager ? pager(params, formatted) : formatted
 }
 
 module.exports = {

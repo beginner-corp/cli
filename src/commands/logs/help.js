@@ -19,6 +19,10 @@ module.exports = {
           name: '-f, --filter',
           description: `Filter to apply against logs`,
         },
+        {
+          name: '-p, --pager',
+          description: `Send log output to system pager`,
+        },
       ],
     },
     examples: [
