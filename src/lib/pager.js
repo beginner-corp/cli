@@ -2,9 +2,14 @@ module.exports = function pager (params, output) {
   let { args, isCI } = params
   let { debug } = args
   let c = require('picocolors')
-  let banner = c.bold(c.white(`–––––––––– Press q to exit log view ––––––––––`)) + '\n\n'
-
   let isWin = process.platform.startsWith('win')
+
+  let msg = ' Press q to exit log view '
+  let hrSize = Math.floor((process.stdout.columns - msg.length) / 2)
+  let dash = isWin ? '-' : '–'
+  let hr = Array(hrSize).join(dash)
+  let banner = c.bold(c.white(`${hr}${msg}${hr}`)) + '\n\n'
+
   if (isCI || debug) return output
   else if (isWin) {
     // Unlike *nix, Windows only comes bundled with `more` + `echo` (vs. `less` + `printf`)
