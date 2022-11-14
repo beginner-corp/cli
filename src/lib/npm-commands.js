@@ -9,7 +9,7 @@ function install (params, opts) {
     let { verbose, debug } = params.args
 
     spinner(opts.msg)
-    let child = spawn(cmd, args, { cwd: opts?.cwd })
+    let child = spawn(cmd, args, { cwd: opts?.cwd, shell: true })
     let output = []
     if (verbose || debug) spinner.done()
     let out = data => {
