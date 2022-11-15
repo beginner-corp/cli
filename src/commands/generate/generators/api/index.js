@@ -19,11 +19,11 @@ module.exports = {
         examples: [
           {
             name: 'Create a new API route',
-            example: 'begin new api --path /notes',
+            example: 'begin gen api --path /notes',
           },
           {
             name: 'Create a new API route with path parameter',
-            example: `begin new api --path '/notes/$id'`,
+            example: `begin gen api --path '/notes/$id'`,
           }
         ]
       }
