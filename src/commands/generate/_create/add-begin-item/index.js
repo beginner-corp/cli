@@ -1,8 +1,9 @@
 function nameHandlerFile ({ path, prefix, runtime }) {
   let { join } = require('path')
   let cwd = process.cwd()
+  let name = path === '/' ? 'index' : path
   let ext = runtime === 'html' ? '.html' : '.mjs'
-  return join(cwd, prefix, `${path}${ext}`)
+  return join(cwd, prefix, `${name}${ext}`)
 }
 
 module.exports = async function create ({ path, prefix, handler, lang, runtime }, params) {
