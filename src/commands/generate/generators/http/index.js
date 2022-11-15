@@ -30,7 +30,7 @@ module.exports = {
         examples: [
           {
             name: 'Create a new HTTP route',
-            example: 'begin new http --method get --path /',
+            example: 'begin gen http --method get --path /',
           }
         ]
       },
