@@ -31,19 +31,19 @@ module.exports = {
       examples: [
         {
           name: 'Create a new scheduled event that runs every day',
-          example: 'begin new scheduled --name my-task --rate "1 day"',
+          example: 'begin gen scheduled --name my-task --rate "1 day"',
         },
         {
           name: 'Create a new scheduled event that runs every 15 minutes',
-          example: 'begin new scheduled --name my-task --rate "15 minutes"',
+          example: 'begin gen scheduled --name my-task --rate "15 minutes"',
         },
         {
           name: 'Create a new scheduled event that runs at 10:15 AM (UTC) every day',
-          example: 'begin new scheduled --name my-task --cron "15 10 * * ? *"',
+          example: 'begin gen scheduled --name my-task --cron "15 10 * * ? *"',
         },
         {
           name: 'Create a new scheduled event that runs at 6:00 PM Monday through Friday',
-          example: 'begin new scheduled --name my-task --cron "0 18 ? * MON-FRI *"',
+          example: 'begin gen scheduled --name my-task --cron "0 18 ? * MON-FRI *"',
         }
       ]
     }
