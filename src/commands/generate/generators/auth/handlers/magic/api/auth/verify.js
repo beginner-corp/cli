@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `import db from '@begin/data'
+  return /*javascript*/`import db from '@begin/data'
 import { getAccounts } from '../../node_modules/@architect/views/models/accounts.mjs'
 
 /**
@@ -31,7 +31,7 @@ export async function get (req){
     }
     if (!account) {
       try {
-        const allowList = await import('../../models/auth/allow-list.mjs')
+        const allowList = await import('../../node_modules/@architect/views/models/auth/allow-list.mjs')
         account = allowList.default.find(i => i.email === sessionInfo.email)
       } 
       catch(e) {

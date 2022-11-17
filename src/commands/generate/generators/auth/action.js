@@ -14,70 +14,74 @@ module.exports = async function action (params, utils, command) {
     return error('oauth_plugin_already_installed')
   }
 
+
+  let prefsFile = project.localPreferencesFile
+  let { readFileSync } = require('fs')
+  let prefs = readFileSync(prefsFile, 'utf8')
+  if (!project.localPreferences?.['sandbox-startup']) {
+    prefs += `@sandbox-startup
+node ./scripts/seed-accounts.js`
+    writeFile(prefsFile, prefs)
+  }
+  else if (!project.localPreferences['sandbox-startup'].includes('node ./scripts/seed-accounts.js')){
+    prefs = prefs.replace('@sandbox-startup', `@sandbox-startup
+node ./scripts/seed-accounts.js`)
+    writeFile(prefsFile, prefs)
+  }
+  // Install Dependencies
+  await installAwsSdk(params)
+
+  let { writeJsonSchema } = require('../scaffold/jsonschema')
+
+
+  let roleManifest = require('./roles-manifest')
+  let roleTable = require('./roles-table')
+  writeJsonSchema(roleTable.modelName, roleTable.schema, writeFile)
+  await generate(params, {
+    manifest: roleManifest,
+    project,
+    replacements: {
+      ...roleTable.modelName,
+      authRole: 'admin',
+      includeAuth: true,
+      routeName: roleTable.routeName,
+      schema: roleTable.schema,
+    },
+    command,
+    utils
+  })
+
+  let accountManifest = require('./accounts-manifest')
+  let accountsTable = require('./accounts-table')
+  writeJsonSchema(accountsTable.modelName, accountsTable.schema, writeFile)
+  await generate(params, {
+    manifest: accountManifest,
+    project,
+    replacements: {
+      ...accountsTable.modelName,
+      authRole: 'admin',
+      includeAuth: true,
+      routeName: accountsTable.routeName,
+      schema: accountsTable.schema,
+    },
+    command,
+    utils
+  })
+
   let authType = args.type || args.t
   if (authType === 'oauth') {
     let manifest = require('./oauth-manifest')
     await generate(params, { manifest, command, project, utils })
   }
   else if (!authType || authType === 'magic-link') {
-    let { routeName, modelName, schema } = require('./accounts-table')
-    let prefsFile = project.localPreferencesFile
-    let { readFileSync } = require('fs')
-    let prefs = readFileSync(prefsFile, 'utf8')
-    if (!project.localPreferences?.['sandbox-startup']) {
-      prefs += `@sandbox-startup
-node ./scripts/seed-accounts.js`
-      writeFile(prefsFile, prefs)
-    }
-    else if (!project.localPreferences['sandbox-startup'].includes('node ./scripts/seed-accounts.js')){
-      prefs = prefs.replace('@sandbox-startup', `@sandbox-startup
-node ./scripts/seed-accounts.js`)
-      writeFile(prefsFile, prefs)
-    }
-
-    // Install Dependencies
-    await installAwsSdk(params)
-
-    let { writeJsonSchema } = require('../scaffold/jsonschema')
-
-
-    let roleManifest = require('./roles-manifest')
-    let roleTable = require('./roles-table')
-    writeJsonSchema(roleTable.modelName, roleTable.schema, writeFile)
-    await generate(params, {
-      manifest: roleManifest,
-      project,
-      replacements: {
-        ...roleTable.modelName,
-        authRole: 'admin',
-        includeAuth: true,
-        routeName: roleTable.routeName,
-        schema: roleTable.schema,
-      },
-      command,
-      utils
-    })
-
-
     let manifest = require('./magic-manifest')
-    writeJsonSchema(modelName, schema, writeFile)
     await generate(params, {
       manifest,
       project,
-      replacements: {
-        ...modelName,
-        authRole: 'admin',
-        includeAuth: true,
-        routeName,
-        schema,
-      },
       command,
       utils
     })
-
-
-
-
-
   }
+
+
 }

@@ -1,3 +1,4 @@
+.DS_STORE
 .nyc_output/
 build
 commit
@@ -8,3 +9,6 @@ node_modules/
 scratch/
 scripts/package.json
 test/tmp/
+/test-results/
+/playwright-report/
+/playwright/.cache/

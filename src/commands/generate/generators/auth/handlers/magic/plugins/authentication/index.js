@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `
+  return /* javascript*/`
   let { join } = require('path')
 
 module.exports = {
@@ -19,37 +19,37 @@ module.exports = {
         {
           method: 'any',
           path: '/auth/*',
-          src: join(customRoutes,'any-auth-catchall'),
+          src: join(customRoutes, 'any-auth-catchall'),
           config: {
             // shared: false,
-            views: false,
+            views: true,
           }
         },
         {
           method: 'any',
           path: '/login',
-          src: join(customRoutes,'any-login'),
+          src: join(customRoutes, 'any-login'),
           config: {
             // shared: false,
-            views: false,
+            views: true,
           }
         },
         {
           method: 'any',
           path: '/signup',
-          src: join(customRoutes,'any-signup'),
+          src: join(customRoutes, 'any-signup'),
           config: {
             // shared: false,
-            views: false,
+            views: true,
           }
         },
         {
           method: 'post',
           path: '/logout',
-          src: join(customRoutes,'post-logout'),
+          src: join(customRoutes, 'post-logout'),
           config: {
             // shared: false,
-            views: false,
+            views: true,
           }
         },
       ]
