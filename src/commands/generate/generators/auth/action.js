@@ -82,8 +82,20 @@ node ./scripts/seed-accounts.js`)
       utils
     })
 
-
-
+  let authType = args.type || args.t
+  if (authType === 'oauth') {
+    let manifest = require('./oauth-manifest')
+    await generate(params, { manifest, command, project, utils })
+  }
+  else if (!authType || authType === 'magic-link') {
+    let manifest = require('./magic-manifest')
+    await generate(params, {
+      manifest,
+      project,
+      command,
+      utils
+    })
+  }
 
 
   }
