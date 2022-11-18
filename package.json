@@ -21,7 +21,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "9.0.9",
-    "@architect/inventory": "3.3.2",
+    "@architect/inventory": "3.3.3",
     "@architect/parser": "6.0.2",
     "@architect/sandbox": "5.3.5",
     "@architect/utils": "3.1.2",
