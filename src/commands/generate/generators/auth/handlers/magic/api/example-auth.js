@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `import {checkRole, checkAccount} from '../models/auth/auth-check.mjs'
+  return /* javascript*/`import {checkRole, checkAccount} from '../models/auth/auth-check.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}
