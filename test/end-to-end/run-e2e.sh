@@ -18,21 +18,21 @@ node $BEGIN_CLI generate auth
 cd $SCRIPT_DIR 
 
 # Test login with magic link
-npx playwright test get-magiclink.spec.js
+npx playwright test get-magiclink.spec.js 
 sleep 1
 magiclink=$(grep "Login Link:" $SCRIPT_DIR/sandbox-output.tmp.txt | tail -1 | sed 's/Login Link:  //')
-PLAYWRIGHT_MAGICLINK=$magiclink npx playwright test use-magiclink.spec.js
+PLAYWRIGHT_MAGICLINK=$magiclink npx playwright test use-magiclink.spec.js 
 
 # Test login with magic link
-npx playwright test get-allow-list-link.spec.js
+npx playwright test get-allow-list-link.spec.js 
 sleep 1
 # TODO: if no link found it will get the previous link
 hardcodedmagiclink=$(grep "Login Link:" $SCRIPT_DIR/sandbox-output.tmp.txt | tail -1 | sed 's/Login Link:  //' )
-PLAYWRIGHT_MAGICLINK=$hardcodedmagiclink npx playwright test use-allow-list-link.spec.js
+PLAYWRIGHT_MAGICLINK=$hardcodedmagiclink npx playwright test use-allow-list-link.spec.js 
 
 
 # Test signup for new account
-npx playwright test request-signup.spec.js
+npx playwright test request-signup.spec.js 
 sleep 1
 # TODO: if no link found it will get the previous link
 signupmagiclink=$(grep "Login Link:" $SCRIPT_DIR/sandbox-output.tmp.txt | tail -1 | sed 's/Login Link:  //' )
@@ -42,7 +42,7 @@ signupmagiclink=$(grep "Login Link:" $SCRIPT_DIR/sandbox-output.tmp.txt | tail -
 #   echo "No Signup Link Found"
 #   exit 1 # Fail if no link found
 # fi
-PLAYWRIGHT_MAGICLINK=$signupmagiclink npx playwright test complete-signup.spec.js
+PLAYWRIGHT_MAGICLINK=$signupmagiclink npx playwright test complete-signup.spec.js 
 
 
 exit

@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `import crypto from 'crypto'
+  return /* javascript*/`import crypto from 'crypto'
 import arc from '@architect/functions'
 
 /**
@@ -22,7 +22,7 @@ export async function post (req) {
 
   return {
     session: {},
-    html: '<div>Check email for link</div>'
+    html: '<div>Check the console for link</div>'
   }
 }
 `

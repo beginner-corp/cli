@@ -9,7 +9,7 @@ module.exports = {
       return [
         {
           name: 'auth-link',
-          src: join(__dirname, 'events', 'auth-link')
+          src: join(__dirname, 'jobs', 'auth-link')
         }
       ]
     },

@@ -8,5 +8,5 @@ test('Signup Request', async ({ page }) => {
   await page.keyboard.press('Enter')
 
   await expect(page).toHaveURL('/signup')
-  await page.waitForSelector('text="Check email for link"')
+  await page.waitForSelector('text="Check the console for link"')
 })

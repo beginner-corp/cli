@@ -15,6 +15,6 @@ test('Request a Magic Link', async ({ page }) => {
 
   // Expects the URL to contain intro.
   await expect(page).toHaveURL('/login')
-  await page.waitForSelector('text="Check email for link"')
+  await page.waitForSelector('text="Check the console for link"')
 
 })

@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `// View documentation at: https://enhance.dev/docs/learn/starter-project/api
+  return /* javascript*/`// View documentation at: https://enhance.dev/docs/learn/starter-project/api
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */

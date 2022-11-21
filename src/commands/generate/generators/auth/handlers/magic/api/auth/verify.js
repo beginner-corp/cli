@@ -1,5 +1,5 @@
 module.exports = function () {
-  return /*javascript*/`import db from '@begin/data'
+  return /* javascript*/`import db from '@begin/data'
 import { getAccounts } from '../../node_modules/@architect/views/models/accounts.mjs'
 
 /**

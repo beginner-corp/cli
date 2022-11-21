@@ -1,5 +1,5 @@
 module.exports = function () {
-  return `/**
+  return /* javascript*/`/**
  * @type {import('@enhance/types').EnhanceApiFn}
  */
 export async function post () {
