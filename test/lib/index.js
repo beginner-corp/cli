@@ -34,6 +34,7 @@ async function getInv (t, cwd) {
 module.exports = {
   begin,
   capture,
+  defaultNoOfLambdas: 4,
   getInv,
   newFolder,
   run,

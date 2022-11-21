@@ -2,7 +2,7 @@ let test = require('tape')
 let { existsSync } = require('fs')
 let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, getInv, newFolder, run } = require(lib)
+let { begin: _begin, defaultNoOfLambdas, getInv, newFolder, run } = require(lib)
 
 test('Run generate tests', async t => {
   await run(runTests, t)
@@ -30,11 +30,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, defaultNoOfLambdas, 'Project has a single Lambda')
 
     r = await begin('generate http -m get -p /js', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 1 + defaultNoOfLambdas, 'Project has an extra Lambda')
     lambda = i.get.http('get /js')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(!existsSync(lambda.configFile), 'Did not write Lambda config')
@@ -45,7 +45,7 @@ async function runTests (runType, t) {
 
     r = await begin('generate http -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 2 + defaultNoOfLambdas, 'Project has two extra Lambda')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -57,7 +57,7 @@ async function runTests (runType, t) {
 
     r = await begin('generate http -m PUT -p /default', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3 + defaultNoOfLambdas, 'Project has three extra Lambda')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -125,11 +125,11 @@ async function runTests (runType, t) {
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
-    t.equal(i.inv.lambdaSrcDirs.length, 2, 'Project has a single Lambda')
+    t.equal(i.inv.lambdaSrcDirs.length, defaultNoOfLambdas, 'Project has a single Lambda')
 
     r = await begin('generate http -m get -p /js --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 3, 'Project now has two Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 1 + defaultNoOfLambdas, 'Project has an extra Lambda')
     lambda = i.get.http('get /js')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
     t.ok(!existsSync(lambda.configFile), 'Did not write Lambda config')
@@ -141,7 +141,7 @@ async function runTests (runType, t) {
 
     r = await begin('generate http -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 4, 'Project now has three Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 2 + defaultNoOfLambdas, 'Project has two extra Lambda')
     lambda = i.get.http('get /default')
     t.equal(lambda.method, 'get', 'Used default lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
@@ -154,7 +154,7 @@ async function runTests (runType, t) {
 
     r = await begin('generate http -m PUT -p /default --json', cwd, true)
     i = await getInv(t, cwd)
-    t.equal(i.inv.lambdaSrcDirs.length, 5, 'Project now has four Lambdas')
+    t.equal(i.inv.lambdaSrcDirs.length, 3 + defaultNoOfLambdas, 'Project has three extra Lambda')
     lambda = i.get.http('put /default')
     t.equal(lambda.method, 'put', 'Used put for lambda method')
     t.ok(existsSync(lambda.handlerFile), 'Wrote Lambda handler')
