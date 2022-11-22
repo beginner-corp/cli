@@ -37,7 +37,7 @@ an-event
   t.equal(result, after, 'Inserted item into correct pragma, preserved comments + newlines')
 })
 
-test('Item insert (map)', t => {
+test('Item insert (map after complex (map))', t => {
   t.plan(1)
   let before = `
 @http
@@ -62,7 +62,46 @@ get /a    # a comment
   t.equal(result, after, 'Inserted item into correct pragma, preserved comments + newlines')
 })
 
-test('Item insert (vector)', t => {
+test('Item insert (map after scalar (string))', t => {
+  t.plan(1)
+  let before = `
+@pragma
+string-item
+`
+
+  let after = `
+@pragma
+string-item
+map-item
+  one two
+`
+
+  let item = 'map-item\n  one two'
+  let pragma = 'pragma'
+  let result = mutateArc.upsert({ item, pragma, raw: before })
+  t.equal(result, after, 'Mutated arc file wite map items')
+})
+
+test('Item insert, no trailing newline (map after scalar (string))', t => {
+  t.plan(1)
+  let before = `
+@pragma
+string-item`
+
+  let after = `
+@pragma
+string-item
+map-item
+  one two
+`
+
+  let item = 'map-item\n  one two'
+  let pragma = 'pragma'
+  let result = mutateArc.upsert({ item, pragma, raw: before })
+  t.equal(result, after, 'Mutated arc file wite map items')
+})
+
+test('Item insert (vector after complex (vector))', t => {
   t.plan(1)
   let before = `
 @idk
@@ -77,6 +116,29 @@ something
 something
   a
   b
+something-else
+  b
+  c
+
+# comment
+`
+  let item = 'something-else\n  b\n  c'
+  let pragma = 'idk'
+  let result = mutateArc.upsert({ item, pragma, raw: before })
+  t.equal(result, after, 'Inserted item into correct pragma, preserved comments + newlines')
+})
+
+test('Item insert (vector after scalar (string))', t => {
+  t.plan(1)
+  let before = `
+@idk
+hi
+
+# comment
+`
+  let after = `
+@idk
+hi
 something-else
   b
   c
@@ -137,7 +199,7 @@ get /a
   t.equal(result, after, 'Inserted missing pragma, preserved comments + newlines')
 })
 
-test('Updateable item insert', t => {
+test('Updatable item insert', t => {
   t.plan(1)
   let before = `
 @arc
