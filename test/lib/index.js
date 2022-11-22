@@ -22,6 +22,8 @@ let run = async (runTests, t) => {
   }
 }
 
+let defaultNumberOfLambdas = 4
+
 async function getInv (t, cwd) {
   try {
     return inventory({ cwd })
@@ -34,7 +36,7 @@ async function getInv (t, cwd) {
 module.exports = {
   begin,
   capture,
-  defaultNoOfLambdas: 4,
+  defaultNumberOfLambdas,
   getInv,
   newFolder,
   run,
