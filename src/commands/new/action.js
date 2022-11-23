@@ -89,8 +89,8 @@ module.exports = async function (params) {
 .DS_Store
 **/static.json
 node_modules
-package-lock.json
 public/bundles
+public/pages
 sam.json
 sam.yaml
 `
