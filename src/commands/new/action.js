@@ -60,8 +60,11 @@ module.exports = async function (params) {
 
   writeFile(p('package.json'), JSON.stringify(packageJson, null, 2))
 
+  // Read .arc file from starter project
+  let arcPath = join(nodeModules, '@enhance', 'starter-project', '.arc')
+  let arc = readFileSync(arcPath).toString().replace('myproj', appName)
+
   // Write the new Arc project manifest
-  let arc = `@app\n${appName}\n\n@plugins\nenhance/arc-plugin-enhance\n\n@bundles\n@enhance-styles\n`
   writeFile(p('.arc'), arc)
 
   // Create starter app folders
