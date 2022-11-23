@@ -43,45 +43,28 @@ module.exports = async function (params) {
     return error('invalid_appname')
   }
 
-  // write package.json
-  let packageJson = {
-    'name': `${appName}`,
-    'version': '0.0.1',
-    'scripts': {
-      'start': 'begin dev',
-      'lint': 'eslint ./app/**/*.mjs --fix'
-    },
-    'devDependencies': {
-      '@enhance/types': 'latest',
-      'eslint': 'latest'
-    },
-    'dependencies': {
-      '@enhance/arc-plugin-enhance': 'latest'
-    },
-    'eslintConfig': {
-      'env': {
-        'node': true
-      },
-      'extends': 'eslint:recommended',
-      'rules': {
-        'indent': [
-          'error',
-          2
-        ]
-      },
-      'ignorePatterns': [],
-      'parserOptions': {
-        'sourceType': 'module',
-        'ecmaVersion': 2022
-      }
-    }
-  }
+  let nodeModules = join(__dirname, '..', '..', '..', 'node_modules')
+
+  // Read package.json from starter project
+  let packagePath = join(nodeModules, '@enhance', 'starter-project', 'package.json')
+  let packageJson = JSON.parse(readFileSync(packagePath))
+
+  // Tweak settings for new project
+  packageJson.name = appName
+  packageJson.version = '0.0.1'
+  packageJson.scripts.start = 'begin dev'
+  delete packageJson.scripts.postinstall
+  delete packageJson.devDependencies['@architect/sandbox']
+
   let p = file => join(projectPath, file)
 
   writeFile(p('package.json'), JSON.stringify(packageJson, null, 2))
 
+  // Read .arc file from starter project
+  let arcPath = join(nodeModules, '@enhance', 'starter-project', '.arc')
+  let arc = readFileSync(arcPath).toString().replace('myproj', appName)
+
   // Write the new Arc project manifest
-  let arc = `@app\n${appName}\n\n@plugins\nenhance/arc-plugin-enhance\n\n@bundles\n@enhance-styles\n`
   writeFile(p('.arc'), arc)
 
   // Create starter app folders
@@ -91,7 +74,6 @@ module.exports = async function (params) {
   // Starter project files
   // when you install @enhance/starter-project the manifest.json file is created
   // so we can read it instead of having to maintain a file list here.
-  let nodeModules = join(__dirname, '..', '..', '..', 'node_modules')
   let manifestPath = join(nodeModules, '@enhance', 'starter-project', 'manifest.json')
   let starterProjectManifest = JSON.parse(readFileSync(manifestPath))
 
@@ -107,8 +89,8 @@ module.exports = async function (params) {
 .DS_Store
 **/static.json
 node_modules
-package-lock.json
 public/bundles
+public/pages
 sam.json
 sam.yaml
 `
