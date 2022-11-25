@@ -28,6 +28,10 @@ let help = {
             description: 'View build logs from app deployments',
           },
           {
+            name: 'create',
+            description: 'Create a Begin app or environment',
+          },
+          {
             name: 'deploy',
             description: 'Deploy an app to Begin',
           },
