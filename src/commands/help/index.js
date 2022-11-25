@@ -44,6 +44,10 @@ let help = {
             description: `List your Begin app's environment variables`,
           },
           {
+            name: 'list',
+            description: 'List your Begin apps and environments',
+          },
+          {
             name: 'login',
             description: 'Log into Begin',
           },
