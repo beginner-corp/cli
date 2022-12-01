@@ -5,7 +5,7 @@ let { join } = require('path')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run, sandbox } = require(lib)
+let { begin: _begin, newFolder, run, start, shutdown } = require(lib)
 let filePath = folder => join(folder, 'hi.txt')
 
 test('Run update tests', async t => {
@@ -26,10 +26,8 @@ async function runTests (runType, t) {
   let failed = /Failed to check latest version/
   let port
 
-  t.test(`${mode} Start Sandbox`, async t => {
-    t.plan(1)
-    port = await sandbox.start({ cwd: mock })
-    t.pass('Started Sandbox')
+  t.test(`${mode} Start dev server`, async t => {
+    port = await start[runType](t, mock)
   })
 
   if (process.arch === 'x64') {
@@ -159,13 +157,11 @@ async function runTests (runType, t) {
     t.equal(r.code, 1, 'Exited 1')
   })
 
-  t.test(`${mode} Shut down sandbox`, async t => {
-    t.plan(1)
-    await sandbox.end()
+  t.test(`${mode} Shut down dev server`, t => {
+    shutdown(t)
     process.exitCode = 0
     delete process.env.BEGIN_INSTALL
     delete process.env.__BEGIN_TEST_URL__
-    t.pass('Shut down Sandbox')
   })
 }
 

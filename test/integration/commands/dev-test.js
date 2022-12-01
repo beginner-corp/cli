@@ -3,7 +3,7 @@ let { writeFileSync } = require('fs')
 let { join } = require('path')
 let tiny = require('tiny-json-http')
 let lib = join(process.cwd(), 'test', 'lib')
-let { createTmpFolder, newFolder, run, startup, shutdown } = require(lib)
+let { createTmpFolder, newFolder, run, start, shutdown } = require(lib)
 
 let arc = `@app
 hi
@@ -13,7 +13,7 @@ hi
   method get
   src .
 `
-let url = 'http://localhost:3333'
+let url
 
 test('Run new tests', async t => {
   await run(runTests, t)
@@ -35,7 +35,8 @@ async function runTests (runType, t) {
     let handler = `exports.handler = async req => req`
     writeFileSync(handlerFile, handler)
 
-    await startup[runType](t, cwd)
+    let port = await start[runType](t, cwd)
+    url = `http://localhost:${port}`
   })
 
   t.test(`${mode} get /`, t => {
