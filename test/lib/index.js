@@ -5,8 +5,7 @@ let inventory = require('@architect/inventory')
 let begin = require('./_begin')
 let capture = require('./_capture')
 let createTmpFolder = require('./_create-tmp-folder')
-let sandbox = require('./_sandbox')
-let { startup, shutdown } = require('./_startup-shutdown')
+let { start, shutdown } = require('./_start-shutdown')
 let tmp = require('./_tmp-dir')
 
 // Unlike *nix systems, Windows mysteriously kept file handles open (EBUSY) after completing fs mutations
@@ -43,8 +42,7 @@ module.exports = {
   getInv,
   newFolder,
   run,
-  sandbox,
-  startup,
+  start,
   shutdown,
   tmp,
 }
