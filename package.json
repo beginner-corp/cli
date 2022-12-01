@@ -9,9 +9,10 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "npm run lint && npm run coverage && npm run test:integration",
+    "test": "npm run lint && npm run coverage && npm run test:integration && npm run test:integration:slow",
     "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
     "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc",
+    "test:integration:slow": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test-slow.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
     "build": "cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
