@@ -52,7 +52,7 @@ async function installDependencies (params, dependencies) {
 }
 
 async function initialInstall (params, cwd) {
-  if (process.env.NODE_ENV !== 'testing') {
+  if (process.env.__SLOW__ || process.env.NODE_ENV !== 'testing') {
     return install(params, { cwd, msg: 'Installing dependencies' })
   }
 }
