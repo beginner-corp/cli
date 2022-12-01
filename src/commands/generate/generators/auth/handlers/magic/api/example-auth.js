@@ -1,12 +1,12 @@
 module.exports = function () {
-  return `import {checkRole} from '../models/auth/auth-check.mjs'
+  return /* javascript*/`import { checkAuth } from '../models/auth/auth-check.mjs'
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}
  */
 export async function get (req) {
-  const account = checkRole(req)
-  const admin = checkRole(req, 'admin' )
+  const account = checkAuth(req)
+  const admin = checkAuth(req, 'admin' )
   if (account) {
     return {
       json: { account, admin  }

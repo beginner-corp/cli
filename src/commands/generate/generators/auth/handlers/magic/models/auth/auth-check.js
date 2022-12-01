@@ -1,14 +1,16 @@
 module.exports = function () {
-  return `export function checkRole (req, role) {
+  return /* javascript*/`export function checkAuth (req, role) {
   const { session = {} } = req
   const account = session.account
   const accountRoles = Object.values(account?.account?.roles || {} )
 
-  if (!role) {
-    return account
-  }
-  else if (accountRoles?.includes(role)) {
-    return true
-  }
-  else return false
+  if (!account) return false
+
+  if (account && !role) return account
+
+  if (accountRoles?.includes(role)) return true
+    
+  return false
+
+}`
 }
