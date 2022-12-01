@@ -14,7 +14,7 @@ export async function get (req) {
   }
   else {
     return {
-      session: { redirectAfterAuth: '/auth-example' },
+      session: { redirectAfterAuth: '/example-auth' },
       location: '/login'
     }
   }
