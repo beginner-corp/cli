@@ -1,10 +1,10 @@
 let { join, sep } = require('path')
 let test = require('tape')
 let { sync: rm } = require('rimraf')
-let { mkdirSync, readFileSync, rmSync, writeFileSync } = require('fs')
+let { readFileSync, rmSync, writeFileSync } = require('fs')
 let cwd = process.cwd()
 let testLib = join(cwd, 'test', 'lib')
-let { newFolder } = require(testLib)
+let { newTmpFolder } = require(testLib)
 let sut = join(cwd, 'src', 'lib')
 let lib = require(sut)
 let reset = folder => rmSync(folder, { recursive: true, force: true })
@@ -31,8 +31,7 @@ test('getConfig', t => {
   let printer = () => {}
   printer.debug = () => {}
 
-  cliDir = newFolder('getConfig')
-  mkdirSync(cliDir, { recursive: true })
+  cliDir = newTmpFolder(t, 'getConfig')
 
   // Control
   config = getConfig({ cliDir, _refresh, printer })

@@ -2,9 +2,9 @@ let test = require('tape')
 let { existsSync } = require('fs')
 let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, defaultNumberOfLambdas, getInv, newFolder, run } = require(lib)
+let { begin: _begin, defaultNumberOfLambdas, getInv, newTmpFolder, run } = require(lib)
 
-test('Run generate tests', async t => {
+test('Run generate tests (http)', async t => {
   await run(runTests, t)
   t.end()
 })
@@ -25,14 +25,14 @@ async function runTests (runType, t) {
   t.test(`${mode} generate http`, async t => {
     t.plan(26)
     let i, lambda, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate http -m get -p /js', cwd, true)
+    r = await begin('generate http -m get -p /js', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 1, 'Project has an extra Lambda')
     lambda = i.get.http('get /js')
@@ -43,7 +43,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('generate http -p /default', cwd, true)
+    r = await begin('generate http -p /default', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 2, 'Project has two extra Lambdas')
     lambda = i.get.http('get /default')
@@ -55,7 +55,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('generate http -m PUT -p /default', cwd, true)
+    r = await begin('generate http -m PUT -p /default', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 3, 'Project has three extra Lambdas')
     lambda = i.get.http('put /default')
@@ -71,47 +71,47 @@ async function runTests (runType, t) {
   t.test(`${mode} generate http (errors)`, async t => {
     t.plan(24)
     let r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
 
-    r = await begin('generate http', cwd, true)
+    r = await begin('generate http', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, pathNotFound, 'Errored on missing path')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m', cwd, true)
+    r = await begin('generate http -m', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, pathNotFound, 'Errored on missing path')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m foo -p /', cwd, true)
+    r = await begin('generate http -m foo -p /', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, methodInvalid, 'Errored on invalid method')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get', cwd, true)
+    r = await begin('generate http -m get', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, pathNotFound, 'Errored on missing path')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get -p 1', cwd, true)
+    r = await begin('generate http -m get -p 1', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, pathNotString, 'Errored on invalid path')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get -p foo', cwd, true)
+    r = await begin('generate http -m get -p foo', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, pathStartsWithSlash, 'Errored on path missing slash')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`generate http -m get -p / --src ${oob}`, cwd, true)
+    r = await begin(`generate http -m get -p / --src ${oob}`, cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
     await begin('new', cwd)
-    await begin(`generate http -m get -p /foo`, cwd, true)
-    r = await begin(`generate http -m get -p /foo`, cwd, true)
+    await begin(`generate http -m get -p /foo`, cwd)
+    r = await begin(`generate http -m get -p /foo`, cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, duplicateRoute, 'Errored on duplicate route')
     t.equal(r.code, 1, 'Exited 1')
@@ -120,14 +120,14 @@ async function runTests (runType, t) {
   t.test(`${mode} generate http (JSON)`, async t => {
     t.plan(26)
     let i, json, lambda, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate http -m get -p /js --json', cwd, true)
+    r = await begin('generate http -m get -p /js --json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 1, 'Project has an extra Lambda')
     lambda = i.get.http('get /js')
@@ -139,7 +139,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('generate http -p /default --json', cwd, true)
+    r = await begin('generate http -p /default --json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 2, 'Project has two extra Lambdas')
     lambda = i.get.http('get /default')
@@ -152,7 +152,7 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    r = await begin('generate http -m PUT -p /default --json', cwd, true)
+    r = await begin('generate http -m PUT -p /default --json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 3, 'Project has three extra Lambdas')
     lambda = i.get.http('put /default')
@@ -169,52 +169,52 @@ async function runTests (runType, t) {
   t.test(`${mode} generate http (errors / JSON)`, async t => {
     t.plan(32)
     let json, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
 
-    r = await begin('generate http --json', cwd, true)
+    r = await begin('generate http --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathNotFound, 'Errored on missing path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m --json', cwd, true)
+    r = await begin('generate http -m --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathNotFound, 'Errored on missing path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m foo -p / --json', cwd, true)
+    r = await begin('generate http -m foo -p / --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, methodInvalid, 'Errored on invalid method')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get --json', cwd, true)
+    r = await begin('generate http -m get --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathNotFound, 'Errored on missing path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get -p 1 --json', cwd, true)
+    r = await begin('generate http -m get -p 1 --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathNotString, 'Errored on invalid path')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate http -m get -p foo --json', cwd, true)
+    r = await begin('generate http -m get -p foo --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, pathStartsWithSlash, 'Errored on path missing slash')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`generate http -m get -p / --src ${oob} --json`, cwd, true)
+    r = await begin(`generate http -m get -p / --src ${oob} --json`, cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidSrcPath, 'Errored on invalid src path')
@@ -222,8 +222,8 @@ async function runTests (runType, t) {
     t.equal(r.code, 1, 'Exited 1')
 
     await begin('new', cwd)
-    await begin(`generate http -m get -p /foo --json`, cwd, true)
-    r = await begin(`generate http -m get -p /foo --json`, cwd, true)
+    await begin(`generate http -m get -p /foo --json`, cwd)
+    r = await begin(`generate http -m get -p /foo --json`, cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, duplicateRoute, 'Errored on duplicate route')

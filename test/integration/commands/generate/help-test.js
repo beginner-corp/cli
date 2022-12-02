@@ -3,7 +3,7 @@ let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
 let { begin: _begin, run } = require(lib)
 
-test('Run generate tests', async t => {
+test('Run generate tests (help)', async t => {
   await run(runTests, t)
   t.end()
 })

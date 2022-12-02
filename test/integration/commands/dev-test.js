@@ -3,7 +3,7 @@ let { writeFileSync } = require('fs')
 let { join } = require('path')
 let tiny = require('tiny-json-http')
 let lib = join(process.cwd(), 'test', 'lib')
-let { createTmpFolder, newFolder, run, start, shutdown } = require(lib)
+let { newTmpFolder, run, start, shutdown } = require(lib)
 
 let arc = `@app
 hi
@@ -15,7 +15,7 @@ hi
 `
 let url
 
-test('Run new tests', async t => {
+test('Run dev tests', async t => {
   await run(runTests, t)
   t.end()
 })
@@ -26,8 +26,7 @@ async function runTests (runType, t) {
   let newDevDir = 'dev'
 
   t.test(`${mode} Start Begin dev`, async t => {
-    let cwd = newFolder(newDevDir)
-    createTmpFolder(t, cwd)
+    let cwd = newTmpFolder(t, newDevDir)
     let arcFile = join(cwd, 'app.arc')
     writeFileSync(arcFile, arc)
 
