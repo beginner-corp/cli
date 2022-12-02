@@ -5,7 +5,7 @@ let { join } = require('path')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run, start, shutdown } = require(lib)
+let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
 let filePath = folder => join(folder, 'config.json')
 
 test('Run login tests', async t => {
@@ -31,11 +31,11 @@ async function runTests (runType, t) {
     t.plan(11)
     let file, folder, path, r
 
-    folder = newFolder(loginDir)
+    folder = newTmpFolder(t, loginDir)
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
-    r = await begin('login', undefined, true)
+    r = await begin('login')
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
     t.ok(file['// Begin config'], 'Got Begin config file comment')
@@ -49,7 +49,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     // Re-login
-    r = await begin('login', undefined, true)
+    r = await begin('login')
     t.equal(r.stdout, alreadyLoggedIn, 'Got already logged in confirmation')
     t.equal(r.code, 0, 'Exited 0')
   })
@@ -58,11 +58,11 @@ async function runTests (runType, t) {
     t.plan(13)
     let file, folder, json, path, r
 
-    folder = newFolder(loginDir)
+    folder = newTmpFolder(t, loginDir)
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
-    r = await begin('login --json', undefined, true)
+    r = await begin('login --json')
     json = JSON.parse(r.stdout)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
@@ -78,7 +78,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     // Re-login
-    r = await begin('login --json', undefined, true)
+    r = await begin('login --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, true, 'Got ok: true for login confirmation')
     t.equal(json.message, alreadyLoggedIn, 'Got already logged in confirmation')

@@ -6,7 +6,6 @@ let exec = promisify(_exec)
 
 let capture = require('./_capture')
 let tmp = require('./_tmp-dir')
-let setup = require('./_create-tmp-folder')
 
 let cwd = process.cwd()
 let isWin = process.platform.startsWith('win')
@@ -29,10 +28,10 @@ function reset (t) {
 }
 
 module.exports = {
-  module: async (t, args, dir, reuse, options) => {
-    setup(t, dir, reuse, options)
+  module: async (t, args, dir) => {
     process.chdir(dir || tmp)
     process.argv = [ 'fake-env', 'fake-file', ...getArgs(args) ]
+    process.exitCode = 0
     capture.start()
     await mod()
     capture.stop()
@@ -45,12 +44,12 @@ module.exports = {
       code: process.exitCode
     }
   },
-  binary: async (t, args, dir, reuse, options) => {
-    setup(t, dir, reuse, options)
+  binary: async (t, args, dir) => {
     let opts = { cwd: dir || tmp, shell: true }
     let cmd = `${bin} ${args}`
     let result, code
     try {
+      process.exitCode = 0
       result = await exec(cmd, opts)
       code = result.error?.code
     }

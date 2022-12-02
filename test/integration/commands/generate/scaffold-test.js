@@ -2,9 +2,9 @@ let test = require('tape')
 let { existsSync } = require('fs')
 let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, defaultNumberOfLambdas, getInv, newFolder, run } = require(lib)
+let { begin: _begin, defaultNumberOfLambdas, getInv, newTmpFolder, run } = require(lib)
 
-test('Run generate tests', async t => {
+test('Run generate tests (scaffold)', async t => {
   await run(runTests, t)
   t.end()
 })
@@ -19,14 +19,14 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - normal`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate scaffold Books title:string author:string', cwd, true)
+    r = await begin('generate scaffold Books title:string author:string', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
     t.ok(existsSync(join(cwd, 'app', 'api', 'books.mjs')), 'Wrote books api route')
@@ -43,13 +43,13 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - file based`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
-    r = await begin('generate scaffold -f ../../mock/person.schema.json', cwd, true)
+    r = await begin('generate scaffold -f ../../mock/person.schema.json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
     t.ok(existsSync(join(cwd, 'app', 'api', 'people.mjs')), 'Wrote people api route')
@@ -66,13 +66,13 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - reference file based`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has a single Lambda')
-    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd, true)
+    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project still has one Lambda')
     t.ok(existsSync(join(cwd, 'app', 'api', 'customers.mjs')), 'Wrote customers api route')
@@ -90,12 +90,12 @@ async function runTests (runType, t) {
     t.plan(4)
     let cwd, r
 
-    cwd = newFolder(newAppDir)
+    cwd = newTmpFolder(t, newAppDir)
     // Create a fresh project
     r = await begin('new', cwd)
     t.pass('Project is valid')
-    await begin('generate scaffold Books title:string author:string', cwd, true)
-    r = await begin('generate scaffold Books title:string author:string', cwd, true)
+    await begin('generate scaffold Books title:string author:string', cwd)
+    r = await begin('generate scaffold Books title:string author:string', cwd)
     await getInv(t, cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, alreadyExists, 'Errored upon finding existing routes in project')
@@ -105,14 +105,14 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - normal / JSON`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate scaffold Books title:string author:string', cwd, true)
+    r = await begin('generate scaffold Books title:string author:string', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
     t.ok(existsSync(join(cwd, 'app', 'api', 'books.mjs')), 'Wrote books api route')
@@ -129,14 +129,14 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - file based / JSON`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate scaffold  -f ../../mock/person.schema.json', cwd, true)
+    r = await begin('generate scaffold  -f ../../mock/person.schema.json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
     t.ok(existsSync(join(cwd, 'app', 'api', 'people.mjs')), 'Wrote people api route')
@@ -153,14 +153,14 @@ async function runTests (runType, t) {
   t.test(`${mode} scaffold project - referenced file based / JSON`, async t => {
     t.plan(13)
     let i, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd, true)
+    r = await begin('generate scaffold -f ../../mock/customer.schema.json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
     t.ok(existsSync(join(cwd, 'app', 'api', 'customers.mjs')), 'Wrote customers api route')
@@ -178,13 +178,13 @@ async function runTests (runType, t) {
     t.plan(5)
     let cwd, json, r
 
-    cwd = newFolder(newAppDir)
+    cwd = newTmpFolder(t, newAppDir)
     // Create a fresh project
     r = await begin('new', cwd)
     t.pass('Project is valid')
 
-    await begin('generate scaffold Books title:string author:string --json', cwd, true)
-    r = await begin('generate scaffold Books title:string author:string --json', cwd, true)
+    await begin('generate scaffold Books title:string author:string --json', cwd)
+    r = await begin('generate scaffold Books title:string author:string --json', cwd)
     await getInv(t, cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')

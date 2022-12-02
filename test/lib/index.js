@@ -4,13 +4,9 @@ let inventory = require('@architect/inventory')
 
 let begin = require('./_begin')
 let capture = require('./_capture')
-let createTmpFolder = require('./_create-tmp-folder')
+let newTmpFolder = require('./_new-tmp-folder')
 let { start, shutdown } = require('./_start-shutdown')
 let tmp = require('./_tmp-dir')
-
-// Unlike *nix systems, Windows mysteriously kept file handles open (EBUSY) after completing fs mutations
-// So we have to rely on semi-random folders
-let newFolder = name => join(tmp, `${name || 'tmp'}` + '-' + `${Date.now()}`.substr(5))
 
 // Integration test runner
 let bin = join(process.cwd(), 'build', `begin${process.platform.startsWith('win') ? '.exe' : ''}`)
@@ -37,12 +33,11 @@ async function getInv (t, cwd) {
 module.exports = {
   begin,
   capture,
-  createTmpFolder,
   defaultNumberOfLambdas,
   getInv,
-  newFolder,
+  newTmpFolder,
   run,
-  start,
   shutdown,
+  start,
   tmp,
 }

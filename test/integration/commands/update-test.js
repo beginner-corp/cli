@@ -5,7 +5,7 @@ let { join } = require('path')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run, start, shutdown } = require(lib)
+let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
 let filePath = folder => join(folder, 'hi.txt')
 
 test('Run update tests', async t => {
@@ -35,7 +35,7 @@ async function runTests (runType, t) {
       t.plan(9)
       let file, folder, path, r
 
-      folder = newFolder('install')
+      folder = newTmpFolder(t, 'install')
       path = filePath(folder)
       process.env.BEGIN_INSTALL = folder
       process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-upgrade`
@@ -50,7 +50,7 @@ async function runTests (runType, t) {
       t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
       t.equal(r.code, 0, 'Exited 0')
 
-      folder = newFolder('install')
+      folder = newTmpFolder(t, 'install')
       path = filePath(folder)
       process.env.BEGIN_INSTALL = folder
       process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-ok`
@@ -67,7 +67,7 @@ async function runTests (runType, t) {
       t.plan(9)
       let file, folder, path, r
 
-      folder = newFolder('install')
+      folder = newTmpFolder(t, 'install')
       path = filePath(folder)
       process.env.BEGIN_INSTALL = folder
       process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-upgrade`
@@ -82,7 +82,7 @@ async function runTests (runType, t) {
       t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
       t.equal(r.code, 0, 'Exited 0')
 
-      folder = newFolder('install')
+      folder = newTmpFolder(t, 'install')
       path = filePath(folder)
       process.env.BEGIN_INSTALL = folder
       process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-ok`
@@ -98,7 +98,7 @@ async function runTests (runType, t) {
     t.plan(3)
     let folder, path, r
 
-    folder = newFolder('install')
+    folder = newTmpFolder(t, 'install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/lolidk`
@@ -113,7 +113,7 @@ async function runTests (runType, t) {
     t.plan(10)
     let file, folder, json, path, r
 
-    folder = newFolder('install')
+    folder = newTmpFolder(t, 'install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-upgrade`
@@ -129,7 +129,7 @@ async function runTests (runType, t) {
     t.ok(r.stderr.includes(path), 'Printed destination filepath to stderr')
     t.equal(r.code, 0, 'Exited 0')
 
-    folder = newFolder('install')
+    folder = newTmpFolder(t, 'install')
     path = filePath(folder)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}/versions-ok`

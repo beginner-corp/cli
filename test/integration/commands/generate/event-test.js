@@ -2,9 +2,9 @@ let test = require('tape')
 let { existsSync } = require('fs')
 let { join } = require('path')
 let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, defaultNumberOfLambdas, getInv, newFolder, run } = require(lib)
+let { begin: _begin, defaultNumberOfLambdas, getInv, newTmpFolder, run } = require(lib)
 
-test('Run generate tests', async t => {
+test('Run generate tests (event)', async t => {
   await run(runTests, t)
   t.end()
 })
@@ -23,14 +23,14 @@ async function runTests (runType, t) {
   t.test(`${mode} generate event`, async t => {
     t.plan(10)
     let i, lambda, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate event -n js', cwd, true)
+    r = await begin('generate event -n js', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 1, 'Project now has an extra Lambda')
     lambda = i.get.events('js')
@@ -45,32 +45,32 @@ async function runTests (runType, t) {
   t.test(`${mode} generate event (errors)`, async t => {
     t.plan(15)
     let r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
 
-    r = await begin('generate event', cwd, true)
+    r = await begin('generate event', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate event -n', cwd, true)
+    r = await begin('generate event -n', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameNotFound, 'Errored on missing name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate event -n 1', cwd, true)
+    r = await begin('generate event -n 1', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, nameInvalid, 'Errored on invalid name')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`generate event -n foo --src ${oob}`, cwd, true)
+    r = await begin(`generate event -n foo --src ${oob}`, cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, invalidSrcPath, 'Errored on invalid src path')
     t.equal(r.code, 1, 'Exited 1')
 
     await begin('new', cwd)
-    await begin(`generate event -n foo`, cwd, true)
-    r = await begin(`generate event -n foo`, cwd, true)
+    await begin(`generate event -n foo`, cwd)
+    r = await begin(`generate event -n foo`, cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, duplicateEvent, 'Errored on duplicate event')
     t.equal(r.code, 1, 'Exited 1')
@@ -79,14 +79,14 @@ async function runTests (runType, t) {
   t.test(`${mode} generate event (JSON)`, async t => {
     t.plan(10)
     let i, json, lambda, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
     t.equal(i.inv._project.manifest, join(cwd, '.arc'), 'Wrote manifest to folder')
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas, 'Project has default number of Lambdas')
 
-    r = await begin('generate event -n js --json', cwd, true)
+    r = await begin('generate event -n js --json', cwd)
     i = await getInv(t, cwd)
     t.equal(i.inv.lambdaSrcDirs.length, defaultNumberOfLambdas + 1, 'Project now has an extra Lambda')
     lambda = i.get.events('js')
@@ -102,31 +102,31 @@ async function runTests (runType, t) {
   t.test(`${mode} generate event (errors / JSON)`, async t => {
     t.plan(20)
     let json, r
-    let cwd = newFolder(newAppDir)
+    let cwd = newTmpFolder(t, newAppDir)
     await begin('new', cwd)
 
-    r = await begin('generate event --json', cwd, true)
+    r = await begin('generate event --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate event -n --json', cwd, true)
+    r = await begin('generate event -n --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameNotFound, 'Errored on missing name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin('generate event -n 1 --json', cwd, true)
+    r = await begin('generate event -n 1 --json', cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, nameInvalid, 'Errored on invalid name')
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
 
-    r = await begin(`generate event -n foo --src ${oob} --json`, cwd, true)
+    r = await begin(`generate event -n foo --src ${oob} --json`, cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, invalidSrcPath, 'Errored on invalid src path')
@@ -134,8 +134,8 @@ async function runTests (runType, t) {
     t.equal(r.code, 1, 'Exited 1')
 
     await begin('new', cwd)
-    await begin(`generate event -n foo`, cwd, true)
-    r = await begin(`generate event -n foo --json`, cwd, true)
+    await begin(`generate event -n foo`, cwd)
+    r = await begin(`generate event -n foo --json`, cwd)
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false')
     t.match(json.error, duplicateEvent, 'Errored on duplicate event')

@@ -2,7 +2,7 @@ let test = require('tape')
 let { join } = require('path')
 let tiny = require('tiny-json-http')
 let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, newFolder, run, start, shutdown } = require(lib)
+let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
 
 test('Run new tests (slow)', async t => {
   await run(runTests, t)
@@ -21,7 +21,7 @@ async function runTests (runType, t) {
   t.test(`${mode} new - normal, with live npm install`, async t => {
     t.plan(3)
     process.env.__SLOW__ = true
-    cwd = newFolder(newAppDir)
+    cwd = newTmpFolder(t, newAppDir)
     let r = await begin('new', cwd)
     t.notOk(r.stdout, 'Did not print to stdout')
     t.match(r.stderr, installing, 'Printed dep installation message to stderr')

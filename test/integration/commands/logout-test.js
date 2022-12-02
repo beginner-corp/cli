@@ -5,7 +5,7 @@ let { join } = require('path')
 let cwd = process.cwd()
 let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newFolder, run, start, shutdown } = require(lib)
+let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
 let filePath = folder => join(folder, 'config.json')
 
 test('Run logout tests', async t => {
@@ -35,13 +35,13 @@ async function runTests (runType, t) {
     t.plan(6)
     let file, folder, path, r
 
-    folder = newFolder(logoutDir)
+    folder = newTmpFolder(t, logoutDir)
     mkdirSync(folder, { recursive: true })
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
-    r = await begin('logout', undefined, true)
+    r = await begin('logout')
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
     t.notOk(file.access_token, 'config.access_token property no longer found')
@@ -50,7 +50,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     // Re-logout
-    r = await begin('logout', undefined, true)
+    r = await begin('logout')
     t.equal(r.stderr, 'Error: ' + alreadyLoggedOut, 'Got already logged out error')
     t.equal(r.code, 1, 'Exited 1')
   })
@@ -59,13 +59,13 @@ async function runTests (runType, t) {
     t.plan(8)
     let file, folder, json, path, r
 
-    folder = newFolder(logoutDir)
+    folder = newTmpFolder(t, logoutDir)
     mkdirSync(folder, { recursive: true })
     path = filePath(folder)
     writeFileSync(path, config)
     process.env.BEGIN_INSTALL = folder
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
-    r = await begin('logout --json', undefined, true)
+    r = await begin('logout --json')
     json = JSON.parse(r.stdout)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
     file = JSON.parse(await readFile(path))
@@ -76,7 +76,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 0, 'Exited 0')
 
     // Re-logout
-    r = await begin('logout --json', undefined, true)
+    r = await begin('logout --json')
     json = JSON.parse(r.stdout)
     t.equal(json.ok, false, 'Got ok: false for logout error')
     t.equal(json.error, alreadyLoggedOut, 'Got already logged out error')
