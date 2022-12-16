@@ -6,6 +6,7 @@ let tmp = require('./_tmp-dir')
 
 let cwd = process.cwd()
 let enhancePlugin = join('node_modules', '@enhance', 'arc-plugin-enhance')
+let sharedElementsPlugin = join('node_modules', '@hicksy', 'shared-enhance-components-plugin')
 
 let folderName = name => `${name || 'tmp'}` + '-' + `${Date.now()}`.substr(5)
 
@@ -35,9 +36,10 @@ module.exports = function newTmpFolder (t, dest, options = {}) {
   mkdirSync(dir, { recursive: true })
   if (!existsSync(dir)) t.fail(`Failed to create tmp dir: ${dir}`)
 
-  // The Enhance Arc plugin is necessary for starting Sandbox in test runs
+  // The Enhance Arc & Shared Element plugins are necessary for starting Sandbox in test runs
   let copyDest = copy ? join(dir, copy) : dir
   copySync(join(cwd, enhancePlugin), join(copyDest, enhancePlugin))
+  copySync(join(cwd, sharedElementsPlugin), join(copyDest, sharedElementsPlugin))
 
   return dir
 }
