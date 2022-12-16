@@ -1,5 +1,8 @@
 let manifest = {
-  arcMutations: [],
+  arcMutations: [
+    { pragma: 'plugins', item: `hicksy/shared-enhance-components-plugin` },
+    { pragma: 'shared-enhance-components-plugin', item: `enhance/form-elements` }
+  ],
   sourceFiles: [
     // Utils
     { src: 'handlers/model.js', target: 'app/models/<ROUTE_NAME>.mjs' },
@@ -11,18 +14,11 @@ let manifest = {
     { src: 'handlers/pages-list.js', target: 'app/pages/<ROUTE_NAME>.mjs' },
     { src: 'handlers/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
   ],
-  elements: [
-    { name: 'CheckBox', package: '@enhance/form-elements', tagName: 'enhance-checkbox' },
-    { name: 'FieldSet', package: '@enhance/form-elements', tagName: 'enhance-fieldset' },
-    { name: 'FormElement', package: '@enhance/form-elements', tagName: 'enhance-form' },
-    { name: 'LinkElement', package: '@enhance/form-elements', tagName: 'enhance-link' },
-    { name: 'PageContainer', package: '@enhance/form-elements', tagName: 'enhance-page-container' },
-    { name: 'SubmitButton', package: '@enhance/form-elements', tagName: 'enhance-submit-button' },
-    { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
-  ],
+  elements: [],
   dependencies: [
     '@begin/validator@0.0.10',
-    'github:enhance-dev/form-elements'
+    'github:enhance-dev/form-elements',
+    '@hicksy/shared-enhance-components-plugin'
   ]
 }
 

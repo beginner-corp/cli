@@ -7,24 +7,24 @@ export default function Html ({ html, state }) {
   const registration = store.registration || {}
   const problems = store.problems || {}
 
-  return html\`<enhance-page-container>
+  return html\`<page-container>
   <main>
     <h1 class="mb1 font-semibold text3">Register New User</h1>
-    <enhance-form
+    <form-element
   action="/auth/register/\${registration.key}"
   method="POST">
   <div class="\${problems.form ? 'block' : 'hidden'}">
     <p>Found some problems!</p>
     <ul>\${problems.form}</ul>
   </div>
-  <enhance-fieldset legend="User">
-  <enhance-text-input label="Firstname" type="text" id="firstname" name="firstname" value="\${registration?.firstname}" errors="\${problems?.firstname?.errors}"></enhance-text-input>
-  <enhance-text-input label="Lastname" type="text" id="lastname" name="lastname" value="\${registration?.lastname}" errors="\${problems?.lastname?.errors}"></enhance-text-input>
-  <enhance-submit-button style="float: right"><span slot="label">Save</span></enhance-submit-button>
-  </enhance-fieldset>
-</enhance-form>
+  <field-set legend="User">
+  <text-input label="Firstname" type="text" id="firstname" name="firstname" value="\${registration?.firstname}" errors="\${problems?.firstname?.errors}"></text-input>
+  <text-input label="Lastname" type="text" id="lastname" name="lastname" value="\${registration?.lastname}" errors="\${problems?.lastname?.errors}"></text-input>
+  <submit-button style="float: right"><span slot="label">Save</span></submit-button>
+  </field-set>
+</form-element>
 </main>
-</enhance-page-container>
+</page-container>
 \`
 }`
 }

@@ -24,7 +24,7 @@ export default function Html ({ html, state }) {
   const ${singular} = store.${singular} || {}
   const problems = store.problems || {}
 
-  return html\`<enhance-page-container>
+  return html\`<page-container>
   <main>
     <h1 class="mb1 font-semibold text3">${capPlural} page</h1>
     \${${plural}.map(item => \`<article class="mb2">
@@ -32,10 +32,10 @@ export default function Html ({ html, state }) {
   ${list}
 </div>
 <p class="mb-1">
-  <enhance-link href="/${plural}/\${item.key}">Edit this ${singular}</enhance-link>
+  <link-element href="/${plural}/\${item.key}">Edit this ${singular}</link-element>
 </p>
 <form action="/${plural}/\${item.key}/delete" method="POST" class="mb-1">
-  <enhance-submit-button><span slot="label">Delete this ${singular}</span></enhance-submit-button>
+  <submit-button><span slot="label">Delete this ${singular}</span></submit-button>
 </form>
 </article>\`).join('\\n')}
 <details class="mb0" \${Object.keys(problems).length ? 'open' : ''}>
@@ -43,7 +43,7 @@ export default function Html ({ html, state }) {
     ${schemaToForm({ action: plural, schema, update: true, data: singular })}
 </details>
 </main>
-</enhance-page-container>
+</page-container>
   \`
 }
 `

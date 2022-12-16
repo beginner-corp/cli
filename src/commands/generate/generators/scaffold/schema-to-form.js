@@ -43,7 +43,7 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   let name = keyPrefix ? `${keyPrefix}` : key
   let dataPath = keyPrefix ? keyPrefix.replace(/\./g, '?.') : key
 
-  let input = `<enhance-${tagName} label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
+  let input = `<${tagName} label="${capitalize(key).replace(/([a-z])([A-Z])/g, '$1 $2')}" type="` + type + '" id="' + name + '" name="' + name + '" '
   if (property.minimum) {
     input = input + 'min="' + property.minimum + '" '
   }
@@ -71,7 +71,7 @@ function inputTemplate (key, type, property, data, required = [], keyPrefix = ''
   if (type === 'checkbox' && data[key] === true) {
     input = input + 'checked '
   }
-  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></enhance-${tagName}>`
+  input = input + `value="\${${data}?.${dataPath}}" errors="\${problems?.${dataPath}?.errors}"></${tagName}>`
   return input
 }
 
@@ -100,11 +100,11 @@ function input (key, schema, data, prefix = '') {
     elem = selectTemplate(key, property, data, schema.required, prefix)
   }
   else if (type === 'object') {
-    elem = elem + `<enhance-fieldset legend="${capitalize(key)}">`
+    elem = elem + `<field-set legend="${capitalize(key)}">`
     elem = elem + Object.keys(schema.properties[key].properties).map(innerKey =>
       input(innerKey, schema.properties[key], data, key)
     ).join('\n')
-    elem = elem + `</enhance-fieldset>`
+    elem = elem + `</field-set>`
   }
   else if (type === 'array') {
     // TODO: skip arrays for now
@@ -117,20 +117,20 @@ function input (key, schema, data, prefix = '') {
 }
 
 function schemaToForm ({ action, schema, update = false, data }) {
-  return `<enhance-form
+  return `<form-element
   action="/${action}${update ? `/\${${data}.key}` : ''}"
   method="POST">
   <div class="\${problems.form ? 'block' : 'hidden'}">
     <p>Found some problems!</p>
     <ul>\${problems.form}</ul>
   </div>
-  <enhance-fieldset legend="${capitalize(schema?.id)}">
+  <field-set legend="${capitalize(schema?.id)}">
   ${Object.keys(schema.properties).map(key =>
     input(key, schema, data)
   ).join('\n  ')}
-  <enhance-submit-button style="float: right"><span slot="label">Save</span></enhance-submit-button>
-  </enhance-fieldset>
-</enhance-form>`
+  <submit-button style="float: right"><span slot="label">Save</span></submit-button>
+  </field-set>
+</form-element>`
 }
 
 module.exports = {
