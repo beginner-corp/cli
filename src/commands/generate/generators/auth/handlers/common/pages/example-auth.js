@@ -3,7 +3,7 @@ module.exports = function () {
   * @type {import('@enhance/types').EnhanceElemFn}
   */
 export default function ({ html, state }) {
-  const account = state?.store?.account?.account
+  const account = state?.store?.account
   return html\`
   <form action=/logout method=POST>
     <button>Logout</button>

@@ -15,16 +15,16 @@ module.exports = function () {
       name: 'Not Allowed'
     }
   },
-  appAccounts: {
-    janedoe: {
-      role: 'member',
-      name: 'Jane Doe'
-    },
-    johnsmith: {
-      role: 'member',
-      name: 'John Smith'
-    }
-  }
+  // appAccounts: {
+  //   janedoe: {
+  //     role: 'member',
+  //     name: 'Jane Doe'
+  //   },
+  //   johnsmith: {
+  //     role: 'member',
+  //     name: 'John Smith'
+  //   }
+  // }
 }
 `
 }

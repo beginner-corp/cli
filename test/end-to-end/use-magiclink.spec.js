@@ -14,9 +14,6 @@ test('Magic Link validates', async ({ page }) => {
   await page.goto('/accounts')
   await expect(page).toHaveURL('/accounts')
 
-  await page.goto('/roles')
-  await expect(page).toHaveURL('/roles')
-
   await page.goto('/example-auth')
   const logout = await page.waitForSelector('form[action="/logout"]>button')
   await logout.click()

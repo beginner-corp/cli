@@ -1,6 +1,6 @@
 module.exports = function (){
   return `import arc from '@architect/functions'
-import { loginHref } from '@architect/views/models/auth/auth-helpers.mjs'
+import loginHref from '@architect/views/models/auth/login-href.mjs'
 
 export const handler = arc.http.async(login)
 

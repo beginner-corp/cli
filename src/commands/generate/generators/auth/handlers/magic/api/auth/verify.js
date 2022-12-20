@@ -42,7 +42,7 @@ export async function get (req){
     if (account) {
       // Verified Account
       return {
-        session: { account: { account } },
+        session: { account: { ...account } },
         location: sessionInfo?.redirectAfterAuth
       }
     }

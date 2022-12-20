@@ -34,22 +34,6 @@ node ./scripts/seed-accounts.js`)
   let { writeJsonSchema } = require('../scaffold/jsonschema')
 
 
-  let roleManifest = require('./roles-manifest')
-  let roleTable = require('./roles-table')
-  writeJsonSchema(roleTable.modelName, roleTable.schema, writeFile)
-  await generate(params, {
-    manifest: roleManifest,
-    project,
-    replacements: {
-      ...roleTable.modelName,
-      authRole: 'admin',
-      includeAuth: true,
-      routeName: roleTable.routeName,
-      schema: roleTable.schema,
-    },
-    command,
-    utils
-  })
 
   let accountManifest = require('./accounts-manifest')
   let accountsTable = require('./accounts-table')
@@ -75,17 +59,7 @@ node ./scripts/seed-accounts.js`)
   }
   else if (!authType || authType === 'magic-link') {
     let manifest = require('./magic-manifest')
-    await generate(params, {
-      manifest,
-      project,
-      command,
-      utils
-    })
-
-
-
-
-
+    await generate(params, { manifest, command, project, utils })
   }
 
 }

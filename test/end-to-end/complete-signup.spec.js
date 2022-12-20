@@ -17,8 +17,6 @@ test('Signup link validates', async ({ page }) => {
 
   await page.goto('/accounts')
   await expect(page).toHaveURL('/')
-  await page.goto('/roles')
-  await expect(page).toHaveURL('/')
 
   await page.goto('/example-auth')
   const logout = await page.waitForSelector('form[action="/logout"]>button')

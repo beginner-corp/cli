@@ -2,7 +2,7 @@ module.exports = function () {
   return /* javascript*/`export function checkAuth (req, role) {
   const { session = {} } = req
   const account = session.account
-  const accountRoles = Object.values(account?.account?.roles || {} )
+  const accountRoles = Object.values(account?.roles || {} )
 
   if (!account) return false
 
