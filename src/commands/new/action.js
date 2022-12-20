@@ -53,7 +53,6 @@ module.exports = async function (params) {
   packageJson.name = appName
   packageJson.version = '0.0.1'
   packageJson.scripts.start = 'begin dev'
-  delete packageJson.scripts.postinstall
   delete packageJson.devDependencies['@architect/sandbox']
 
   let p = file => join(projectPath, file)
@@ -85,15 +84,8 @@ module.exports = async function (params) {
   })
 
   // Write .gitignore
-  let gitIgnore = `.env
-.DS_Store
-**/static.json
-node_modules
-public/bundles
-public/pages
-sam.json
-sam.yaml
-`
+  let gitIgnoreTemplate = join(nodeModules, '@enhance', 'starter-project', 'template.gitignore')
+  let gitIgnore = readFileSync(gitIgnoreTemplate)
   writeFile(p('.gitignore'), gitIgnore)
 
   // Need to install enhance/arc-plugin-enhance or 💥
