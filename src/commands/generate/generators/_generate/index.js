@@ -3,11 +3,12 @@ module.exports = async function generate (params, args) {
   let { addElements, addRouteSource } = require('./utils')
   let { installDependencies } = require('../../../../lib/npm-commands')
   let { mutateArc, writeFile } = utils
-  let { arcMutations = [], elements = [], dependencies = [] } = manifest
+  let { arcMutations = [], elements = [], dependencies = [], devDependencies = [] } = manifest
   let raw = project.raw
 
   // Install Dependencies
   await installDependencies(params, dependencies)
+  await installDependencies(params, devDependencies, true)
 
   // Mutate Arc File
   arcMutations.forEach(mutation => {

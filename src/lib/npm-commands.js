@@ -36,7 +36,7 @@ async function installAwsSdk (params) {
   }
 }
 
-async function installDependencies (params, dependencies) {
+async function installDependencies (params, dependencies, dev = false) {
   if (process.env.NODE_ENV !== 'testing') {
     let { readFile } = require('fs/promises')
     let packageJson = JSON.parse(await readFile('./package.json'))
@@ -46,6 +46,10 @@ async function installDependencies (params, dependencies) {
       let msg = params.args.verbose
         ? `Installing: ${deps.join(', ')}`
         : 'Installing additional dependencies'
+      if (dev) {
+        deps.push('--save-dev')
+        msg = 'Installing additional dev dependencies'
+      }
       return install(params, { args: deps, msg })
     }
   }
