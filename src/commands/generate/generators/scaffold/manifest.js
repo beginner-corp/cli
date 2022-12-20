@@ -23,6 +23,15 @@ let manifest = {
   dependencies: [
     '@begin/validator@0.0.10',
     'github:enhance-dev/form-elements'
+  ],
+  devDependencies: [
+    '@aws-sdk/client-apigatewaymanagementapi',
+    '@aws-sdk/client-dynamodb',
+    '@aws-sdk/client-s3',
+    '@aws-sdk/client-sns',
+    '@aws-sdk/client-sqs',
+    '@aws-sdk/client-ssm',
+    '@aws-sdk/lib-dynamodb'
   ]
 }
 
