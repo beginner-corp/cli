@@ -18,6 +18,7 @@ module.exports = {
         {
           name: '-f, --filter',
           description: `Filter to apply against logs`,
+          optional: true,
         },
       ],
     },

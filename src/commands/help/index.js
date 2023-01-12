@@ -59,6 +59,10 @@ let help = {
             name: 'logs',
             description: 'Retrieve logs from Begin',
           },
+          {
+            name: 'tail',
+            description: 'Tail logs from Begin',
+          },
         ],
       },
       {
