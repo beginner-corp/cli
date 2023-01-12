@@ -3,7 +3,7 @@ let create = require('./create')
 let deploy = require('./deploy')
 let destroy = require('./destroy')
 let dev = require('./dev')
-let envar = require('./env')
+let envVar = require('./env')
 let logs = require('./logs')
 let generate = require('./generate')
 let help = require('./help')
@@ -11,9 +11,13 @@ let list = require('./list')
 let login = require('./login')
 let logout = require('./logout')
 let newProj = require('./new')
+let tail = require('./tail')
 let update = require('./update')
 let version = require('./version')
-let commands = [ builds, create, deploy, destroy, dev, envar, generate, help, list, login, logout, logs, newProj, update, version ]
+let commands = [
+  builds, create, deploy, destroy, dev, envVar, generate, help,
+  list, login, logout, logs, newProj, tail, update, version,
+]
 
 let helper = require('../helper')
 
