@@ -12,12 +12,12 @@ module.exports = {
         },
         {
           name: '-e, --env <name|ID>',
-          description: `App environment to list logs from`,
+          description: `App environment to list tail logs from`,
           optional: true,
         },
         {
           name: '-f, --filter',
-          description: `Filter to apply against logs`,
+          description: `Filter to apply against tailed logs`,
           optional: true,
         },
       ],
@@ -29,15 +29,15 @@ module.exports = {
       },
       {
         name: 'Tail logs (specifying an environment name)',
-        example: 'begin logs --env staging',
+        example: 'begin tail --env staging',
       },
       {
         name: 'Tail logs with filter',
-        example: 'begin logs --filter "GOT HERE"',
+        example: 'begin tail --filter "GOT HERE"',
       },
       {
         name: 'Tail logs with grep',
-        example: 'begin logs | grep "GOT HERE"',
+        example: 'begin tail | grep "GOT HERE"',
       },
     ]
   }
