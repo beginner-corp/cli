@@ -16,9 +16,18 @@ function checkManifest (inventory) {
 
 // See if the project manifest contains an app ID
 function getAppID (inventory) {
+  return getBeginProperty(inventory, 'appID')
+}
+
+// See if the project manifest contains an region
+function getRegion (inventory) {
+  return getBeginProperty(inventory, 'region')
+}
+
+function getBeginProperty (inventory, propertyName) {
   let { begin } = inventory.inv._project.arc
-  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
-  return appID
+  let prop = begin?.find(i => i[0] === propertyName && typeof i[1] === 'string')?.[1]
+  return prop
 }
 
 let config
@@ -108,6 +117,7 @@ module.exports = {
   getAppID,
   getConfig,
   getRelativeCwd,
+  getRegion,
   httpMethods,
   mutateArc,
   npmCommands,

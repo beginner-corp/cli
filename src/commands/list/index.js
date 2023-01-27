@@ -19,8 +19,8 @@ async function action (params) {
   let last = '└──'
 
   let output = []
-  apps.forEach(({ name, appID, environments }) => {
-    output.push(`${c.white(c.bold(name))} (app ID: ${appID})`)
+  apps.forEach(({ name, appID, environments, region }) => {
+    output.push(`${c.white(c.bold(name))} (app ID: ${appID}, region: ${region})`)
     if (!environments.length) {
       output.push(`${last} (no app environments)`)
     }

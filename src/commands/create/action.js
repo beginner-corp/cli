@@ -1,5 +1,5 @@
 module.exports = async function action (params, utils) {
-  let { appID, config, envName } = params
+  let { appID, config, envName, region } = params
   let { access_token: token, stagingAPI: _staging } = config
   let { createApp, promptOptions, validateEnvName } = require('../../lib/app')
   let { prompt } = require('enquirer')
@@ -9,7 +9,7 @@ module.exports = async function action (params, utils) {
   // Create a new app and associate it with this project
   if (!appID) {
     let created = await createApp(params, utils)
-    let { app, name, envName } = created
+    let { app, name, envName, region } = created
     let env = app.environments[0]
     console.error(`App '${name}' + environment '${envName}' created at ${env.url}`)
 
@@ -20,7 +20,7 @@ module.exports = async function action (params, utils) {
       initial: 'y',
     }, promptOptions)
     if (deployIt) {
-      return deploy.action({ ...params, appID: app.appID, envName }, utils)
+      return deploy.action({ ...params, appID: app.appID, envName, region }, utils)
     }
     else {
       console.error(`You can deploy at any time by running: \`begin deploy\``)
@@ -74,7 +74,7 @@ module.exports = async function action (params, utils) {
       initial: 'y',
     }, promptOptions)
     if (deployIt) {
-      return deploy.action({ ...params, appID: app.appID, envName }, utils)
+      return deploy.action({ ...params, appID: app.appID, envName, region }, utils)
     }
     else {
       console.error(`You can deploy this environment by running: \`begin deploy --env ${envName}\``)

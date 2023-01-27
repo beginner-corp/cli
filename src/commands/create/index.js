@@ -7,7 +7,7 @@ async function action (params) {
   let _inventory = require('@architect/inventory')
   params.inventory = await _inventory()
   let lib = require('../../lib')
-  let { checkManifest, getAppID, getConfig } = lib
+  let { checkManifest, getAppID, getConfig, getRegion } = lib
 
   let config = getConfig(params)
   if (!config.access_token) {
@@ -25,6 +25,9 @@ async function action (params) {
   let env = args.env || args.e
   let envName = env !== true && env || undefined
 
+  // See if the user has specified a region
+  let region = args.region || args.r || getRegion(params.inventory)
+
   let utils = {
     ...lib,
     writeFile: lib.writeFile(params),
@@ -32,6 +35,7 @@ async function action (params) {
   return action({
     appID,
     envName,
+    region,
     config,
     ...params
   }, utils)

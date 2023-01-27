@@ -15,6 +15,11 @@ module.exports = {
           description: `Environment name to create`,
           optional: true,
         },
+        {
+          name: '-r, --region <name>',
+          description: `Region to create the application in. Must be one of [us-east-1, us-east-2, us-west-1, us-west-2]`,
+          optional: true,
+        },
       ],
     },
     examples: [
@@ -25,6 +30,10 @@ module.exports = {
       {
         name: `Create an app environment named 'staging'`,
         example: 'begin create --env staging',
+      },
+      {
+        name: `Create an app environment named 'staging' in 'us-west-2'`,
+        example: 'begin create --env staging --region us-west-2',
       },
     ]
   }

@@ -1,13 +1,13 @@
 // Create first app + environment flow, used in both `app create` + `app deploy`
 module.exports = async function createApp (params, utils) {
   let { args, config, inventory } = params
-  let { env } = args
+  let { env, region } = args
   let { access_token: token, stagingAPI: _staging } = config
   let { mutateArc, writeFile } = utils
   let { prompt } = require('enquirer')
   let client = require('@begin/api')
   let { promptOptions } = require('.')
-  let { validateEnvName } = require('./validate')
+  let { validateEnvName, validateRegionName } = require('./validate')
 
   console.error(`This project doesn't appear to be associated with a Begin app`)
   let { create } = await prompt({
@@ -45,8 +45,22 @@ module.exports = async function createApp (params, utils) {
     }, promptOptions)
   }
 
+  if (region) {
+    validateRegionName.arg(region)
+    var regionName = env
+  }
+  else {
+    var { regionName } = await prompt({
+      type: 'input',
+      name: 'regionName',
+      message: 'What would you like to name your first environment?',
+      initial: 'us-west-2',
+      validate: validateRegionName.prompt
+    }, promptOptions)
+  }
+
   // Create the app
-  let app = await client.create({ token, name, envName, _staging })
+  let app = await client.create({ token, name, envName, region: regionName, _staging })
   let appID = app?.appID
   let envID = app?.environments[0]
   if (!app || !appID || !envID) {

@@ -4,6 +4,10 @@ let cannotBeStaging = `Environment name cannot be 'staging'`
 let envRequired = 'An environment name is required'
 let envInvalid = 'Environment name must be [a-zA-Z0-9-_]'
 
+let regions = [ 'us-east-1', 'us-east-2', 'us-west-1', 'us-west-2' ]
+let regionRequired = 'A region name is required'
+let regionInvalid = `Region must be one of [${regions.toString()}]`
+
 let validateEnvName = {
   arg: name => {
     if (name === 'testing') throw ReferenceError(cannotBeStaging)
@@ -18,6 +22,21 @@ let validateEnvName = {
   }
 }
 
+let validateRegionName = {
+  arg: name => {
+    if (!name) throw ReferenceError(regionRequired)
+    if (!regions.includes(name)) throw ReferenceError(regionInvalid)
+    return true
+  },
+  prompt: name => {
+    if (!name) return regionRequired
+    if (!regions.includes(name)) return regionInvalid
+    return true
+  }
+}
+
+
 module.exports = {
-  validateEnvName
+  validateEnvName,
+  validateRegionName
 }
