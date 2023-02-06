@@ -16,15 +16,17 @@ const get${capSingular} = async function (key) {
 }
 
 const get${capPlural} = async function () {
-  const pages = await data.get({
+  const pages = await data.page({
     table: '${plural}',
     limit: 25
   })
 
   let ${plural} = []
-  for await (let ${singular} of pages) {
-    delete ${singular}.table
-    ${plural}.push(${singular})
+  for await (let page of pages) {
+    for (let ${singular} of page) {
+      delete ${singular}.table
+      ${plural}.push(${singular})
+    }
   }
 
   return ${plural}
