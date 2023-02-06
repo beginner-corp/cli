@@ -16,7 +16,18 @@ const get${capSingular} = async function (key) {
 }
 
 const get${capPlural} = async function () {
-  return data.get({ table: '${plural}' })
+  const pages = await data.get({
+    table: '${plural}',
+    limit: 25
+  })
+
+  let ${plural} = []
+  for await (let ${singular} of pages) {
+    delete ${singular}.table
+    ${plural}.push(${singular})
+  }
+
+  return ${plural}
 }
 
 const validate = {
