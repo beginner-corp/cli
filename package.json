@@ -22,9 +22,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "9.1.0",
-    "@architect/inventory": "3.4.0",
+    "@architect/inventory": "3.4.2",
     "@architect/parser": "6.0.2",
-    "@architect/sandbox": "5.4.2",
+    "@architect/sandbox": "5.5.1",
     "@architect/utils": "3.1.2",
     "@begin/api": "1.4.5",
     "@enhance/arc-plugin-enhance": "4.4.1",
