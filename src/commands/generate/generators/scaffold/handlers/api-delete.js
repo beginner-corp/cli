@@ -21,10 +21,10 @@ export async function post (req) {${includeAuth ? `
   // eslint-disable-next-line no-unused-vars
   let { problems: removedProblems, ${singular}: removed, ...newSession } = session
   try {
-    await delete${capSingular}(id)
+    let result = await delete${capSingular}(id)
     return {
       session: newSession,
-      json: null,
+      json: { result },
       location: '/${plural}'
     }
   }
