@@ -4,7 +4,8 @@ import { validator } from '@begin/validator'
 import { ${capSingular} } from './schemas/${singular}.mjs'
 
 const delete${capSingular} = async function (key) {
-  return data.destroy({ table: '${plural}', key })
+  await data.destroy({ table: '${plural}', key })
+  return { key }
 }
 
 const upsert${capSingular} = async function (${singular}) {
