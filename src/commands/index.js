@@ -20,6 +20,7 @@ let commands = [
 ]
 
 let helper = require('../helper')
+let telemetry = require('../lib/telemetry')
 
 module.exports = async function runCommand (params) {
   let { args, isCI, lang, printer } = params
@@ -47,19 +48,27 @@ module.exports = async function runCommand (params) {
     let { names, action, help } = command
     // Some help output is generated dynamically
     if (names[lang].includes(cmd)) {
+      if (names[lang][0] !== cmd) {
+        params.alias = cmd
+        cmd = params.cmd = names[lang][0]
+      }
       printer.debug(
         'command\n' +
         `  names: ${names[lang]?.join(', ')}\n` +
         `  action: ${action ? true : false}\n` +
-        `  help: ${help ? Object.keys(help).join(', ') : false}`,
+        `  help: ${help ? Object.keys(help).join(', ') || '[function]' : false}`,
       )
+
       if (args.help && help) {
         helper(params, await getHelp(help))
+        telemetry.update(params)
         return
       }
       try {
+        telemetry.send(params)
         let result = await action(params)
         printer(result)
+        telemetry.update(params)
         return
       }
       catch (err) {
@@ -67,9 +76,13 @@ module.exports = async function runCommand (params) {
           printer(err)
           if (args.json) return
           helper(params, await getHelp(help))
+          telemetry.update(params)
           return
         }
-        else if (err) throw err
+        else if (err) {
+          telemetry.update(params, err)
+          throw err
+        }
         process.exitCode = 1 // Rejecting without an error is probably a failed build
         return
       }
@@ -77,6 +90,7 @@ module.exports = async function runCommand (params) {
   }
   // Fall back to main help if nothing else ran
   if (cmd) {
+    telemetry.update(params)
     printer(Error(`Unknown command: ${cmd}`))
   }
   if (!args.json) {

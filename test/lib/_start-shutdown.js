@@ -36,7 +36,7 @@ async function startDev (type, t, dir, reuse, options = {}) {
     // Quiet overrides are a bit more abstracted here bc we have to print from a child
     let cmd = type === 'module' ? 'node' : bin
     let args = type === 'module' ? [ cwd ] : []
-    args.push('dev', '--port', `${port}`)
+    args.push('dev', '--port', `${port}`, '--disable-telemetry')
     child = spawn(cmd, args, {
       cwd: dir,
       env: { ...process.env },

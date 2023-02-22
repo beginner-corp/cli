@@ -5,6 +5,7 @@ let { homedir } = require('os')
 let minimist = require('minimist')
 let commands = require('./commands')
 let _printer = require('./printer')
+let telemetry = require('./lib/telemetry')
 
 async function begin (params = {}) {
   let { version } = params
@@ -34,6 +35,7 @@ async function begin (params = {}) {
     let isCI = args.input === false || (process.env.CI || !process.stdout.isTTY) || false
     let params = { args, appVersion: version, cliDir, clientIDs, isCI, lang, printer }
     await commands(params)
+    telemetry.end(params)
   }
   catch (err) {
     _printer(args)(err)
@@ -45,7 +47,7 @@ if (require.main === module) {
   begin()
 }
 
-// For whatever reason signal-exit doesn't catch SIGINT, so do this in case we have a running spinner that hid the cursor
+// Do this in case we have a running spinner that hid the cursor
 process.on('SIGINT', () => {
   require('restore-cursor')()
   process.stderr.write('\n')

@@ -23,12 +23,12 @@ function getAppID (inventory) {
 
 let config
 // Get Begin API creds and related config
-function getConfig (params) {
+function getConfig (params, print = true) {
   if (config && !params._refresh) return config
 
   function done (via) {
-    if (config.stagingAPI) printer(`Begin staging enabled`)
-    if (config.access_token) printer.debug(`Using Begin token via ${via}`)
+    if (print && config.stagingAPI) printer(`Begin staging enabled`)
+    if (print && config.access_token) printer.debug(`Using Begin token via ${via}`)
     return config
   }
 

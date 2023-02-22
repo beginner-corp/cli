@@ -9,7 +9,7 @@ let printed = []
 let printer = r => printed.push(r)
 printer.verbose = () => {}
 printer.debug = () => {}
-let getArgs = s => minimist([ ...s.split(' ').filter(Boolean) ])
+let getArgs = s => minimist([ ...s.split(' ').filter(Boolean), '--disable-telemetry' ])
 let reset = () => printed = []
 
 test('Set up env', t => {
