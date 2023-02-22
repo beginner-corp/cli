@@ -19,6 +19,7 @@ function update (params, err) {
   let args = Object.keys(params.args).filter(a => a !== '_')
   let help = params.help ? true : false
 
+  events.updated = new Date().toISOString()
   events.events.push({
     cmd,
     alias,
@@ -34,6 +35,7 @@ function update (params, err) {
 }
 
 // Optimistically send telemetry data
+// No need to await this, because it should run in the background and be killed if necessary
 async function send (params) {
   if (isDisabled(params)) return
 
@@ -64,13 +66,19 @@ async function send (params) {
   let keeping = []
   let maxPayload = 1000 * 100
   let reachedMax = false
+  let payloadSize = 0
   events.events.forEach(event => {
-    if (reachedMax) keeping.push(event)
-    else if (JSON.stringify(sending.concat(event)).length >= maxPayload) {
+    if (reachedMax) return keeping.push(event)
+
+    let newPayload = JSON.stringify(event).length
+    if ((payloadSize + newPayload) >= maxPayload) {
       reachedMax = true
-      return keeping.push(event)
+      keeping.push(event)
     }
-    else sending.push(event)
+    else {
+      payloadSize += newPayload.length
+      sending.push(event)
+    }
   })
 
   let headers = undefined
@@ -164,6 +172,7 @@ function updateEvents (events, params) {
   let { writeFileSync } = require('fs')
   let { join } = require('path')
 
+  // TODO we should probably do some file locking around here
   let file = join(cliDir, 'telemetry.json')
   writeFileSync(file, JSON.stringify(events, null, 2))
 }
