@@ -46,7 +46,7 @@ module.exports = {
   },
   binary: async (t, args, dir) => {
     let opts = { cwd: dir || tmp, shell: true }
-    let cmd = `${bin} ${args} disableTelemetry`
+    let cmd = `${bin} ${args} ${disableTelemetry}`
     let result, code
     try {
       process.exitCode = 0
