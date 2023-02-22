@@ -15,7 +15,7 @@ let bin = join(binPath)
 
 let argv = process.argv
 let json = i => JSON.stringify(i)
-
+let disableTelemetry = '--disable-telemetry'
 
 function reset (t) {
   process.chdir(cwd)
@@ -30,7 +30,7 @@ function reset (t) {
 module.exports = {
   module: async (t, args, dir) => {
     process.chdir(dir || tmp)
-    process.argv = [ 'fake-env', 'fake-file', ...getArgs(args) ]
+    process.argv = [ 'fake-env', 'fake-file', ...getArgs(args), disableTelemetry ]
     process.exitCode = 0
     capture.start()
     await mod()
@@ -46,7 +46,7 @@ module.exports = {
   },
   binary: async (t, args, dir) => {
     let opts = { cwd: dir || tmp, shell: true }
-    let cmd = `${bin} ${args}`
+    let cmd = `${bin} ${args} disableTelemetry`
     let result, code
     try {
       process.exitCode = 0
