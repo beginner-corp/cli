@@ -1,7 +1,12 @@
 let started = false
 let done = false
 
-module.exports = { update, send, end }
+module.exports = {
+  // Core methods
+  update, send, end,
+  // Exported for testing
+  isDisabled, getEvents, updateEvents, reset,
+}
 
 function update (params, err) {
   if (isDisabled(params)) return
@@ -17,7 +22,7 @@ function update (params, err) {
   let { randomUUID } = require('crypto')
   let { cmd, alias, isCI } = params
   let args = Object.keys(params.args).filter(a => a !== '_')
-  let help = params.help ? true : false
+  let help = params.args.help ? true : false
 
   events.updated = new Date().toISOString()
   events.events.push({
@@ -44,9 +49,7 @@ async function send (params) {
   if (disableTelemetry) return
 
   let doNotSendOnCmds = [ 'generate', 'version' ]
-  if (doNotSendOnCmds.includes(params.cmd)) return
-
-  started = true
+  if (doNotSendOnCmds.includes(params.cmd) || params.args.help) return
 
   let { printer, clientIDs } = params
   let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
@@ -59,6 +62,8 @@ async function send (params) {
   let now = Date.now()
   let readyToSend = events.events.some(({ ts }) => (now - ts) >= (oneDay / 4))
   if (!readyToSend) return
+
+  started = true
 
   // There's a max payload size of 6MB, so we have to stay within that
   // But just to keep things snappy, let's cap it at 100KB
@@ -76,7 +81,7 @@ async function send (params) {
       keeping.push(event)
     }
     else {
-      payloadSize += newPayload.length
+      payloadSize += newPayload
       sending.push(event)
     }
   })
@@ -96,6 +101,7 @@ async function send (params) {
       // We can't transmit without a unique ID, so bail
       printer.debug('Telemetry machine ID error')
       printer.debug(err)
+      started = false
       return
     }
   }
@@ -103,7 +109,7 @@ async function send (params) {
   printer.debug(`Transmitting ${sending.length} telemetry events to Begin`)
 
   let tiny = require('tiny-json-http')
-  tiny.post({ url: base + '/telemetry', headers, body })
+  await tiny.post({ url: base + '/telemetry', headers, body })
     .then(() => {
       // Filter out stale events; unlikely, but possible
       events.events = keeping.filter(({ ts }) => (now - ts) < (oneDay * 14))
@@ -111,6 +117,7 @@ async function send (params) {
       done = true
     })
     .catch(err => {
+      done = true
       printer.debug('Telemetry error')
       printer.debug(err)
     })
@@ -182,4 +189,9 @@ function getBase (isStaging) {
   if (__BEGIN_TEST_URL__) return __BEGIN_TEST_URL__
 
   return `https://${isStaging ? 'staging-' : ''}api.begin.com/v1`
+}
+
+// Only used for testing
+function reset () {
+  started = done = false
 }

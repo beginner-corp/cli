@@ -73,6 +73,7 @@ module.exports = async function runCommand (params) {
       }
       catch (err) {
         if (err?.type === '__help__' && help) {
+          args.help = true
           printer(err)
           if (args.json) return
           helper(params, await getHelp(help))

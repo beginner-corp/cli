@@ -5,7 +5,7 @@ let inventory = require('@architect/inventory')
 let begin = require('./_begin')
 let capture = require('./_capture')
 let newTmpFolder = require('./_new-tmp-folder')
-let { start, shutdown } = require('./_start-shutdown')
+let { start, shutdown, getPort } = require('./_start-shutdown')
 let tmp = require('./_tmp-dir')
 
 // Integration test runner
@@ -35,6 +35,7 @@ module.exports = {
   capture,
   defaultNumberOfLambdas,
   getInv,
+  getPort,
   newTmpFolder,
   run,
   shutdown,
