@@ -14,15 +14,7 @@ let bin = join(binPath)
 let ready = /Begin dev server \(.*\) ready!/
 
 async function startDev (type, t, dir, reuse, options = {}) {
-  // Our self-hosted runners do not (yet) have full isolation, so port conflicts may be a thing
-  // For whatever reason, even relying on port checking / incrementing wasn't reliably working in that environment
-  // So, instead we'll just get a random port number between 50000–65000 and use that
-  let min = 50000
-  let max = 65000
-  let seed = process.env.CI && !process.platform.startsWith('win')
-    ? Math.floor(Math.random() * (max - min + 1)) + min
-    : 3333
-  let port = await getPort(seed)
+  let port = await getPort()
   // TODO: fix Sandbox (and this) to accept a ports property at some point?
   let _arc = port + 100 // Yeah, this magic number can definitely break, but it's pretty unlikely in a CI context
   process.env.ARC_INTERNAL_PORT = _arc
@@ -106,13 +98,22 @@ module.exports = {
     binary: startDev.bind({}, 'binary'),
   },
   shutdown,
+  getPort,
 }
 
 /**
  * Ensure we have access to the desired HTTP port!
  * Ported (ahem) from @architect/sandbox
  */
-function getPort (checking) {
+function getPort () {
+  // Our self-hosted runners do not (yet) have full isolation, so port conflicts may be a thing
+  // For whatever reason, even relying on port checking / incrementing wasn't reliably working in that environment
+  // So, instead we'll just get a random port number between 50000–65000 and use that
+  let min = 50000
+  let max = 65000
+  let checking = process.env.CI && !process.platform.startsWith('win')
+    ? Math.floor(Math.random() * (max - min + 1)) + min
+    : 3333
   return new Promise((res, rej) => {
     let tries = 0
     let tester = net.createServer()
