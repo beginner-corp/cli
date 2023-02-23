@@ -45,11 +45,14 @@ async function send (params) {
   if (isDisabled(params)) return
 
   let { getConfig } = require('./')
-  let { access_token, collectBasicTelemetry, stagingAPI } = getConfig(params, false)
+  let { access_token, collectBasicTelemetry, flushTelemetry, stagingAPI } = getConfig(params, false)
   if (collectBasicTelemetry === false) return
 
+  let { args } = params
+  let flush = args['flush-telemetry'] || flushTelemetry
+
   let doNotSendOnCmds = [ 'generate', 'telemetry', 'version' ]
-  if (doNotSendOnCmds.includes(params.cmd) || params.args.help) return
+  if (!flush && (doNotSendOnCmds.includes(params.cmd) || args.help)) return
 
   let { printer, clientIDs } = params
   let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
@@ -61,7 +64,7 @@ async function send (params) {
   let oneDay = 60 * 60 * 24 * 1000
   let now = Date.now()
   let readyToSend = events.events.some(({ ts }) => (now - ts) >= (oneDay / 4))
-  if (!readyToSend) return
+  if (!flush && !readyToSend) return
 
   started = true
 

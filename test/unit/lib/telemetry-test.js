@@ -140,7 +140,7 @@ test('Start mock telemetry server', t => {
 })
 
 test('telemetry.send', async t => {
-  t.plan(32)
+  t.plan(36)
   let { getEvents, send } = telemetry
   process.env.__BEGIN_TEST_URL__ = `http://${host}:${port}`
 
@@ -169,13 +169,14 @@ test('telemetry.send', async t => {
     req.on('data', chunk => body.push(chunk))
     req.on('end', () => {
       if (body.length) body = JSON.parse(Buffer.concat(body))
-      // console.log(`Telemetry body:`, body)
       res.writeHead(200, responseHeaders)
       res.end(responseBody)
     })
   })
 
-  // Noop - don't send an empty event block
+  /**
+   * Noop - don't send an empty event block
+   */
   await send({ cmd: 'dev', ...basicParams })
   t.notOk(req, 'Did not send request')
 
@@ -184,7 +185,9 @@ test('telemetry.send', async t => {
   writeFileSync(file, JSON.stringify(events))
   events = getEvents({ cliDir })
 
-  // Noop - some commands should never send telemetry
+  /**
+   * Noop - some commands should never send telemetry
+   */
   await send({ cmd: 'generate', ...basicParams })
   await send({ cmd: 'telemetry', ...basicParams })
   await send({ cmd: 'version', ...basicParams })
@@ -192,7 +195,9 @@ test('telemetry.send', async t => {
   t.notOk(req, 'Did not send request')
   t.equal(events.events.length, 1, 'Telemetry queue has pending event')
 
-  // Send a basic block of telemetry
+  /**
+   * Send a basic block of telemetry
+   */
   await send({ cmd: 'dev', ...basicParams })
   events = getEvents({ cliDir })
   t.ok(req, 'Sent telemetry request')
@@ -206,7 +211,9 @@ test('telemetry.send', async t => {
   req = undefined
   telemetry.reset()
 
-  // Don't send events that are too fresh
+  /**
+   * Don't send events that are too fresh
+   */
   event2 = { cmd: 'help', ts: Date.now() }
   events.events.push(event2)
   writeFileSync(file, JSON.stringify(events))
@@ -216,7 +223,9 @@ test('telemetry.send', async t => {
   t.notOk(req, 'Did not send request')
   t.equal(events.events.length, 1, 'Telemetry queue has pending event')
 
-  // Flush the queue once an event is old enough
+  /**
+   * Flush the queue once an event is old enough
+   */
   events.events.push(event1)
   writeFileSync(file, JSON.stringify(events))
 
@@ -232,7 +241,24 @@ test('telemetry.send', async t => {
   req = undefined
   telemetry.reset()
 
-  // Only transmit approx 100KB of telemetry
+  /**
+   * Force-flush the telemetry buffer
+   */
+  events.events.push(event2)
+  writeFileSync(file, JSON.stringify(events))
+
+  await send({ cmd: 'dev', ...basicParams, args: { 'flush-telemetry': true } })
+  events = getEvents({ cliDir })
+  t.ok(req, 'Sent telemetry request')
+  t.equal(body.events.length, 1, 'Got a single event')
+  t.deepEqual(body.events[0], event2, 'Event matches')
+  t.equal(events.events.length, 0, 'Telemetry queue is cleared')
+  req = undefined
+  telemetry.reset()
+
+  /**
+   * Only transmit approx 100KB of telemetry
+   */
   let junk = { cmd: 'help', ts: Date.now() - oneDay, junkData: 'x'.repeat(30000) }
   // Also test only keeping events fresher than 2 weeks; the last in the array below will be dropped
   events.events.push(junk, junk, junk, junk, junk, { ...junk, ts: 1000 })
@@ -249,7 +275,9 @@ test('telemetry.send', async t => {
   req = undefined
   telemetry.reset()
 
-  // Check token + staging config
+  /**
+   * Check token + staging config
+   */
   let config = { access_token: 'foo', stagingAPI: true }
   writeFileSync(join(cliDir, 'config.json'), JSON.stringify(config))
   events.events = [ event1 ]
