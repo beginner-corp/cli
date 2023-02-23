@@ -87,7 +87,7 @@ async function send (params) {
   })
 
   let headers = undefined
-  let body = { clientID, events: sending }
+  let body = { type: 'cli', clientID, events: sending }
   headers = { 'content-type': 'application/json' }
   if (access_token) {
     headers.authorization = `bearer ${access_token}`
