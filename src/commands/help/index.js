@@ -73,6 +73,10 @@ let help = {
             description: 'Display help',
           },
           {
+            name: 'telemetry',
+            description: 'Enable or disable basic CLI telemetry',
+          },
+          {
             name: 'update',
             description: 'Update Begin to the latest version',
           },

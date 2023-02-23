@@ -12,15 +12,16 @@ let login = require('./login')
 let logout = require('./logout')
 let newProj = require('./new')
 let tail = require('./tail')
+let telemetry = require('./telemetry')
 let update = require('./update')
 let version = require('./version')
 let commands = [
   builds, create, deploy, destroy, dev, envVar, generate, help,
-  list, login, logout, logs, newProj, tail, update, version,
+  list, login, logout, logs, newProj, tail, telemetry, update, version,
 ]
 
 let helper = require('../helper')
-let telemetry = require('../lib/telemetry')
+let _telemetry = require('../lib/telemetry')
 
 module.exports = async function runCommand (params) {
   let { args, isCI, lang, printer } = params
@@ -61,14 +62,14 @@ module.exports = async function runCommand (params) {
 
       if (args.help && help) {
         helper(params, await getHelp(help))
-        telemetry.update(params)
+        _telemetry.update(params)
         return
       }
       try {
-        telemetry.send(params)
+        _telemetry.send(params)
         let result = await action(params)
         printer(result)
-        telemetry.update(params)
+        _telemetry.update(params)
         return
       }
       catch (err) {
@@ -77,11 +78,11 @@ module.exports = async function runCommand (params) {
           printer(err)
           if (args.json) return
           helper(params, await getHelp(help))
-          telemetry.update(params)
+          _telemetry.update(params)
           return
         }
         else if (err) {
-          telemetry.update(params, err)
+          _telemetry.update(params, err)
           throw err
         }
         process.exitCode = 1 // Rejecting without an error is probably a failed build
@@ -91,7 +92,7 @@ module.exports = async function runCommand (params) {
   }
   // Fall back to main help if nothing else ran
   if (cmd) {
-    telemetry.update(params)
+    _telemetry.update(params)
     printer(Error(`Unknown command: ${cmd}`))
   }
   if (!args.json) {

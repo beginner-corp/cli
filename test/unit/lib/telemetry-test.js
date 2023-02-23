@@ -186,6 +186,7 @@ test('telemetry.send', async t => {
 
   // Noop - some commands should never send telemetry
   await send({ cmd: 'generate', ...basicParams })
+  await send({ cmd: 'telemetry', ...basicParams })
   await send({ cmd: 'version', ...basicParams })
   await send({ cmd: 'dev', ...basicParams, args: { help: true } })
   t.notOk(req, 'Did not send request')

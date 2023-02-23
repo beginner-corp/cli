@@ -15,8 +15,8 @@ function update (params, err) {
   if (!exitCode && err) exitCode = 1
 
   let { getConfig } = require('./')
-  let { disableTelemetry } = getConfig(params, false)
-  if (disableTelemetry) return
+  let { collectBasicTelemetry } = getConfig(params, false)
+  if (collectBasicTelemetry === false) return
 
   let events = getEvents(params)
   let { randomUUID } = require('crypto')
@@ -45,10 +45,10 @@ async function send (params) {
   if (isDisabled(params)) return
 
   let { getConfig } = require('./')
-  let { access_token, disableTelemetry, stagingAPI } = getConfig(params, false)
-  if (disableTelemetry) return
+  let { access_token, collectBasicTelemetry, stagingAPI } = getConfig(params, false)
+  if (collectBasicTelemetry === false) return
 
-  let doNotSendOnCmds = [ 'generate', 'version' ]
+  let doNotSendOnCmds = [ 'generate', 'telemetry', 'version' ]
   if (doNotSendOnCmds.includes(params.cmd) || params.args.help) return
 
   let { printer, clientIDs } = params
