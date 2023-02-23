@@ -140,7 +140,7 @@ test('Start mock telemetry server', t => {
 })
 
 test('telemetry.send', async t => {
-  t.plan(31)
+  t.plan(32)
   let { getEvents, send } = telemetry
   process.env.__BEGIN_TEST_URL__ = `http://${host}:${port}`
 
@@ -197,6 +197,7 @@ test('telemetry.send', async t => {
   events = getEvents({ cliDir })
   t.ok(req, 'Sent telemetry request')
   t.notOk(headers.authorization, 'Did not send request with authorization header')
+  t.equal(body.type, 'cli', 'Got correct telemetry type')
   t.equal(body.clientID, 'production', 'Got correct client ID')
   t.equal(body.events.length, 1, 'Got a single event')
   t.deepEqual(body.events[0], event1, 'Event matches')
