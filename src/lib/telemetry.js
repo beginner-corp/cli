@@ -72,10 +72,12 @@ async function send (params) {
   // But just to keep things snappy, let's cap it at 100KB
   let sending = []
   let keeping = []
+  let knownEventIDs = []
   let maxPayload = 1000 * 100
   let reachedMax = false
   let payloadSize = 0
   events.events.forEach(event => {
+    knownEventIDs.push(event.id)
     if (reachedMax) return keeping.push(event)
 
     let newPayload = JSON.stringify(event).length
@@ -115,7 +117,11 @@ async function send (params) {
   await tiny.post({ url: base + '/telemetry', headers, body })
     .then(() => {
       // Filter out stale events; unlikely, but possible
-      events.events = keeping.filter(({ ts }) => (now - ts) < (oneDay * 14))
+      keeping = keeping.filter(({ ts }) => (now - ts) < (oneDay * 14))
+      // Event queue may have changed on disk, so make sure we don't lose any fresh events
+      events = getEvents(params)
+      let freshEvents = events.events.filter(({ id }) => !knownEventIDs.includes(id))
+      events.events = keeping.concat(freshEvents)
       updateEvents(events, params)
       done = true
     })
