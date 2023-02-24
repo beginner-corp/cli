@@ -48,8 +48,8 @@ async function send (params) {
   let { access_token, collectBasicTelemetry, flushTelemetry, stagingAPI } = getConfig(params, false)
   if (collectBasicTelemetry === false) return
 
-  let { args } = params
-  let flush = args['flush-telemetry'] || flushTelemetry
+  let { args, isCI } = params
+  let flush = args['flush-telemetry'] || flushTelemetry || isCI
 
   let doNotSendOnCmds = [ 'generate', 'telemetry', 'version' ]
   if (!flush && (doNotSendOnCmds.includes(params.cmd) || args.help)) return
