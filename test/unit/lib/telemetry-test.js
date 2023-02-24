@@ -140,7 +140,7 @@ test('Start mock telemetry server', t => {
 })
 
 test('telemetry.send', async t => {
-  t.plan(36)
+  t.plan(40)
   let { getEvents, send } = telemetry
   process.env.__BEGIN_TEST_URL__ = `http://${host}:${port}`
 
@@ -248,6 +248,21 @@ test('telemetry.send', async t => {
   writeFileSync(file, JSON.stringify(events))
 
   await send({ cmd: 'dev', ...basicParams, args: { 'flush-telemetry': true } })
+  events = getEvents({ cliDir })
+  t.ok(req, 'Sent telemetry request')
+  t.equal(body.events.length, 1, 'Got a single event')
+  t.deepEqual(body.events[0], event2, 'Event matches')
+  t.equal(events.events.length, 0, 'Telemetry queue is cleared')
+  req = undefined
+  telemetry.reset()
+
+  /**
+   * Force-flush if in CI
+   */
+  events.events.push(event2)
+  writeFileSync(file, JSON.stringify(events))
+
+  await send({ cmd: 'dev', ...basicParams, isCI: true })
   events = getEvents({ cliDir })
   t.ok(req, 'Sent telemetry request')
   t.equal(body.events.length, 1, 'Got a single event')
