@@ -1,6 +1,6 @@
 {
   "name": "@begin/cli",
-  "version": "0.11.4",
+  "version": "0.12.0",
   "bin": {
     "begin": "src/index.js"
   },
