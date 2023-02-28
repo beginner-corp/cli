@@ -9,127 +9,141 @@ module.exports = {
 }
 
 function update (params, err) {
-  if (isDisabled(params)) return
+  try {
+    if (isDisabled(params)) return
 
-  let exitCode = process.exitCode ?? 0
-  if (!exitCode && err) exitCode = 1
+    let exitCode = process.exitCode ?? 0
+    if (!exitCode && err) exitCode = 1
 
-  let { getConfig } = require('./')
-  let { collectBasicTelemetry } = getConfig(params, false)
-  if (collectBasicTelemetry === false) return
+    let { getConfig } = require('./')
+    let { collectBasicTelemetry } = getConfig(params, false)
+    if (collectBasicTelemetry === false) return
 
-  let events = getEvents(params)
-  let { randomUUID } = require('crypto')
-  let { cmd, alias, isCI } = params
-  let args = Object.keys(params.args).filter(a => a !== '_')
-  let help = params.args.help ? true : false
+    let events = getEvents(params)
+    let { randomUUID } = require('crypto')
+    let { cmd, alias, isCI } = params
+    let args = Object.keys(params.args).filter(a => a !== '_')
+    let help = params.args.help ? true : false
 
-  events.updated = new Date().toISOString()
-  events.events.push({
-    cmd,
-    alias,
-    help,
-    args,
-    isCI,
-    ts: Date.now(),
-    exitCode,
-    id: randomUUID(),
-  })
+    events.updated = new Date().toISOString()
+    events.events.push({
+      cmd,
+      alias,
+      help,
+      args,
+      isCI,
+      ts: Date.now(),
+      exitCode,
+      id: randomUUID(),
+    })
 
-  updateEvents(events, params)
+    updateEvents(events, params)
+  }
+  catch (err) {
+    let { printer } = params
+    printer.debug('telemetry.update error:')
+    printer.debug(err)
+  }
 }
 
 // Optimistically send telemetry data
 // No need to await this, because it should run in the background and be killed if necessary
 async function send (params) {
-  if (isDisabled(params)) return
+  try {
+    if (isDisabled(params)) return
 
-  let { getConfig } = require('./')
-  let { access_token, collectBasicTelemetry, flushTelemetry, stagingAPI } = getConfig(params, false)
-  if (collectBasicTelemetry === false) return
+    let { getConfig } = require('./')
+    let { access_token, collectBasicTelemetry, flushTelemetry, stagingAPI } = getConfig(params, false)
+    if (collectBasicTelemetry === false) return
 
-  let { args, isCI } = params
-  let flush = args['flush-telemetry'] || flushTelemetry || isCI
+    let { args, isCI } = params
+    let flush = args['flush-telemetry'] || flushTelemetry || isCI
 
-  let doNotSendOnCmds = [ 'generate', 'telemetry', 'version' ]
-  if (!flush && (doNotSendOnCmds.includes(params.cmd) || args.help)) return
+    let doNotSendOnCmds = [ 'generate', 'telemetry', 'version' ]
+    if (!flush && (doNotSendOnCmds.includes(params.cmd) || args.help)) return
 
-  let { printer, clientIDs } = params
-  let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
-  let base = getBase(stagingAPI)
+    let { printer, clientIDs } = params
+    let clientID = stagingAPI ? clientIDs.staging : clientIDs.production
+    let base = getBase(stagingAPI)
 
-  let events = getEvents(params)
-  if (!events.events.length) return
+    let events = getEvents(params)
+    if (!events.events.length) return
 
-  let oneDay = 60 * 60 * 24 * 1000
-  let now = Date.now()
-  let readyToSend = events.events.some(({ ts }) => (now - ts) >= (oneDay / 4))
-  if (!flush && !readyToSend) return
+    let oneDay = 60 * 60 * 24 * 1000
+    let now = Date.now()
+    let readyToSend = events.events.some(({ ts }) => (now - ts) >= (oneDay / 4))
+    if (!flush && !readyToSend) return
 
-  started = true
+    started = true
 
-  // There's a max payload size of 6MB, so we have to stay within that
-  // But just to keep things snappy, let's cap it at 100KB
-  let sending = []
-  let keeping = []
-  let knownEventIDs = []
-  let maxPayload = 1000 * 100
-  let reachedMax = false
-  let payloadSize = 0
-  events.events.forEach(event => {
-    knownEventIDs.push(event.id)
-    if (reachedMax) return keeping.push(event)
+    // There's a max payload size of 6MB, so we have to stay within that
+    // But just to keep things snappy, let's cap it at 100KB
+    let sending = []
+    let keeping = []
+    let knownEventIDs = []
+    let maxPayload = 1000 * 100
+    let reachedMax = false
+    let payloadSize = 0
+    events.events.forEach(event => {
+      knownEventIDs.push(event.id)
+      if (reachedMax) return keeping.push(event)
 
-    let newPayload = JSON.stringify(event).length
-    if ((payloadSize + newPayload) >= maxPayload) {
-      reachedMax = true
-      keeping.push(event)
+      let newPayload = JSON.stringify(event).length
+      if ((payloadSize + newPayload) >= maxPayload) {
+        reachedMax = true
+        keeping.push(event)
+      }
+      else {
+        payloadSize += newPayload
+        sending.push(event)
+      }
+    })
+
+    let headers = undefined
+    let body = { type: 'cli', clientID, events: sending }
+    headers = { 'content-type': 'application/json' }
+    if (access_token) {
+      headers.authorization = `bearer ${access_token}`
     }
     else {
-      payloadSize += newPayload
-      sending.push(event)
+      let { machineId } = require('node-machine-id')
+      try {
+        body.device = await machineId()
+      }
+      catch (err) {
+        // We can't transmit without a unique ID, so bail
+        printer.debug('Telemetry machine ID error')
+        printer.debug(err)
+        started = false
+        return
+      }
     }
-  })
 
-  let headers = undefined
-  let body = { type: 'cli', clientID, events: sending }
-  headers = { 'content-type': 'application/json' }
-  if (access_token) {
-    headers.authorization = `bearer ${access_token}`
+    printer.debug(`Transmitting ${sending.length} telemetry events to Begin`)
+
+    let tiny = require('tiny-json-http')
+    await tiny.post({ url: base + '/telemetry', headers, body })
+      .then(() => {
+        // Filter out stale events; unlikely, but possible
+        keeping = keeping.filter(({ ts }) => (now - ts) < (oneDay * 14))
+        // Event queue may have changed on disk, so make sure we don't lose any fresh events
+        events = getEvents(params)
+        let freshEvents = events.events.filter(({ id }) => !knownEventIDs.includes(id))
+        events.events = keeping.concat(freshEvents)
+        updateEvents(events, params)
+        done = true
+      })
+      .catch(err => {
+        done = true
+        printer.debug('Telemetry error')
+        printer.debug(err)
+      })
   }
-  else {
-    let { machineId } = require('node-machine-id')
-    try {
-      body.device = await machineId()
-    }
-    catch (err) {
-      // We can't transmit without a unique ID, so bail
-      printer.debug('Telemetry machine ID error')
-      printer.debug(err)
-      started = false
-      return
-    }
+  catch (err) {
+    let { printer } = params
+    printer.debug('telemetry.send error:')
+    printer.debug(err)
   }
-
-  printer.debug(`Transmitting ${sending.length} telemetry events to Begin`)
-
-  let tiny = require('tiny-json-http')
-  await tiny.post({ url: base + '/telemetry', headers, body })
-    .then(() => {
-      // Filter out stale events; unlikely, but possible
-      keeping = keeping.filter(({ ts }) => (now - ts) < (oneDay * 14))
-      // Event queue may have changed on disk, so make sure we don't lose any fresh events
-      events = getEvents(params)
-      let freshEvents = events.events.filter(({ id }) => !knownEventIDs.includes(id))
-      events.events = keeping.concat(freshEvents)
-      updateEvents(events, params)
-      done = true
-    })
-    .catch(err => {
-      done = true
-      printer.debug('Telemetry error')
-      printer.debug(err)
-    })
 }
 
 // Since Promises aren't cancelable, force-exit the process if telemetry hasn't heard back yet
