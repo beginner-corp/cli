@@ -66,6 +66,15 @@ let help = {
         ],
       },
       {
+        header: 'Manage your Begin account domains',
+        items: [
+          {
+            name: 'domains',
+            description: 'List your Begin account domain names',
+          },
+        ],
+      },
+      {
         header: 'Other',
         items: [
           {
