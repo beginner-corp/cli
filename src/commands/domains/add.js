@@ -30,17 +30,17 @@ async function action (params) {
 }
 
 module.exports = {
-  name: 'check',
-  description: 'Check domain availability',
+  name: 'add',
+  description: 'Start adding a domain subscription to your Begin account',
   action,
   help: {
     en: {
-      usage: [ 'domains check' ],
+      usage: [ 'domains add' ],
       description: 'Check domain availability',
       examples: [
         {
           name: 'Check begin.com availability',
-          example: 'begin domains check begin.com',
+          example: 'begin domains add --domain begin.com',
         },
       ]
     }
