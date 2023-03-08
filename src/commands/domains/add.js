@@ -13,8 +13,8 @@ async function action (params) {
   let output = []
   if (available) {
     output.push(`Good news! ${c.green(c.bold(domain))} is available!`)
-    output.push(`  Subscribe here: ${c.bold(c.cyan(purchaseLink))}.`)
-    output.push(`  Learn more about Begin domain subscriptions here: ${c.cyan('https://begin.com/')}.`)
+    output.push(`Subscribe here: ${c.bold(c.cyan(purchaseLink))}.`)
+    output.push(`Learn more about Begin domain subscriptions here: ${c.cyan('https://begin.com/')}.`)
   }
   else {
     output.push(`Sorry, ${c.red(c.bold(domain))} is unavailable.`)

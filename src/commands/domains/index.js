@@ -24,11 +24,14 @@ async function action (params) {
     let { getConfig, getAppID } = require('../../lib')
     let { action } = require(`./${subcommand}`)
 
-    let inventory = await _inventory()
-
     let config = getConfig(params)
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
+
+    if (!config.stagingAPI)
+      return Error('You must be logged in, please run: begin login')
+
+    let inventory = await _inventory()
 
     let appID = args.app || args.a || getAppID(inventory)
     let env = args.env || args.e

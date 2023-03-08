@@ -23,10 +23,10 @@ async function action (params) {
   let theDomain = domains.find(d => d.domain === domain)
 
   if (!theDomain)
-    return Error(
-      `You do not subscribe to the domain "${domain}".\n` +
-      `To subscribe, run: begin domains check ${domain}`
-    )
+    return Error([
+      `You do not subscribe to the domain "${domain}".`,
+      `To subscribe, run: begin domains check ${domain}`,
+    ].join('\n'))
 
   let result = await client.domains.associate({
     token,
@@ -38,7 +38,7 @@ async function action (params) {
 
   if (result.success)
     return [
-      `${c.underline(c.cyan(domain))} is being lnked to ${c.bold(theApp.name)} "${theEnv.name}" env`,
+      `${c.underline(c.cyan(domain))} is being linked to the ${c.bold(theApp.name)} app's "${theEnv.name}" env`,
       'This may take a several minutes as we provision DNS and SSL certificates.',
       'Check progress with: begin domains list',
     ].join('\n')

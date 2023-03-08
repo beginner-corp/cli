@@ -1,11 +1,11 @@
 module.exports = {
   en: {
-    usage: [ 'domains' ],
-    description: 'List your Begin account domain names',
+    usage: [ 'no op' ],
+    description: 'no op',
     examples: [
       {
-        name: 'List all domains',
-        example: 'begin domains',
+        name: 'no op',
+        example: 'begin no op',
       },
     ]
   }
