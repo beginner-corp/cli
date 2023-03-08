@@ -1,15 +1,13 @@
 async function action (params) {
   let c = require('picocolors')
-  let { domains, config } = params
-  let { args } = params
+  let client = require('@begin/api')
+  let { config, domain } = params
   let { access_token: token, stagingAPI: _staging } = config
 
-  let domain = args.domain || args._[2]
-
   if (!domain)
-    return Error('Please specify a domain name like: begin domains check begin.com')
+    return Error('Please specify a domain name like: begin domains add --domain begin.com')
 
-  let availability = await domains.check({ token, domain, _staging })
+  let availability = await client.domains.check({ token, domain, _staging })
   let { available, suggestions, purchaseLink } = availability
 
   let output = []
@@ -19,11 +17,11 @@ async function action (params) {
     output.push(`  Learn more about Begin domain subscriptions here: ${c.cyan('https://begin.com/')}.`)
   }
   else {
-    output.push(`Sorry, ${c.red(c.bold(domain))} is not available.`)
+    output.push(`Sorry, ${c.red(c.bold(domain))} is unavailable.`)
     if (suggestions.length) {
-      output.push(c.white('  Some suggestions:'))
+      output.push(c.white('Some suggestions:'))
       suggestions.slice(1, 11).forEach(suggestion => {
-        output.push(`    ${c.gray(suggestion.DomainName)}`)
+        output.push(`  ${c.gray(suggestion.DomainName)}`)
       })
     }
   }
@@ -32,17 +30,17 @@ async function action (params) {
 }
 
 module.exports = {
-  name: 'list',
-  description: "List your Begin account's domains",
+  name: 'check',
+  description: 'Check domain availability',
   action,
   help: {
     en: {
-      usage: [ 'domains' ],
-      description: 'List your Begin account domain names',
+      usage: [ 'domains check' ],
+      description: 'Check domain availability',
       examples: [
         {
-          name: 'List all domains',
-          example: 'begin domains',
+          name: 'Check begin.com availability',
+          example: 'begin domains check begin.com',
         },
       ]
     }

@@ -1,11 +1,15 @@
 let help = require('./help')
 let names = { en: [ 'domains' ] }
-let subcommands = [ 'list', 'check', 'link', 'unlink' ]
+let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink' ]
 let aliases = {
-  add: 'check',
-  associate: 'link',
-  disassociate: 'unlink',
   ls: 'list',
+  check: 'add',
+  rm: 'remove',
+  cancel: 'remove',
+  alias: 'link',
+  associate: 'link',
+  unalias: 'unlink',
+  disassociate: 'unlink',
 }
 let defaultCommand = 'list'
 
@@ -17,8 +21,7 @@ async function action (params) {
 
   if (subcommands.includes(subcommand)) {
     let _inventory = require('@architect/inventory')
-    let { domains } = require('@begin/api')
-    let { getConfig } = require('../../lib')
+    let { getConfig, getAppID } = require('../../lib')
     let { action } = require(`./${subcommand}`)
 
     let inventory = await _inventory()
@@ -27,7 +30,11 @@ async function action (params) {
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
 
-    return action({ domains, config, inventory, ...params })
+    let appID = args.app || args.a || getAppID(inventory)
+    let env = args.env || args.e
+    let domain = args.domain
+
+    return action({ config, inventory, appID, env, domain, ...params })
   }
   else {
     let err = Error('Please specify an domains subcommand')

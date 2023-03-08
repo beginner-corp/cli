@@ -1,16 +1,16 @@
 async function action (params) {
   let c = require('picocolors')
-  let { domains, config } = params
+  let client = require('@begin/api')
+  let { config } = params
   let { access_token: token, stagingAPI: _staging } = config
 
-  let ownedDomains = await domains.list({ token, _staging })
-  if (!ownedDomains.length)
+  let domains = await client.domains.list({ token, _staging })
+  if (!domains.length)
     return Error('No domains found. Start by checking a name with: `begin domains check <domain>')
 
-  let output = []
-  ownedDomains.forEach(({ domain, status }) => {
-    output.push(`${c.white(c.bold(domain))} (${status})`)
-  })
+  let output = domains.map(({ domain, status, domainID }) =>
+    `${c.underline(c.cyan(domain))} - ${status} <${domainID}>`
+  )
 
   return output.join('\n')
 }
