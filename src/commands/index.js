@@ -3,6 +3,7 @@ let create = require('./create')
 let deploy = require('./deploy')
 let destroy = require('./destroy')
 let dev = require('./dev')
+let domains = require('./domains')
 let envVar = require('./env')
 let logs = require('./logs')
 let generate = require('./generate')
@@ -16,7 +17,7 @@ let telemetry = require('./telemetry')
 let update = require('./update')
 let version = require('./version')
 let commands = [
-  builds, create, deploy, destroy, dev, envVar, generate, help,
+  builds, create, deploy, destroy, dev, domains, envVar, generate, help,
   list, login, logout, logs, newProj, tail, telemetry, update, version,
 ]
 
