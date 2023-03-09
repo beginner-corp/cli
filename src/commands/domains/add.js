@@ -7,8 +7,7 @@ async function action (params) {
   if (!domain)
     return Error('Please specify a domain name like: begin domains add --domain begin.com')
 
-  let availability = await client.domains.check({ token, domain, _staging })
-  let { available, suggestions, purchaseLink } = availability
+  let { available, suggestions, purchaseLink } = await client.domains.check({ token, domain, _staging })
 
   let output = []
   if (available) {
