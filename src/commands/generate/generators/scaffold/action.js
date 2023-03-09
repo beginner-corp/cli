@@ -1,5 +1,6 @@
 module.exports = async function action (params, utils, command) {
   let { createJsonSchema,  existsJsonSchema, readSchemaFile, writeJsonSchema } = require('./jsonschema')
+  let { writeOpenAPI } = require('./openapi')
   let { createModelName } = require('./model-utils')
   let { writeFile, npmCommands, validate } = utils
   let { installAwsSdk } = npmCommands
@@ -37,6 +38,19 @@ module.exports = async function action (params, utils, command) {
 
   // Write JSON Schema file
   writeJsonSchema(modelName, schema, writeFile)
+
+  // Write OpenAPI file
+  if (args.openapi) {
+    writeOpenAPI(modelName, schema, writeFile)
+    // Don't double add plugin
+    if (!project.arc.plugins.includes(`enhance/arc-plugin-openapi`)) {
+      manifest.arcMutations.push({
+        pragma: 'plugins',
+        item: `enhance/arc-plugin-openapi`
+      })
+    }
+    manifest.dependencies.push('@enhance/arc-plugin-openapi')
+  }
 
   // Install dependencies
   await installAwsSdk(params)

@@ -17,13 +17,22 @@ module.exports = {
             {
               name: '-f, --file',
               description: `Path to a JSON Schema file`,
-            }
+            },
+            {
+              name: '--openapi',
+              description: `Generate OpenAPI routes`,
+              optional: true,
+            },
           ],
         },
         examples: [
           {
             name: 'Scaffold a CRUD app',
             example: 'begin generate scaffold Books title:string author:string publication_year:integer',
+          },
+          {
+            name: 'Scaffold a CRUD app with OpenAPI',
+            example: 'begin generate scaffold Books title:string author:string publication_year:integer --openapi',
           },
           {
             name: 'Scaffold a CRUD app from JSON Schema file',
