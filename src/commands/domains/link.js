@@ -17,7 +17,7 @@ async function action (params) {
 
   let theEnv = theApp.environments.find(({ name, envID }) => [ name, envID ].includes(env))
   if (!theEnv)
-    return Error(`App <${appID}> does not have an environment named "${env}"`)
+    return Error(`App <${appID}> does not have an environment "${env}"`)
 
   let domains = await client.domains.list({ token, _staging })
   let theDomain = domains.find(d => d.domain === domain)
@@ -28,7 +28,7 @@ async function action (params) {
       `To subscribe, run: begin domains check ${domain}`,
     ].join('\n'))
 
-  let result = await client.domains.associate({
+  let result = await client.domains.link({
     token,
     _staging,
     domainID: theDomain.domainID,

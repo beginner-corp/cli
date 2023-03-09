@@ -6,7 +6,7 @@ async function action (params) {
 
   let domains = await client.domains.list({ token, _staging })
   if (!domains.length)
-    return Error('No domains found. Start by checking a name with: `begin domains add --domain <domain>')
+    return Error('No domains found. Start by running: begin domains add --domain <domain>')
 
   let output = domains.map(({ domain, status, domainID }) =>
     `${c.underline(c.cyan(domain))} - ${status} <${domainID}>`
