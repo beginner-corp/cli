@@ -1,0 +1,8 @@
+.env
+.DS_Store
+**/static.json
+node_modules
+public/bundles
+public/pages
+sam.json
+sam.yaml

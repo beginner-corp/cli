@@ -1,0 +1,35 @@
+{
+  "name": "begin-app",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "begin dev",
+    "lint": "eslint ./app/**/*.mjs --fix"
+  },
+  "devDependencies": {
+    "@enhance/types": "latest",
+    "aws-sdk": "^2.1307.0",
+    "eslint": "latest"
+  },
+  "dependencies": {
+    "@begin/validator": "^0.0.10",
+    "@enhance/arc-plugin-enhance": "github:ryanbethel/arc-plugin-enhance#router-export",
+    "@enhance/form-elements": "github:enhance-dev/form-elements"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "rules": {
+      "indent": [
+        "error",
+        2
+      ]
+    },
+    "ignorePatterns": [],
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2022
+    }
+  }
+}

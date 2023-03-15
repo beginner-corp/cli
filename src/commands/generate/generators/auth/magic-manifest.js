@@ -11,7 +11,7 @@ let manifest = {
     { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/post-logout/index.mjs' },
     { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/any-signup/index.mjs' },
 
-    
+
     { src: 'handlers/common/api/example-auth.js', target: 'app/api/example-auth.mjs' },
     { src: 'handlers/common/pages/example-auth.js', target: 'app/pages/example-auth.mjs' },
     // API

@@ -1,0 +1,31 @@
+[?25l[1A
+         App ⌁ begin-app
+      Region ⌁ us-west-2
+     Profile ⌁ default
+     Version ⌁ Sandbox 5.4.1
+         cwd ⌁ /Users/ryanbethel/_PARA_Local/code-projects/consulting/begin-com/cli/test/end-to-end/mock/tmp-mock-oauth
+
+✓ Sandbox @tables created in local database
+[?25l[1A
+  Enhance Styles: CSS generated.
+✓ Sandbox @http (HTTP API mode / Lambda proxy v2.0 format / live reload) routes
+    get /_public/* .................................. node_modules/@enhance/arc-plugin-enhance/src/http/get-_public-catchall
+    get /_styleguide ................................ node_modules/@enhance/arc-plugin-styles/src/handlers/guide
+    get /auth ....................................... src/plugins/oauth/routes/get-auth
+    get /enhance-styles.css ......................... node_modules/@enhance/arc-plugin-styles/src/handlers/css
+    get /login ...................................... src/plugins/oauth/routes/get-login
+   post /logout ..................................... src/plugins/oauth/routes/post-logout
+    any /mock/auth/:part ............................ src/plugins/oauth/routes/get-mock-auth-000part
+    any /* .......................................... node_modules/@enhance/arc-plugin-enhance/src/http/any-catchall
+
+    http://localhost:3333
+
+✓ Sandbox Started in 349ms
+❤︎ Local environment ready!
+
+⚬ Sandbox Running 1 Sandbox startup plugin
+✓ Sandbox Ran Sandbox startup plugin in 22ms
+⚬ Sandbox Running startup scripts
+⚬ Sandbox node ./scripts/seed-accounts.js
+✓ Sandbox Sandbox startup scripts ran in 773ms
+✓ Sandbox File watcher now looking for project changes
