@@ -3,18 +3,21 @@ let names = { en: [ 'domains' ] }
 let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink' ]
 let aliases = {
   ls: 'list',
+  buy: 'add',
   check: 'add',
-  rm: 'remove',
+  subscribe: 'add',
   cancel: 'remove',
+  rm: 'remove',
   alias: 'link',
   associate: 'link',
-  unalias: 'unlink',
   disassociate: 'unlink',
+  unalias: 'unlink',
 }
 let defaultCommand = 'list'
 
 async function action (params) {
   let { args } = params
+  let { verbose } = args
   let subcommand = args._[1] || defaultCommand
   let alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
   subcommand = alias || subcommand
@@ -37,7 +40,7 @@ async function action (params) {
     let env = args.env || args.e
     let domain = args.domain
 
-    return action({ config, inventory, appID, env, domain, ...params })
+    return action({ config, inventory, appID, env, domain, verbose, ...params })
   }
   else {
     let err = Error('Please specify an domains subcommand')

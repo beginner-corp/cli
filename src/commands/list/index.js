@@ -14,6 +14,7 @@ async function action (params) {
   let client = require('@begin/api')
   let apps = await client.list({ token, _staging })
   if (!apps.length) return Error('No apps found. Create your first by running: `begin deploy`')
+  let domains = await client.domains.list({ token, _staging })
 
   let item = '├──'
   let last = '└──'
@@ -28,7 +29,13 @@ async function action (params) {
       let lastEnv = environments.length - 1
       environments.forEach(({ name, envID, url }, i) => {
         let draw = lastEnv === i ? last : item
-        output.push(`${draw} ${name} (env ID: ${envID}): ${c.green(url)}`)
+        let linkedDomain = domains.find(({ appLink }) => appLink?.appID === appID && appLink?.envID === envID)
+        output.push([
+          `${draw} ${name}`,
+          ` (env ID: ${envID}):`,
+          `${linkedDomain ? ` ${c.cyan(`https://${linkedDomain.domain}`)} |` : ''}`,
+          ` ${c.green(url)}`,
+        ].join(''))
       })
     }
   })
