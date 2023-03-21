@@ -51,7 +51,7 @@ async function action (params) {
           let { ARC_HTTP_PORT, PORT } = process.env
           let n = idk => Number(idk)
 
-          let port = args.port || 3333
+          let port = args.port || args.p || 3333
           let specified = prefs?.http || n(port) || n(ARC_HTTP_PORT) || n(PORT)
           let link = c.green(c.bold(c.underline(`http://localhost:${specified}\n`)))
           process.stdout.write(link)
