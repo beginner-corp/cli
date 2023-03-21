@@ -32,22 +32,22 @@ async function action (params) {
       output.push(linkLine)
     }
     else if (status === states.PURCHASING) {
-      // TODO: display purchase link
-      output.push(`${mark} ${c.bold('Purchasing')}`)
+      if (verbose) output.push(`${mark} ${c.bold('Ready to purchase')}`)
+      else output = []
     }
     else if (status === states.REGISTERING) {
       output.push(`${mark} ${c.bold('Registering')}`)
     }
     else if (status === states.ACTIVE) {
-      output.push(`${mark} ${c.bold('Available for linking')}`)
+      output.push(`${mark} ${c.bold('Available to link with "begin domains link"')}`)
     }
     else if (status === states.LINKING) {
-      output.push(`${mark} ${c.bold('Linking')}`)
+      output.push(`${mark} ${c.bold('Linking to an app environment')}`)
       if (verbose)
         output.push(`  ${mark} Last DNS check: ${c.bold(r53LastStatus)}`)
     }
     else if (status === states.UNLINKING) {
-      output.push(`${mark} ${c.bold('Unlinking')}`)
+      output.push(`${mark} ${c.bold('Unlinking DNS and SSL certificates')}`)
     }
     else if ([ states.LAPSED, states.CANCELLED, states.DELETED ].includes(status)) {
       output.push(`${mark} ${c.bold('Inactive')} (status: ${status})`)
