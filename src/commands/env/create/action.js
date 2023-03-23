@@ -29,6 +29,11 @@ module.exports = async function action (params) {
     return error('no_value')
   }
 
+  // convert numerical values like say a port number to a string
+  if (Number.isInteger(value)) {
+    value = value.toString()
+  }
+
   try {
     await client.env.vars.add({ _staging, appID, envID, token, vars: { [name]: value } })
     return `Successfully created environment variable ${name} in '${environment.name}'`
