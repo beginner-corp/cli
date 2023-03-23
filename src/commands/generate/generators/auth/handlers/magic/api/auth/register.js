@@ -1,9 +1,9 @@
 module.exports = function () {
-  return `// View documentation at: https://enhance.dev/docs/learn/starter-project/api
+  return /* javascript*/`// View documentation at: https://enhance.dev/docs/learn/starter-project/api
 /**
   * @typedef {import('@enhance/types').EnhanceApiFn} EnhanceApiFn
   */
-import { getUsers, upsertUser, validate } from '../../models/users.mjs'
+import { getAccounts, upsertAccount, validate } from '../../node_modules/@architect/views/models/accounts.mjs'
 
 /**
  * @type {EnhanceApiFn}
@@ -19,10 +19,10 @@ export async function get (req) {
   }
 
   if (session?.problems) {
-    let { problems, user, ...session } = req.session
+    let { problems, account, ...session } = req.session
     return {
       session,
-      json: { problems, user, email: verifiedEmail }
+      json: { problems, account, email: verifiedEmail }
     }
   }
 
@@ -41,32 +41,32 @@ export async function post (req) {
   newReq.body.email = verifiedEmail
   newReq.body.roles = { role1: 'member', role2: '', role3: '' }
   // Validate
-  let { problems, user } = await validate.create(newReq)
+  let { problems, account } = await validate.create(newReq)
   if (problems) {
     return {
-      session: { ...session, problems, registration: user },
-      json: { problems, registration: user, email: verifiedEmail },
+      session: { ...session, problems, registration: account },
+      json: { problems, registration: account, email: verifiedEmail },
       location: '/auth/register'
     }
   }
 
   try {
-    const users = await getUsers()
-    const exists = users.find(dbUser => dbUser.email === verifiedEmail)
+    const accounts = await getAccounts()
+    const exists = accounts.find(dbAccount => dbAccount.email === verifiedEmail)
     if (!exists){
-      const newUser = await upsertUser(user)
+      const newAccount = await upsertAccount(account)
       return {
-        session: { account: { user: newUser } },
-        json: { account: { user: newUser } },
+        session: { account: { account: newAccount } },
+        json: { account: { account: newAccount } },
         location: '/auth/welcome'
       }
     }
     else {
-      // TODO: Add better error message. This should only happen if two people try to register the same user simultaneously.
-      console.error('User already registered with this email')
+      // TODO: Add better error message. This should only happen if two people try to register the same account simultaneously.
+      console.error('Account already registered with this email')
       return {
         session: {},
-        location: '/auth/signup'
+        location: '/signup'
       }
     }
   }

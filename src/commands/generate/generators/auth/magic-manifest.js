@@ -1,64 +1,44 @@
 let manifest = {
   arcMutations: [
-    {
-      pragma: 'events', item: `auth-link
-  src jobs/events/auth-link` },
+    // { pragma: 'plugins', item: 'authentication' },
+    { pragma: 'plugins', item: '\nauthentication\n  src plugins/authentication' },
   ],
   sourceFiles: [
+    // Plugin
+    { src: 'handlers/magic/plugins/authentication/index.js', target: 'plugins/authentication/index.js' },
+    { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/any-auth-catchall/index.mjs' },
+    { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/any-login/index.mjs' },
+    { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/post-logout/index.mjs' },
+    { src: 'handlers/magic/plugins/authentication/routes/index.js', target: 'plugins/authentication/routes/any-signup/index.mjs' },
+
+
+    { src: 'handlers/common/api/example-auth.js', target: 'app/api/example-auth.mjs' },
+    { src: 'handlers/common/pages/example-auth.js', target: 'app/pages/example-auth.mjs' },
     // API
-    { src: 'handlers/magic/api/auth/example.js', target: 'app/api/auth/example.mjs' },
-    { src: 'handlers/magic/api/auth/login.js', target: 'app/api/auth/login.mjs' },
-    { src: 'handlers/magic/api/auth/signup.js', target: 'app/api/auth/signup.mjs' },
-    { src: 'handlers/magic/api/auth/register.js', target: 'app/api/auth/register.mjs' },
-    { src: 'handlers/magic/api/auth/logout.js', target: 'app/api/auth/logout.mjs' },
-    { src: 'handlers/magic/api/auth/verify.js', target: 'app/api/auth/verify.mjs' },
-    { src: 'handlers/magic/api/auth/welcome.js', target: 'app/api/auth/welcome.mjs' },
+    { src: 'handlers/magic/api/login.js', target: 'plugins/authentication/routes/any-login/api/login.mjs' },
+    { src: 'handlers/magic/api/signup.js', target: 'plugins/authentication/routes/any-signup/api/signup.mjs' },
+    { src: 'handlers/magic/api/logout.js', target: 'plugins/authentication/routes/post-logout/api/logout.mjs' },
+    { src: 'handlers/magic/api/auth/register.js', target: 'plugins/authentication/routes/any-auth-catchall/api/auth/register.mjs' },
+    // { src: 'handlers/magic/api/example-auth.js', target: 'app/api/example-auth.mjs' },
+    { src: 'handlers/magic/api/auth/verify.js', target: 'plugins/authentication/routes/any-auth-catchall/api/auth/verify.mjs' },
+    { src: 'handlers/magic/api/auth/welcome.js', target: 'plugins/authentication/routes/any-auth-catchall/api/auth/welcome.mjs' },
     // Pages
-    { src: 'handlers/magic/pages/auth/example.js', target: 'app/pages/auth/example.mjs' },
-    { src: 'handlers/magic/pages/auth/login.js', target: 'app/pages/auth/login.html' },
-    { src: 'handlers/magic/pages/auth/signup.js', target: 'app/pages/auth/signup.html' },
-    { src: 'handlers/magic/pages/auth/register.js', target: 'app/pages/auth/register.mjs' },
-    { src: 'handlers/magic/pages/auth/verify.js', target: 'app/pages/auth/verify.html' },
-    { src: 'handlers/magic/pages/auth/welcome.js', target: 'app/pages/auth/welcome.mjs' },
+    // { src: 'handlers/magic/pages/example-auth.js', target: 'app/pages/example-auth.mjs' },
+    { src: 'handlers/magic/pages/login.js', target: 'plugins/authentication/routes/any-login/pages/login.html' },
+    { src: 'handlers/magic/pages/signup.js', target: 'plugins/authentication/routes/any-signup/pages/signup.html' },
+    { src: 'handlers/magic/pages/auth/register.js', target: 'plugins/authentication/routes/any-auth-catchall/pages/auth/register.mjs' },
+    { src: 'handlers/magic/pages/auth/verify.js', target: 'plugins/authentication/routes/any-auth-catchall/pages/auth/verify.html' },
+    { src: 'handlers/magic/pages/auth/welcome.js', target: 'plugins/authentication/routes/any-auth-catchall/pages/auth/welcome.mjs' },
     // Shared code (inside models directory)
-    { src: 'handlers/magic/models/auth/can-i.js', target: 'app/models/auth/can-i.mjs' },
-    { src: 'handlers/magic/models/auth/allow-list.js', target: 'app/models/auth/allow-list.mjs' },
+    { src: 'handlers/common/models/auth/auth-check.js', target: 'app/models/auth/auth-check.mjs' },
+    { src: 'handlers/common/models/auth/allow-list.js', target: 'app/models/auth/allow-list.mjs' },
     // Events
-    { src: 'handlers/magic/events/auth-link/index.js', target: 'jobs/events/auth-link/index.mjs' },
+    { src: 'handlers/magic/plugins/authentication/events/auth-link/index.js', target: 'plugins/authentication/jobs/auth-link/index.mjs' },
     // Seed database
-    { src: 'handlers/magic/scripts/seed-users.js', target: 'scripts/seed-users.js' },
-    // Users Table
-    // Utils
-    { src: '../scaffold/handlers/model.js', target: 'app/models/<ROUTE_NAME>.mjs' },
-    // API
-    { src: '../scaffold/handlers/api-create-list.js', target: 'app/api/<ROUTE_NAME>.mjs' },
-    { src: '../scaffold/handlers/api-delete.js', target: 'app/api/<ROUTE_NAME>/$id/delete.mjs' },
-    { src: '../scaffold/handlers/api-read-update.js', target: 'app/api/<ROUTE_NAME>/$id.mjs' },
-    // Pages
-    { src: '../scaffold/handlers/pages-list.js', target: 'app/pages/<ROUTE_NAME>.mjs' },
-    { src: '../scaffold/handlers/pages-read.js', target: 'app/pages/<ROUTE_NAME>/$id.mjs' },
-  ],
-  elements: [
-    { name: 'CheckBox', package: '@enhance/form-elements', tagName: 'enhance-checkbox' },
-    { name: 'FieldSet', package: '@enhance/form-elements', tagName: 'enhance-fieldset' },
-    { name: 'FormElement', package: '@enhance/form-elements', tagName: 'enhance-form' },
-    { name: 'LinkElement', package: '@enhance/form-elements', tagName: 'enhance-link' },
-    { name: 'PageContainer', package: '@enhance/form-elements', tagName: 'enhance-page-container' },
-    { name: 'SubmitButton', package: '@enhance/form-elements', tagName: 'enhance-submit-button' },
-    { name: 'TextInput', package: '@enhance/form-elements', tagName: 'enhance-text-input' }
+    { src: 'handlers/common/scripts/seed-accounts.js', target: 'scripts/seed-accounts.js' },
   ],
   dependencies: [
-    '@begin/validator@0.0.10',
-    'github:enhance-dev/form-elements'
-  ],
-  devDependencies: [
-    '@aws-sdk/client-apigatewaymanagementapi',
-    '@aws-sdk/client-dynamodb',
-    '@aws-sdk/client-s3',
-    '@aws-sdk/client-sns',
-    '@aws-sdk/client-sqs',
-    '@aws-sdk/client-ssm',
-    '@aws-sdk/lib-dynamodb'
+    'github:ryanbethel/arc-plugin-enhance#router-export'
   ]
 }
 

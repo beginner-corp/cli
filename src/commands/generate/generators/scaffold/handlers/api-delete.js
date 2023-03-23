@@ -1,13 +1,13 @@
 module.exports = function ({ plural, capSingular, singular, includeAuth = false, authRole = 'admin'   }) {
   return `// View documentation at: https://enhance.dev/docs/learn/starter-project/api
 import { delete${capSingular} } from '../../../models/${plural}.mjs'
-${includeAuth ? `import canI from '../../../models/auth/can-i.mjs'` : ''}
+${includeAuth ? `import { checkAuth } from '../models/auth/auth-check.mjs'` : ''}
 
 /**
  * @type {import('@enhance/types').EnhanceApiFn}
  */
 export async function post (req) {${includeAuth ? `
-  const admin = canI(req, '${authRole}')
+  const admin = checkAuth(req, '${authRole}')
   if (!admin) {
     return {
       statusCode: 401
