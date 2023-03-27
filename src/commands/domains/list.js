@@ -16,6 +16,8 @@ async function action (params) {
   let arrow = c.cyan('└─→')
   let output = []
   domains.forEach(({ domain, domainID, status, appLink, r53LastStatus, updatedAt }) => {
+    if (status === states.PURCHASING) return
+
     let domainLine = `${c.underline(c.cyan(domain))}`
     if (verbose) domainLine += ` <${domainID}> ${c.bold(status)} [updated: ${presentDate(updatedAt)}]`
     output.push(domainLine)
@@ -30,10 +32,6 @@ async function action (params) {
       linkLine += ` → "${theEnv.name}"`
       if (verbose) linkLine += ` <${envID}>`
       output.push(linkLine)
-    }
-    else if (status === states.PURCHASING) {
-      if (verbose) output.push(`${mark} ${c.bold('Ready to purchase')}`)
-      else output = []
     }
     else if (status === states.REGISTERING) {
       output.push(`${mark} ${c.bold('Registering')}`)
