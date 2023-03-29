@@ -84,9 +84,9 @@ const HELP = {
       contents: {
         header: 'Link parameters',
         items: [
+          { name: '-a, --app', description: 'App ID, if not in Begin project working dir' },
           { name: '--domain', description: 'Domain name to link' },
           { name: '-e, --env', description: 'Environment name or ID to link to' },
-          { name: '-a, --app', description: 'App ID, if not in Begin project working dir' },
         ],
       },
       examples: [
