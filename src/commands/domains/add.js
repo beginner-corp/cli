@@ -11,9 +11,9 @@ async function action (params) {
 
   let output = []
   if (available) {
-    output.push(`Good news! ${c.green(c.bold(domain))} is available!`)
-    output.push(`Subscribe here: ${c.bold(c.cyan(purchaseLink))}.`)
-    output.push(`Learn more about Begin domain subscriptions here: ${c.cyan('https://begin.com/docs/')}.`)
+    output.push(`${c.green(c.bold(domain))} is available!`)
+    output.push(`Subscribe here: ${c.bold(c.cyan(purchaseLink))}`)
+    output.push(`Learn more about domain subscriptions here: ${c.cyan('https://begin.com/docs/')}.`)
   }
   else {
     output.push(`Sorry, ${c.red(c.bold(domain))} is unavailable.`)
@@ -32,16 +32,4 @@ module.exports = {
   name: 'add',
   description: 'Start adding a domain subscription to your Begin account',
   action,
-  help: {
-    en: {
-      usage: [ 'domains add' ],
-      description: 'Check domain availability',
-      examples: [
-        {
-          name: 'Check begin.com availability',
-          example: 'begin domains add --domain begin.com',
-        },
-      ]
-    }
-  }
 }

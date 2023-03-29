@@ -66,11 +66,11 @@ let help = {
         ],
       },
       {
-        header: 'Manage your Begin account domains',
+        header: 'Domain subscriptions',
         items: [
           {
             name: 'domains',
-            description: 'List your Begin account domain names',
+            description: 'Manage your Begin account domain names',
           },
         ],
       },

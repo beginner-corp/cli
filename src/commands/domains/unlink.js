@@ -42,16 +42,4 @@ module.exports = {
   name: 'unlink',
   description: 'Dissociate a domain from an app environment.',
   action,
-  help: {
-    en: {
-      usage: [ 'domains unlink' ],
-      description: 'Unlink from a domain',
-      examples: [
-        {
-          name: 'unlink a domain',
-          example: 'begin domains unlink --domain begin.com',
-        },
-      ]
-    }
-  }
 }

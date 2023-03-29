@@ -34,7 +34,7 @@ async function action (params) {
       output.push(linkLine)
     }
     else if (status === states.REGISTERING) {
-      output.push(`${mark} ${c.bold('Registering')}`)
+      output.push(`${mark} ${c.bold(`Registration: ${r53LastStatus}`)}`)
     }
     else if (status === states.ACTIVE) {
       output.push(`${mark} ${c.bold('Available to link with "begin domains link"')}`)
@@ -59,16 +59,4 @@ module.exports = {
   name: 'list',
   description: "List your Begin account's domains",
   action,
-  help: {
-    en: {
-      usage: [ 'domains' ],
-      description: 'List your Begin account domain names',
-      examples: [
-        {
-          name: 'List all domains',
-          example: 'begin domains',
-        },
-      ]
-    }
-  }
 }

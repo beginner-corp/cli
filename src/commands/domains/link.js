@@ -50,16 +50,4 @@ module.exports = {
   name: 'link',
   description: 'Associate a domain from your Begin account to an app',
   action,
-  help: {
-    en: {
-      usage: [ 'domains link' ],
-      description: 'Link a domain to an app',
-      examples: [
-        {
-          name: 'Link begin.com to an app',
-          example: 'begin domains link --domain begin.com --env <name|ID> --app [ID]',
-        },
-      ]
-    }
-  }
 }

@@ -1,4 +1,3 @@
-let help = require('./help')
 let names = { en: [ 'domains' ] }
 let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink' ]
 let aliases = {
@@ -14,6 +13,7 @@ let aliases = {
   unalias: 'unlink',
 }
 let defaultCommand = 'list'
+let help = require('./help').bind({})
 
 async function action (params) {
   let { args } = params
@@ -43,8 +43,8 @@ async function action (params) {
     return action({ config, inventory, appID, env, domain, verbose, ...params })
   }
   else {
-    let err = Error('Please specify an domains subcommand')
-    if (subcommand) err = Error(`Invalid domains subcommand: ${subcommand}`)
+    let err = new Error('Please specify an domains subcommand')
+    if (subcommand) err = new Error(`Invalid domains subcommand: ${subcommand}`)
     err.type = '__help__'
     throw err
   }
