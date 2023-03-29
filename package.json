@@ -27,7 +27,7 @@
     "@architect/sandbox": "5.5.2",
     "@architect/utils": "3.1.2",
     "@begin/api": "1.5.4",
-    "@enhance/starter-project": "4.0.1",
+    "@enhance/starter-project": "4.0.2",
     "adm-zip": "0.5.10",
     "enquirer": "2.3.6",
     "escodegen": "2.0.0",
