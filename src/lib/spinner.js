@@ -29,6 +29,8 @@ function spinner (output) {
   let isWin = process.platform.startsWith('win')
 
   if (!isCI && !isWin) {
+    let stripAnsi = require('strip-ansi')
+
     // Hide cursor, queue up cursor restore for when the process eventually terminates
     write('\u001B[?25l')
     if (!restore) restore = require('restore-cursor')
@@ -46,7 +48,7 @@ function spinner (output) {
       }
       lastLine = lines[0]
       let msg = `    ${lastLine}`
-      let len = msg.length
+      let len = stripAnsi(msg).length
       let y
       write(msg) // Initial render before first animation interval
       // Now calculate the cursor position if that last item wrapped
