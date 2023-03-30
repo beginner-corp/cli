@@ -31,9 +31,6 @@ async function action (params) {
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
 
-    if (!config.stagingAPI)
-      return Error('You must be logged in, please run: begin login')
-
     let inventory = await _inventory()
 
     let appID = args.app || args.a || getAppID(inventory)
