@@ -64,7 +64,7 @@ async function action (params) {
   let logsQty = Object.keys(logs).length
   if (!logsQty) {
     spinner.done(`Loaded '${name}' log data from ${c.white(c.bold(app.name))} (${c.green(url)})`)
-    return `No logs found (last 12 hours; logs may take up to a minute to appear)`
+    return `No logs found (last 12 hours; logs may take up to 10 seconds to appear)`
   }
   else {
     let isWin = process.platform.startsWith('win')
@@ -74,35 +74,35 @@ async function action (params) {
     spinner.done(`${ready} Loaded latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
   }
 
-  let sortByTs = (a, b) => {
-    if (a.start < b.start) return -1
-    if (a.start > b.start) return 1
-    return 0
-  }
+  let formatDate = str => '\n' + c.green(c.bold(str))
+  let formatted = logs
+    .sort((a, b) => {
+      if (a.created < b.created) return -1
+      if (a.created > b.created) return 1
+      return 0
+    })
+    .map(log => {
+      let { created, msg, name, pos, pragma, requestID } = log
+      if (!msg && !verbose) return
+      let out
 
-  let formatted = logs.map(log => {
-    let { duration, initDuration, lambda, maxMemoryUsed, messages, start } = log
-    if (!messages && !verbose) return
-    let out = ''
-    if (!messages && verbose) {
-      out += `${c.green(c.bold(start))} (duration: ${duration})\n` +
-               `[ ${lambda} invoked, nothing logged ]\n\n`
-    }
-    if (messages) {
-      out += messages.sort(sortByTs).map(({ ts, msg }) => {
-        if (filter && !msg.includes(filter)) return ''
+      let start = created.split('_')[0]
+      let lambda = `@${pragma} ${name}`
+      let requestHeader = c.gray(`\n[ ${lambda} request ID ${requestID} ]`)
 
-        let date = verbose ? ts : new Date(ts).toLocaleString()
-        let dur = verbose ? ` (duration: ${duration})` : ''
-        let invoke = verbose
-          ? c.gray(`\n[ ${lambda} invoked; init duration: ${initDuration}, max memory used: ${maxMemoryUsed} ]`)
-          : ''
-        let str = `${c.green(c.bold(date))}` + dur + invoke + `\n${msg.trim()}`
-        return str
-      }).filter(Boolean).join('\n\n')
-    }
-    return out
-  }).filter(Boolean).join('\n\n')
+      if (!msg && verbose) {
+        out = `${formatDate(start)}${requestHeader}\n(nothing logged)`
+      }
+      else if (filter && !msg.includes(filter)) return
+      else {
+        let date = verbose ? start : new Date(start).toLocaleString()
+        let invoke = verbose ? requestHeader : ''
+        let ts = pos ? '' : `${formatDate(date)}${invoke}\n`
+        out = ts + msg.trim()
+      }
+      return out
+    })
+    .filter(Boolean).join('\n')
 
   return usePager ? pager(params, formatted) : formatted
 }
