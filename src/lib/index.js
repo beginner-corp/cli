@@ -9,7 +9,7 @@ function checkManifest (inventory) {
   let { parse } = require('path')
   let { base, ext } = parse(inventory.inv._project.manifest)
   if (base !== '.arc' && ext !== '.arc') {
-    let message = `Begin CLI only supports app.arc and .arc project manifests`
+    let message = 'Begin CLI only supports app.arc and .arc project manifests'
     return Error(message)
   }
 }
@@ -27,15 +27,16 @@ function getConfig (params, print = true) {
   if (config && !params._refresh) return config
 
   function done (via) {
-    if (print && config.stagingAPI) printer(`Begin staging enabled`)
+    if (print && config.stagingAPI) printer('Begin staging enabled')
     if (print && config.access_token) printer.debug(`Using Begin token via ${via}`)
     return config
   }
 
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
-  let { cliDir, printer } = params
-  let configPath = join(cliDir, 'config.json')
+  let { cliDir, printer, staging } = params
+  let cliFilename = staging ? 'config-staging.json' : 'config.json'
+  let configPath = join(cliDir, cliFilename)
 
   // Local config file wins over env vars
   if (!existsSync(configPath)) {

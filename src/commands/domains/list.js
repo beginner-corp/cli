@@ -12,13 +12,13 @@ async function action (params) {
   let apps = await client.list({ token, _staging })
 
   let presentDate = (date) => (new Date(date)).toLocaleString()
-  let mark = c.gray('└──')
-  let arrow = c.cyan('└─→')
+  let mark = c.gray(' └──')
+  let arrow = c.cyan(' └─→')
   let output = []
   domains.forEach(({ domain, domainID, status, appLink, r53LastStatus, updatedAt }) => {
     if (status === states.PURCHASING) return
 
-    let domainLine = `${c.underline(c.cyan(domain))}`
+    let domainLine = c.underline(c.cyan(`https://${domain}`))
     if (verbose) domainLine += ` <${domainID}> ${c.bold(status)} [updated: ${presentDate(updatedAt)}]`
     output.push(domainLine)
 
@@ -29,18 +29,18 @@ async function action (params) {
 
       let linkLine = `${arrow} ${c.bold(c.green(theApp.name))}`
       if (verbose) linkLine += ` <${appID}>`
-      linkLine += ` → "${theEnv.name}"`
+      linkLine += `: "${theEnv.name}"`
       if (verbose) linkLine += ` <${envID}>`
       output.push(linkLine)
     }
     else if (status === states.REGISTERING) {
-      output.push(`${mark} ${c.bold(`Registration: ${r53LastStatus}`)}`)
+      output.push(`  ${mark} ${c.bold(`Registration: ${r53LastStatus}`)}`)
     }
     else if (status === states.ACTIVE) {
-      output.push(`${mark} ${c.bold('Available to link with "begin domains link"')}`)
+      output.push(`  ${mark} ${c.bold('Available to link with "begin domains link"')}`)
     }
     else if (status === states.LINKING) {
-      output.push(`${mark} ${c.bold('Linking to an app environment')}`)
+      output.push(`  ${mark} ${c.bold('Linking to an app environment')}`)
       if (verbose)
         output.push(`  ${mark} Last DNS check: ${c.bold(r53LastStatus)}`)
     }

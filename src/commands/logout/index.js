@@ -10,17 +10,18 @@ module.exports = {
 }
 
 async function action (params) {
-  let { cliDir, clientIDs = {} } = params
+  let { cliDir, clientIDs = {}, staging } = params
   let { join } = require('path')
   let { existsSync, readFileSync } = require('fs')
   let writeFile = require('../../lib').writeFile(params)
-  let configFile = join(cliDir, 'config.json')
+  let cliFilename = staging ? 'config-staging.json' : 'config.json'
+  let configPath = join(cliDir, cliFilename)
 
-  if (!existsSync(configFile)) {
+  if (!existsSync(configPath)) {
     return Error('Config file not found, cannot log out of Begin session')
   }
 
-  let config = JSON.parse(readFileSync(configFile))
+  let config = JSON.parse(readFileSync(configPath))
   let { access_token, stagingAPI } = config
   let { __BEGIN_TEST_URL__ } = process.env
   let domain = __BEGIN_TEST_URL__
@@ -52,7 +53,7 @@ async function action (params) {
     config.modified = now
     delete config.access_token
     delete config.device_code
-    writeFile(configFile, JSON.stringify(config, null, 2))
+    writeFile(configPath, JSON.stringify(config, null, 2))
     return 'Successfully logged out!'
   }
   catch (err) {
