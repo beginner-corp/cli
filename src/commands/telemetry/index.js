@@ -1,7 +1,7 @@
 module.exports = {
   names: { en: [ 'telemetry' ] },
   action: (params) => {
-    let { appVersion, args, cliDir, staging } = params
+    let { appVersion, args, cliDir, args: { staging } } = params
     let { disable, enable } = args
 
     let lib = require('../../lib')

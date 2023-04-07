@@ -34,7 +34,7 @@ function getConfig (params, print = true) {
 
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
-  let { cliDir, printer, staging } = params
+  let { cliDir, printer, args: { staging } } = params
   let cliFilename = staging ? 'config-staging.json' : 'config.json'
   let configPath = join(cliDir, cliFilename)
 
