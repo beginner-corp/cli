@@ -34,8 +34,8 @@ function getConfig (params, print = true) {
 
   let { existsSync, readFileSync } = require('fs')
   let { join } = require('path')
-  let { cliDir, printer, args: { staging } } = params
-  let cliFilename = staging ? 'config-staging.json' : 'config.json'
+  let { cliDir, printer, args } = params
+  let cliFilename = args?.staging ? 'config-staging.json' : 'config.json'
   let configPath = join(cliDir, cliFilename)
 
   // Local config file wins over env vars

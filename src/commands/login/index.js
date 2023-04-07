@@ -10,11 +10,11 @@ module.exports = {
 }
 
 async function action (params) {
-  let { appVersion, cliDir, clientIDs = {}, printer, args: { staging } } = params
+  let { appVersion, cliDir, clientIDs = {}, printer, args } = params
   let { join } = require('path')
   let { existsSync, readFileSync } = require('fs')
   let writeFile = require('../../lib').writeFile(params)
-  let cliFilename = staging ? 'config-staging.json' : 'config.json'
+  let cliFilename = args?.staging ? 'config-staging.json' : 'config.json'
   let configPath = join(cliDir, cliFilename)
   let now = new Date().toISOString()
   let headers = { 'content-type': 'application/x-www-form-urlencoded' }
