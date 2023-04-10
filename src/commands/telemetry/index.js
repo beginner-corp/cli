@@ -1,8 +1,8 @@
 module.exports = {
   names: { en: [ 'telemetry' ] },
   action: (params) => {
-    let { appVersion, args, cliDir } = params
-    let { disable, enable } = args
+    let { appVersion, args, cliDir, } = params
+    let { disable, enable, staging } = args
 
     let lib = require('../../lib')
     let { getConfig } = lib
@@ -15,17 +15,18 @@ module.exports = {
     let on = c.white(c.bold('enabled'))
     let off = c.white(c.bold('disabled'))
 
-    let configFile = join(cliDir, 'config.json')
+    let cliFilename = staging ? 'config-staging.json' : 'config.json'
+    let configPath = join(cliDir, cliFilename)
     let config = getConfig(params)
     function maybeCreateConfigFile () {
-      if (!existsSync(configFile)) {
+      if (!existsSync(configPath)) {
         config = {
           '// Begin config': `you can edit this file, just be sure to keep your 'access_token' secret (if you have one)`,
           created: now,
           createdVer: appVersion,
           modified: now,
         }
-        writeFile(configFile, JSON.stringify(config, null, 2))
+        writeFile(configPath, JSON.stringify(config, null, 2))
       }
     }
 
@@ -34,14 +35,14 @@ module.exports = {
       maybeCreateConfigFile()
       config.collectBasicTelemetry = true
       config.modified = now
-      writeFile(configFile, JSON.stringify(config, null, 2))
+      writeFile(configPath, JSON.stringify(config, null, 2))
       message = `Basic CLI telemetry manually set to ${on}`
     }
     else if (disable) {
       maybeCreateConfigFile()
       config.collectBasicTelemetry = false
       config.modified = now
-      writeFile(configFile, JSON.stringify(config, null, 2))
+      writeFile(configPath, JSON.stringify(config, null, 2))
       message = `Basic CLI telemetry manually set to ${off}`
     }
     else {

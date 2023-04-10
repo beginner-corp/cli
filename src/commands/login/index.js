@@ -10,21 +10,22 @@ module.exports = {
 }
 
 async function action (params) {
-  let { appVersion, cliDir, clientIDs = {}, printer } = params
+  let { appVersion, cliDir, clientIDs = {}, printer, args } = params
   let { join } = require('path')
   let { existsSync, readFileSync } = require('fs')
   let writeFile = require('../../lib').writeFile(params)
-  let configFile = join(cliDir, 'config.json')
+  let cliFilename = args?.staging ? 'config-staging.json' : 'config.json'
+  let configPath = join(cliDir, cliFilename)
   let now = new Date().toISOString()
   let headers = { 'content-type': 'application/x-www-form-urlencoded' }
 
   let config
   function writeConfig () {
     if (!config) return
-    writeFile(configFile, JSON.stringify(config, null, 2))
+    writeFile(configPath, JSON.stringify(config, null, 2))
   }
 
-  if (!existsSync(configFile)) {
+  if (!existsSync(configPath)) {
     config = {
       '// Begin config': `you can edit this file, just be sure to keep your 'access_token' secret (if you have one)`,
       created: now,
@@ -34,7 +35,7 @@ async function action (params) {
     writeConfig()
   }
   else {
-    config = JSON.parse(readFileSync(configFile))
+    config = JSON.parse(readFileSync(configPath))
   }
   let { access_token, device_code, stagingAPI } = config
   let { __BEGIN_TEST_URL__ } = process.env
