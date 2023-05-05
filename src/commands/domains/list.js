@@ -13,7 +13,7 @@ async function action (params) {
 
   let presentDate = (date) => (new Date(date)).toLocaleString()
   let mark = c.gray(' └──')
-  let arrow = c.cyan(' └─→')
+  let arrow = c.cyan(' └──')
   let output = []
   domains.forEach(({ domain, domainID, status, appLink, r53LastStatus, updatedAt }) => {
     if (status === states.PURCHASING) return
@@ -34,15 +34,15 @@ async function action (params) {
       output.push(linkLine)
     }
     else if (status === states.REGISTERING) {
-      output.push(`  ${mark} ${c.bold(`Registration: ${r53LastStatus}`)}`)
+      output.push(`${mark} ${c.bold(`Registration: ${r53LastStatus}`)}`)
     }
     else if (status === states.ACTIVE) {
-      output.push(`  ${mark} ${c.bold('Available to link with "begin domains link"')}`)
+      output.push(`${mark} ${c.bold('Available to link with "begin domains link"')}`)
     }
     else if (status === states.LINKING) {
-      output.push(`  ${mark} ${c.bold('Linking to an app environment')}`)
+      output.push(`${mark} ${c.bold('Linking to an app environment')}`)
       if (verbose)
-        output.push(`  ${mark} Last DNS check: ${c.bold(r53LastStatus)}`)
+        output.push(`    ${mark} Last DNS check: ${c.bold(r53LastStatus)}`)
     }
     else if (status === states.UNLINKING) {
       output.push(`${mark} ${c.bold('Unlinking DNS and SSL certificates')}`)
