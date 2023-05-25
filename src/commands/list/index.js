@@ -27,14 +27,14 @@ async function action (params) {
     }
     else {
       let lastEnv = environments.length - 1
-      environments.forEach(({ name, envID, url }, i) => {
+      environments.forEach(({ name, envID, url, location }, i) => {
         let draw = lastEnv === i ? last : item
         let linkedDomain = domains.find(({ appLink }) => appLink?.appID === appID && appLink?.envID === envID)
         output.push([
-          `${draw} ${name}`,
-          ` (env ID: ${envID}):`,
+          `${draw} ${name}:`,
           `${linkedDomain ? ` ${c.cyan(`https://${linkedDomain.domain}`)} |` : ''}`,
           ` ${c.green(url)}`,
+          ` (env ID: ${envID}, region: ${location})`,
         ].join(''))
       })
     }
