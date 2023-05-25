@@ -15,6 +15,11 @@ module.exports = {
           description: `Environment name to create`,
           optional: true,
         },
+        {
+          name: '--region <AWS region code>',
+          description: `AWS region in which to create the app or environment`,
+          optional: true,
+        },
       ],
     },
     examples: [

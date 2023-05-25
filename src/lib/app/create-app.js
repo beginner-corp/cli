@@ -50,7 +50,7 @@ module.exports = async function createApp (params, utils) {
     let { selectRegion } = await prompt({
       type: 'confirm',
       name: 'selectRegion',
-      message: `Would you like to select the geographical region your project will be deployed to? (This cannot be changed)`,
+      message: `Would you like to specify the geographical region your project will be deployed to? (This cannot be changed)`,
       initial: 'n',
     }, promptOptions)
 
