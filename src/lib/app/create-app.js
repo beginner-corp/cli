@@ -4,10 +4,10 @@ module.exports = async function createApp (params, utils) {
   let { env, region } = args
   let { access_token: token, stagingAPI: _staging } = config
   let { mutateArc, writeFile } = utils
-  let { prompt } = require('enquirer')
+  let { prompt, Select } = require('enquirer')
   let client = require('@begin/api')
   let { promptOptions } = require('.')
-  let { validateEnvName, validateRegion } = require('./validate')
+  let { validateEnvName } = require('./validate')
 
   console.error(`This project doesn't appear to be associated with a Begin app`)
   let { create } = await prompt({
@@ -45,22 +45,47 @@ module.exports = async function createApp (params, utils) {
     }, promptOptions)
   }
 
-  if (region) {
-    validateRegion.arg(region)
-  }
-  else {
-    var result = await prompt({
-      type: 'input',
-      name: 'region',
-      message: 'Which region would you like to deploy to?',
-      initial: 'us-west-2',
-      validate: validateRegion.prompt
+  let regions
+  if (!region) {
+    let { selectRegion } = await prompt({
+      type: 'confirm',
+      name: 'selectRegion',
+      message: `Would you like to select the geographical region your project will be deployed to? (This cannot be changed)`,
+      initial: 'n',
     }, promptOptions)
-    region = result.region
+
+    if (selectRegion) {
+      // Get available regions
+      regions = await client.regions({ token, _staging })
+      let regionsByLocation = Object.fromEntries(Object.entries(regions).map(([ k, v ]) => ([ v, k ])))
+
+      let prompt = new Select({
+        name: 'build',
+        message: 'Select from these regions',
+        choices: Object.values(regions)
+      }, promptOptions)
+
+      let result = await prompt.run()
+      region = regionsByLocation[result]
+    }
   }
 
   // Create the app
-  let app = await client.create({ token, name, envName, _staging, region })
+  try {
+    var app = await client.create({ token, name, envName, _staging, region })
+  }
+  catch (err) {
+    if (err.message === 'profile_max_env_capacity') {
+      let selected = region ? `the specified region (${regions?.[region] || region})` : 'Begin'
+      let instruction = region ? 'please try another region' : 'please try again'
+      let msg = `Sorry, ${selected} does not currently have capacity for a new app, ${instruction}`
+      throw Error(msg)
+    }
+    if (err.message === 'unsupported_region') {
+      let msg = `The specified region (${region}) is invalid or unsupported by Begin`
+      throw Error(msg)
+    }
+  }
   let appID = app?.appID
   let envID = app?.environments[0]
   if (!app || !appID || !envID) {
