@@ -21,7 +21,7 @@ async function action (params) {
 
   let output = []
   apps.forEach(({ name, appID, environments }) => {
-    output.push(`${c.white(c.bold(name))} (app ID: ${appID})`)
+    output.push(`${c.bold(name)} (app ID: ${appID})`)
     if (!environments.length) {
       output.push(`${last} (no app environments)`)
     }

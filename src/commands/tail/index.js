@@ -84,7 +84,7 @@ async function action (params) {
     let mode = ''
     if (verbose) mode = ' - verbose mode'
     if (debug) mode = ' - debug mode'
-    console.error(`Tailing latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})${mode}`)
+    console.error(`Tailing latest '${name}' logs from ${c.bold(app.name)} (${c.green(url)})${mode}`)
     if (filter) console.error(`Filtering: '${filter}'`)
     printed = true
   }

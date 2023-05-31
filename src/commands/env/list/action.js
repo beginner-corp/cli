@@ -6,7 +6,7 @@ module.exports = async function action (params) {
   let item = '├──'
   let last = '└──'
   let output = []
-  output.push(`${c.white(c.bold(name))} (app ID: ${appID})`)
+  output.push(`${c.bold(name)} (app ID: ${appID})`)
   if (!environments.length) {
     output.push(`${last} (no app environments)`)
   }

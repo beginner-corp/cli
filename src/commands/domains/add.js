@@ -46,7 +46,7 @@ async function action (params) {
   else {
     output.push(`Sorry, ${c.red(c.bold(domain))} is unavailable.`)
     if (check.suggestions && Array.isArray(check.suggestions)) {
-      output.push(c.white('Some suggestions:'))
+      output.push(c.bold('Some suggestions:'))
       check.suggestions.slice(1, 16).forEach(suggestion => {
         output.push(`  ${c.cyan(suggestion.DomainName)}`)
       })

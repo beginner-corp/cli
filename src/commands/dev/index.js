@@ -40,7 +40,7 @@ async function action (params) {
         let ready = isWin
           ? chars.done
           : c.green(c.dim('❤︎'))
-        let readyMsg = c.white(`${ver} ready!`)
+        let readyMsg = c.bold(`${ver} ready!`)
         console.error(`${ready} ${readyMsg}`)
 
         let { inv } = inventory

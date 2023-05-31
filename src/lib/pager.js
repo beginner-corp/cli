@@ -8,7 +8,7 @@ module.exports = function pager (params, output) {
   let hrSize = Math.floor((process.stdout.columns - msg.length) / 2)
   let dash = isWin ? '-' : '–'
   let hr = Array(hrSize).join(dash)
-  let banner = c.bold(c.white(`${hr}${msg}${hr}`)) + '\n\n'
+  let banner = c.bold(`${hr}${msg}${hr}`) + '\n\n'
 
   if (isCI || debug) return output
   else if (isWin) {

@@ -12,8 +12,8 @@ module.exports = {
     let { existsSync } = require('fs')
     let c = require('picocolors')
     let now = new Date().toISOString()
-    let on = c.white(c.bold('enabled'))
-    let off = c.white(c.bold('disabled'))
+    let on = c.bold('enabled')
+    let off = c.bold('disabled')
 
     let cliFilename = staging ? 'config-staging.json' : 'config.json'
     let configPath = join(cliDir, cliFilename)

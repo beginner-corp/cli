@@ -19,12 +19,12 @@ module.exports = function helper (params, cmdHelp) {
 
   // Command header
   // First array string is bold, everything else is normal
-  let help = br(1) + `${c.white(c.bold('begin ' + usage[0]))} ${usage[1] ? usage[1] : ''}`
+  let help = br(1) + `${c.bold('begin ' + usage[0])} ${usage[1] ? usage[1] : ''}`
   if (description) {
     help += br(1) + indent + description
   }
   if (aliases) {
-    help += br(1) + indent + `Alias: ${c.white(c.dim(aliases.join(', ')))}`
+    help += br(1) + indent + `Alias: ${c.dim(aliases.join(', '))}`
   }
 
   // Command options

@@ -59,11 +59,11 @@ async function action (params) {
   // Send to pager
   let usePager = args.pager || args.p
 
-  spinner(`Loading latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
+  spinner(`Loading latest '${name}' logs from ${c.bold(app.name)} (${c.green(url)})`)
   let logs = await client.env.logs({ token, appID, envID, _staging })
   let logsQty = Object.keys(logs).length
   if (!logsQty) {
-    spinner.done(`Loaded '${name}' log data from ${c.white(c.bold(app.name))} (${c.green(url)})`)
+    spinner.done(`Loaded '${name}' log data from ${c.bold(app.name)} (${c.green(url)})`)
     return `No logs found (last 12 hours; logs may take up to 10 seconds to appear)`
   }
   else {
@@ -71,7 +71,7 @@ async function action (params) {
     let ready = isWin
       ? chars.done
       : c.green(c.dim('❤︎'))
-    spinner.done(`${ready} Loaded latest '${name}' logs from ${c.white(c.bold(app.name))} (${c.green(url)})`)
+    spinner.done(`${ready} Loaded latest '${name}' logs from ${c.bold(app.name)} (${c.green(url)})`)
   }
 
   let formatDate = str => '\n' + c.green(c.bold(str))

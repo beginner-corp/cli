@@ -64,7 +64,7 @@ async function action (params) {
   }
   let { envID, name, url } = environment
 
-  console.error(`${c.white(c.bold(app.name))} (app ID: ${appID})`)
+  console.error(`${c.bold(app.name)} (app ID: ${appID})`)
   console.error(`${last} ${name} (env ID: ${envID}): ${c.green(url)}`)
 
   let builds = await client.env.builds({ token, appID, envID, _staging })
