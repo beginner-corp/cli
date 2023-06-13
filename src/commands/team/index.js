@@ -9,7 +9,7 @@ async function action (params) {
   let { args } = params
   let subcommand = args._[1]
   let alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
-  subcommand = alias || subcommand || 'list'
+  subcommand = alias || subcommand
 
   if (subcommands.includes(subcommand)) {
     let appAction = require(`./${subcommand}`)
