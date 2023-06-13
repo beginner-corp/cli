@@ -1,8 +1,8 @@
 let names = { en: [ 'list', 'ls' ] }
 let help = require('./help')
-let { getConfig } = require('../../lib')
 
 async function action (params) {
+  let { getConfig, list } = require('../../lib')
   let config = getConfig(params)
   if (!config.access_token) {
     let msg = 'You must be logged in to list your Begin apps, please run: begin login'
@@ -16,19 +16,16 @@ async function action (params) {
   if (!apps.length) return Error('No apps found. Create your first by running: `begin deploy`')
   let domains = await client.domains.list({ token, _staging })
 
-  let item = '├──'
-  let last = '└──'
-
   let output = []
   apps.forEach(({ name, appID, environments }) => {
     output.push(`${c.bold(name)} (app ID: ${appID})`)
     if (!environments.length) {
-      output.push(`${last} (no app environments)`)
+      output.push(`${list.last} (no app environments)`)
     }
     else {
       let lastEnv = environments.length - 1
       environments.forEach(({ name, envID, url, location }, i) => {
-        let draw = lastEnv === i ? last : item
+        let draw = lastEnv === i ? list.last : list.item
         let linkedDomain = domains.find(({ appLink }) => appLink?.appID === appID && appLink?.envID === envID)
         output.push([
           `${draw} ${name}:`,
