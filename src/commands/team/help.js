@@ -1,49 +1,41 @@
 module.exports = {
   en: {
-    usage: [ 'team', '[options]' ],
+    usage: [ 'team <action> <parameters>', '[options]' ],
     description: 'Manage team membership for yourself and your Begin apps',
     contents: {
-      header: 'Team management options',
+      header: 'Team management actions',
       items: [
         {
-          name: 'list [appID]',
+          name: 'list',
           description: 'View teammates and their permissions',
-          optional: true,
         },
         {
           name: 'invite [role]',
           description: 'Generate an app invite code',
-          optional: true,
         },
         {
           name: 'revoke <code>',
           description: 'Revoke a previously generated app invite code',
-          optional: true,
         },
         {
           name: 'remove <username>',
           description: 'Remove a teammate from an app',
-          optional: true,
         },
         {
           name: 'role <username:role>',
           description: 'Assign a new role to a teammate; must be either `admin` or `collaborator`',
-          optional: true,
         },
         {
           name: 'accept <code>',
           description: 'Accept an app invite code',
-          optional: true,
         },
         {
           name: 'decline <code>',
           description: 'Decline an app invite code',
-          optional: true,
         },
         {
           name: 'leave',
           description: 'Remove yourself from an app',
-          optional: true,
         },
       ],
     },

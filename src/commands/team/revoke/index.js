@@ -18,7 +18,7 @@ module.exports = async function action (params) {
       return Error(`Invite code not found`)
     }
     if (err.message === 'invalid_request') {
-      return Error(`Invalid request`)
+      return Error(`Invalid invite code and/or app ID`)
     }
     return err
   }

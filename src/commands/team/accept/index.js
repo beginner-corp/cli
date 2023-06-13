@@ -11,6 +11,9 @@ module.exports = async function action (params) {
     }
   }
   catch (err) {
+    if (err.message === 'invalid_request') {
+      return Error(`Invalid invite code and/or app ID`)
+    }
     if (err.message === 'cannot_join_own_app') {
       return Error(`You cannot accept an invite for an app you own`)
     }
