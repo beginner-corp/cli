@@ -15,9 +15,19 @@ function checkManifest (inventory) {
 }
 
 // See if the project manifest contains an app ID
-function getAppID (inventory) {
-  let { begin } = inventory.inv._project.arc
-  let appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
+function getAppID (inventory, args) {
+  // First, prioritize args
+  let appID = args.app || args.a
+  // Then move on to the project manifest
+  if (!appID) {
+    let { begin } = inventory.inv._project.arc
+    appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
+  }
+  // Account for possible unintended minimist arg errata
+  appID = appID !== true && appID || undefined
+  if (!appID) {
+    throw Error(`Please specify an appID or run this command from within your app's folder`)
+  }
   return appID
 }
 

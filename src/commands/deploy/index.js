@@ -18,8 +18,7 @@ async function action (params) {
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr) return manifestErr
 
-  // See if the project manifest contains an app ID
-  let appID = getAppID(params.inventory)
+  let appID = getAppID(params.inventory, args)
 
   // Pass along any specified environment IDs
   let env = args.env || args.e

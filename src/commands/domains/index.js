@@ -33,7 +33,7 @@ async function action (params) {
 
     let inventory = await _inventory()
 
-    let appID = args.app || args.a || getAppID(inventory)
+    let appID = getAppID(params.inventory, args)
     let env = args.env || args.e
     let domain = args.domain
 

@@ -15,9 +15,7 @@ async function action (params) {
     return Error(msg)
   }
 
-  // Populate any specified app / environment IDs
-  let appID = args.app || args.a || getAppID(params.inventory)
-  appID = appID !== true && appID || undefined
+  let appID = getAppID(params.inventory, args)
   let env = args.env || args.e
 
   if (!appID) return Error('Please specify an app ID to destroy')

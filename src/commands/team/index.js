@@ -26,10 +26,7 @@ async function action (params) {
     }
     let { access_token: token, stagingAPI: _staging } = config
 
-    // Populate any specified app / environment IDs
-    let appID = args.app || args.a || getAppID(params.inventory)
-    appID = appID !== true && appID || undefined
-    if (!appID) return Error(`Please specify an appID or run this command from within your app's folder`)
+    let appID = getAppID(params.inventory, args)
 
     // Make sure the appID is valid
     try {

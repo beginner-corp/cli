@@ -23,8 +23,7 @@ async function action (params) {
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr) return manifestErr
 
-  let appID =  args.app || args.a || getAppID(params.inventory)
-  if (!appID) return Error('Please specify an appID')
+  let appID = getAppID(params.inventory, args)
 
   // Make sure the appID is valid
   try {
