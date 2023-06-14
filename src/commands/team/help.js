@@ -10,7 +10,7 @@ module.exports = {
           description: 'View teammates and their permissions',
         },
         {
-          name: 'invite [role]',
+          name: 'invite [--role]',
           description: 'Generate an app invite code',
         },
         {
