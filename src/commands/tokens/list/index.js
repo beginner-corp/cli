@@ -14,10 +14,10 @@ module.exports = async function action (params, utils) {
   console.error(`Client tokens`)
   let output = []
   let last = clientTokens.length - 1
-  function addTokens ({ tokenID, created, lastUsed, expires, temporary }, i) {
+  function addTokens ({ tokenID, kind, created, lastUsed, expires }, i) {
     let draw = last === i ? list.last : list.item
     let line = last === i ? ' ' : list.line
-    let temp = temporary ? ' (temporary)' : ''
+    let temp = kind === 'personal_access_temporary' ? ' (temporary)' : ''
     output.push([
       `${draw} ${sanitize(tokenID)}${temp}`,
       `${line}${space}${list.item} created:   ${created}`,
