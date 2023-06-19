@@ -78,6 +78,7 @@ function getRelativeCwd (path) {
 let httpMethods = [ 'get', 'post', 'put', 'patch', 'delete', 'options', 'head', 'any' ]
 
 let list = {
+  line: '│',
   item: '├──',
   last: '└──',
 }
