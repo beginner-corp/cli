@@ -29,7 +29,7 @@ module.exports = async function action (params, utils) {
         let lastVar = keys.length - 1
         keys.forEach((key, i) => {
           // Ceci n'est pas une pipe
-          let marg = envs.length > 1 ? '│' : ' '
+          let marg = envs.length > 1 ? list.line : ' '
           let draw = lastVar === i ? list.last : list.item
           output.push(`${marg}   ${draw} ${key}=${vars[key][0]}****`)
         })

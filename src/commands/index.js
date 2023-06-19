@@ -15,11 +15,12 @@ let newProj = require('./new')
 let tail = require('./tail')
 let team = require('./team')
 let telemetry = require('./telemetry')
+let tokens = require('./tokens')
 let update = require('./update')
 let version = require('./version')
 let commands = [
   builds, create, deploy, destroy, dev, domains, envVar, generate, help,
-  list, login, logout, logs, newProj, tail, team, telemetry, update, version,
+  list, login, logout, logs, newProj, tail, team, tokens, telemetry, update, version,
 ]
 
 let helper = require('../helper')

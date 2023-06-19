@@ -1,5 +1,5 @@
 let globals = require('./global-options')
-let formatItems = require('./format-items')
+let { formatItem, formatItems } = require('./format-items')
 let defaultHelp = require('../commands/help')
 let c = require('picocolors')
 
@@ -21,7 +21,7 @@ module.exports = function helper (params, cmdHelp) {
   // First array string is bold, everything else is normal
   let help = br(1) + `${c.bold('begin ' + usage[0])} ${usage[1] ? usage[1] : ''}`
   if (description) {
-    help += br(1) + indent + description
+    help += br(1) + indent + formatItem({ desc: description, indent: 2 })
   }
   if (aliases) {
     help += br(1) + indent + `Alias: ${c.dim(aliases.join(', '))}`
