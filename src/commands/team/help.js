@@ -42,19 +42,19 @@ module.exports = {
     examples: [
       {
         name: `Generate a shareable invite for a new admin teammate`,
-        example: 'begin invite admin',
+        example: 'begin team invite admin',
       },
       {
         name: `Revoke a not-yet-accepted invite code`,
-        example: 'begin revoke $invitecode',
+        example: 'begin team revoke $invitecode',
       },
       {
         name: `Assign a collaborator teammate the role of admin`,
-        example: 'begin role $username:admin',
+        example: 'begin team role $username:admin',
       },
       {
         name: `Remove a teammate from an app`,
-        example: 'begin remove $username',
+        example: 'begin team remove $username',
       },
     ]
   }

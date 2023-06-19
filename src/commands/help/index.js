@@ -60,6 +60,10 @@ let help = {
             description: 'Retrieve logs from Begin',
           },
           // {
+          //   name: 'team',
+          //   description: `Manage team membership for yourself and your Begin apps`,
+          // },
+          // {
           //   name: 'tokens',
           //   description: `View and manage your account's access tokens`,
           // },
