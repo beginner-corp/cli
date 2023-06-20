@@ -31,13 +31,13 @@ async function action (params) {
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
 
-    let inventory = await _inventory()
+    params.inventory = await _inventory()
 
     let appID = getAppID(params.inventory, args)
     let env = args.env || args.e
     let domain = args.domain
 
-    return action({ config, inventory, appID, env, domain, verbose, ...params })
+    return action({ config, appID, env, domain, verbose, ...params })
   }
   else {
     let err = new Error('Please specify an domains subcommand')
