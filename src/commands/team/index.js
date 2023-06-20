@@ -1,4 +1,4 @@
-let names = { en: [ 'team' ] }
+let names = { en: [ 'team', 'teams' ] }
 let subcommands = [ 'list', 'invite', 'revoke', 'remove', 'role', 'accept', 'decline', 'leave' ]
 let aliases = {
   ls: 'list',
