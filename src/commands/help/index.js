@@ -59,14 +59,14 @@ let help = {
             name: 'logs',
             description: 'Retrieve logs from Begin',
           },
-          // {
-          //   name: 'team',
-          //   description: `Manage team membership for yourself and your Begin apps`,
-          // },
-          // {
-          //   name: 'tokens',
-          //   description: `View and manage your account's access tokens`,
-          // },
+          {
+            name: 'team',
+            description: `Manage team membership for yourself and your Begin apps`,
+          },
+          {
+            name: 'tokens',
+            description: `View and manage your account's access tokens`,
+          },
           {
             name: 'tail',
             description: 'Tail logs from Begin',
