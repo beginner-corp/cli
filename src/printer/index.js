@@ -6,7 +6,11 @@ let getStack = err => err.stack.split('\n').slice(1).join('\n')
 function printer (args) {
   function print (out = '', verbosity) {
     let isError = out instanceof Error
-    if (isError) process.exitCode = 1
+    if (isError) {
+      process.exitCode = 1
+      let errorCheck = require('./error-check')
+      out = errorCheck(out)
+    }
     let errored = process.exitCode === 1
 
     // TODO: this should probably be more nuanced based on stdout vs stderr, TTY state, etc.
