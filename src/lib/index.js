@@ -15,7 +15,7 @@ function checkManifest (inventory) {
 }
 
 // See if the project manifest contains an app ID
-function getAppID (inventory, args, required = true) {
+function getAppID (inventory, args) {
   // First, prioritize args
   let appID = args.app || args.a
   // Then move on to the project manifest
@@ -25,7 +25,7 @@ function getAppID (inventory, args, required = true) {
   }
   // Account for possible unintended minimist arg errata
   appID = appID !== true && appID || undefined
-  if (required && !appID) {
+  if (!appID) {
     throw Error(`Please specify an appID or run this command from within your app's folder`)
   }
   return appID

@@ -18,8 +18,13 @@ async function action (params) {
   let manifestErr = checkManifest(params.inventory)
   if (manifestErr) return manifestErr
 
-  let appIdRequired = false // this command can create a new app
-  let appID = getAppID(params.inventory, args, appIdRequired)
+  let appID
+  try {
+    appID = getAppID(params.inventory, args)
+  }
+  catch (error) {
+    appID = null
+  }
 
   // Pass along any specified environment IDs
   let env = args.env || args.e
