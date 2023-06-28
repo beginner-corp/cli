@@ -13,13 +13,6 @@ let aliases = {
   unalias: 'unlink',
 }
 let defaultCommand = 'list'
-let appIdRequired = {
-  list: false,
-  add: false,
-  remove: true,
-  link: true,
-  unlink: true,
-}
 let help = require('./help').bind({})
 
 async function action (params) {
@@ -40,7 +33,13 @@ async function action (params) {
 
     params.inventory = await _inventory()
 
-    let appID = getAppID(params.inventory, args, appIdRequired[subcommand])
+    let appID
+    try {
+      appID = getAppID(params.inventory, args)
+    }
+    catch (error) {
+      appID = null
+    }
     let env = args.env || args.e
     let domain = args.domain
 
