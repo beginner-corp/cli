@@ -1,10 +1,4 @@
-const visibleTypes = [
-  'TXT',
-  'MX',
-  'ALIAS',
-  'NS',
-  'SPF',
-]
+const visibleTypes = [ 'TXT', 'MX', 'ALIAS', 'NS', 'SPF' ]
 
 async function action (params) {
   let c = require('picocolors')
@@ -49,14 +43,7 @@ async function action (params) {
       // @ts-ignore
       _staging,
       domainID: theDomain.domainID,
-      changes: [
-        {
-          type,
-          name,
-          value,
-          ttl,
-        }
-      ]
+      changes: [ { type, name, value, ttl } ],
     })
 
     return `Added record ${c.bold(type)} ${c.cyan(name)} (${result.status})`
@@ -67,18 +54,12 @@ async function action (params) {
       // @ts-ignore
       _staging,
       domainID: theDomain.domainID,
-      record: {
-        type,
-        name,
-        value,
-        ttl,
-      }
+      record: { type, name, value, ttl },
     })
 
     return `Removed record ${c.bold(type)} ${c.cyan(name)} (${result.status})`
   }
-  else {
-    // list records
+  else { // list records
     let records = await client.domains.records.list({ token, _staging, domainID: theDomain.domainID })
     let outputRecords = verbose ? records : records.filter(r => visibleTypes.includes(r.type))
     outputRecords = outputRecords.sort((a, b) => a.type.localeCompare(b.type))
@@ -87,9 +68,12 @@ async function action (params) {
       return c.red(`No records found for ${c.underline(c.cyan(domain))}`)
     }
     else {
-      return outputRecords.map(r =>
-        `${c.bold(r.type)} ${c.cyan(r.name)} ${c.italic(r.ttl || '')} ${r.values?.join(' ') || ''}`
-      ).join('\n')
+      let Table = require('cli-table3')
+      let table = new Table({ head: [ 'Type', 'Name', 'TTL', 'Value' ] })
+      for (const r of outputRecords)
+        table.push([ c.bold(r.type), c.cyan(r.name), r.ttl, r.values?.join('\n') ])
+
+      return table.toString()
     }
   }
 }

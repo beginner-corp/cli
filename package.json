@@ -29,6 +29,7 @@
     "@begin/api": "1.9.1",
     "@enhance/starter-project": "5.1.4",
     "adm-zip": "0.5.10",
+    "cli-table3": "0.6.3",
     "enquirer": "2.3.6",
     "escodegen": "2.0.0",
     "esprima": "4.0.1",
