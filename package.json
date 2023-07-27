@@ -28,7 +28,7 @@
     "@architect/utils": "3.1.9",
     "@begin/api": "1.9.1",
     "@colors/colors": "1.6.0",
-    "@enhance/starter-project": "5.1.4",
+    "@enhance/starter-project": "5.1.5",
     "adm-zip": "0.5.10",
     "cli-table3": "0.6.3",
     "enquirer": "2.3.6",
