@@ -1,5 +1,5 @@
 async function action (params) {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
   let { config, domain, appID, env } = params
   let { access_token: token, stagingAPI: _staging } = config

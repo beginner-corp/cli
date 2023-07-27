@@ -12,7 +12,7 @@ async function action (params) {
 
   let cli = require('@architect/sandbox/src/cli')
   let { chars } = require('@architect/utils')
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let { debug, verbose } = args
 
   // TODO: output Sandbox start via printer

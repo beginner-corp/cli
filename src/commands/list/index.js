@@ -10,7 +10,7 @@ async function action (params) {
   }
   let { access_token: token, stagingAPI: _staging } = config
 
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
   let apps = await client.list({ token, _staging })
   if (!apps.length) return Error('No apps found. Create your first by running: `begin deploy`')

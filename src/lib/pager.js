@@ -1,7 +1,7 @@
 module.exports = function pager (params, output) {
   let { args, isCI } = params
   let { debug } = args
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let isWin = process.platform.startsWith('win')
 
   let msg = ' Press q to exit log view '

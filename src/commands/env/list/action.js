@@ -2,7 +2,7 @@ module.exports = async function action (params, utils) {
   let { app, appID, args } = params
   let { environments, name } = app
   let { list } = utils
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
 
   let output = []
   output.push(`${c.bold(name)} (app ID: ${appID})`)

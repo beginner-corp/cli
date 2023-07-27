@@ -2,7 +2,7 @@ let names = { en: [ 'logs', 'log' ] }
 let help = require('./help')
 
 async function action (params) {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let error = require('./errors')(params)
   let client = require('@begin/api')
   let { chars } = require('@architect/utils')

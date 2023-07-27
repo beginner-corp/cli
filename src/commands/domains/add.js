@@ -8,7 +8,7 @@ async function checkDomain ({ domain, token, _staging }) {
 }
 
 async function action (params) {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let { config, domain, verbose } = params
   let { access_token: token, stagingAPI: _staging } = config
 

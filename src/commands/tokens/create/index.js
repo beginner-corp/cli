@@ -1,7 +1,7 @@
 module.exports = async function action (params, /* utils */) {
   let { args, config } = params
   let { access_token: token, stagingAPI: _staging } = config
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
 
   let temporary = args.temporary || args.temp || args.t
   let tokenType = temporary ? 'personal_access_temporary' : 'personal_access'

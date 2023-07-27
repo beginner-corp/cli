@@ -1,5 +1,5 @@
 async function action (params) {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
   let states = require('./_states')
   let { config, verbose } = params

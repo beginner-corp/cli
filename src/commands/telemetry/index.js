@@ -10,7 +10,7 @@ module.exports = {
 
     let { join } = require('path')
     let { existsSync } = require('fs')
-    let c = require('picocolors')
+    let c = require('@colors/colors/safe')
     let now = new Date().toISOString()
     let on = c.bold('enabled')
     let off = c.bold('disabled')

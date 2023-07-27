@@ -1,7 +1,7 @@
 let globals = require('./global-options')
 let { formatItem, formatItems } = require('./format-items')
 let defaultHelp = require('../commands/help')
-let c = require('picocolors')
+let c = require('@colors/colors/safe')
 
 let indentSize = 2
 let indent = Array(indentSize + 1).join(' ')

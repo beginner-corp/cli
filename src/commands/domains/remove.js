@@ -1,5 +1,5 @@
 async function action () {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   // TODO: create link for Stripe customer dashbaord
   return [
     c.bold(c.red('This feature is not yet implemented')),

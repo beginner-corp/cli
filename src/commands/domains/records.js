@@ -1,7 +1,7 @@
 const visibleTypes = [ 'TXT', 'MX', 'ALIAS', 'NS', 'SPF' ]
 
 async function action (params) {
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
   let { config, args, domain, verbose } = params
   let { access_token: token, stagingAPI: _staging } = config

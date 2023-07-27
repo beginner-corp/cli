@@ -3,7 +3,7 @@ module.exports = async function action (params, utils) {
   let { access_token: token, stagingAPI: _staging } = config
   let { list } = utils
   let client = require('@begin/api')
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
 
   let { teammates, invites } = await client.team.list({ token, appID, _staging })
   let longestUsername = teammates

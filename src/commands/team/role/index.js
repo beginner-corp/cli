@@ -1,7 +1,7 @@
 module.exports = async function action (params) {
   let { app, args, appID, config } = params
   let { access_token: token, stagingAPI: _staging } = config
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
   let tuple = args._[2]
   if (!tuple) return Error('Please specify a username:role pair to assign')

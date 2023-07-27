@@ -1,7 +1,7 @@
 module.exports = async function action (params) {
   let { app, appID, config } = params
   let { access_token: token, stagingAPI: _staging } = config
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let client = require('@begin/api')
 
   try {

@@ -15,7 +15,7 @@ module.exports = async function (params) {
   let writeFile = utils.writeFile(params)
   let error = require('./errors')(params, utils)
   let _inventory = require('@architect/inventory')
-  let c = require('picocolors')
+  let c = require('@colors/colors/safe')
   let looseName = /^[a-z][a-zA-Z0-9-_]+$/
 
   // Project path
