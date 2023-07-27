@@ -146,4 +146,36 @@ const HELP = {
       ],
     },
   },
+  records: {
+    en: {
+      usage: [ 'domains records <parameters>', '[options]' ],
+      description: 'Manage DNS records for a domain',
+      contents: {
+        header: 'Records parameters',
+        items: [
+          { name: '--domain', description: 'Domain name to list records for' },
+          { name: '-a, --add', description: 'Add a record' },
+          { name: '-r, --remove', description: 'Remove a record' },
+          { name: '-t, --type', description: 'Record type; currently only TXT is supported' },
+          { name: '-n --name', description: 'Record name, ie. example.com' },
+          { name: '--ttl', description: 'Record TTL; defaults to 300' },
+          { name: '--value', description: 'Record value' },
+        ],
+      },
+      examples: [
+        {
+          name: 'List all records for a domain',
+          example: 'begin domains records --domain example.com',
+        },
+        {
+          name: 'Add a TXT record',
+          example: 'begin domains records --domain example.com --add --type TXT --name example.com --value foobarbaz',
+        },
+        {
+          name: 'Remove a TXT record',
+          example: 'begin domains records --domain example.com -r -t TXT -n example.com --value foobarbaz"',
+        },
+      ],
+    },
+  }
 }

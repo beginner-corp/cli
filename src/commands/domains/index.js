@@ -1,5 +1,5 @@
 let names = { en: [ 'domains' ] }
-let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink' ]
+let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink', 'records' ]
 let aliases = {
   ls: 'list',
   buy: 'add',
@@ -17,10 +17,11 @@ let help = require('./help').bind({})
 
 async function action (params) {
   let { args } = params
-  let { verbose } = args
-  let subcommand = args._[1] || defaultCommand
+  let { domain, env, verbose, _ } = args
+  let subcommand = _[1] || defaultCommand
   let alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
   subcommand = alias || subcommand
+  env = env || args.e
 
   if (subcommands.includes(subcommand)) {
     let _inventory = require('@architect/inventory')
@@ -31,19 +32,16 @@ async function action (params) {
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
 
-    params.inventory = await _inventory()
-
+    let inventory = await _inventory()
     let appID
     try {
-      appID = getAppID(params.inventory, args)
+      appID = getAppID(inventory, args)
     }
-    catch (error) {
+    catch (e) {
       appID = null
     }
-    let env = args.env || args.e
-    let domain = args.domain
 
-    return action({ config, appID, env, domain, verbose, ...params })
+    return action({ config, appID, env, domain, verbose, inventory, ...params })
   }
   else {
     let err = new Error('Please specify an domains subcommand')
