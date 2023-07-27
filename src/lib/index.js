@@ -119,6 +119,27 @@ function writeFile (params) {
   }
 }
 
+const tableStyle = {
+  chars: {
+    bottom: '',
+    'bottom-left': '',
+    'bottom-mid': '',
+    'bottom-right': '',
+    left: '',
+    'left-mid': '',
+    mid: '',
+    middle: '',
+    'mid-mid': '',
+    right: '',
+    'right-mid': '',
+    top: '',
+    'top-left': '',
+    'top-mid': '',
+    'top-right': '',
+  },
+  style: { head: [ 'bold', 'red' ] },
+}
+
 module.exports = {
   backtickify,
   checkManifest,
@@ -132,5 +153,6 @@ module.exports = {
   pager,
   runtimes,
   spinner,
+  tableStyle,
   writeFile,
 }

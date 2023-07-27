@@ -1,4 +1,4 @@
-const visibleTypes = [ 'TXT', 'MX', 'ALIAS', 'NS', 'SPF' ]
+const visibleTypes = [ 'TXT', 'MX', 'ALIAS', 'SPF' ]
 
 async function action (params) {
   let c = require('@colors/colors/safe')
@@ -68,12 +68,16 @@ async function action (params) {
       return c.red(`No records found for ${c.underline(c.cyan(domain))}`)
     }
     else {
+      let { tableStyle } = require('../../lib')
       let Table = require('cli-table3')
-      let table = new Table({ head: [ 'Type', 'Name', 'TTL', 'Value' ] })
+      let table = new Table({
+        head: [ 'Type', 'Name', 'TTL', 'Value' ],
+        ...tableStyle,
+      })
       for (const r of outputRecords)
         table.push([ c.bold(r.type), c.cyan(r.name), r.ttl, r.values?.join('\n') ])
 
-      return table.toString()
+      return `\n${table.toString()}`
     }
   }
 }
