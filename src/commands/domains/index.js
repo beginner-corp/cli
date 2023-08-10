@@ -1,6 +1,6 @@
-let names = { en: [ 'domains' ] }
-let subcommands = [ 'list', 'add', 'remove', 'link', 'unlink', 'records' ]
-let aliases = {
+const names = { en: [ 'domains' ] }
+const subcommands = [ 'list', 'add', 'remove', 'link', 'unlink', 'records' ]
+const aliases = {
   ls: 'list',
   buy: 'add',
   check: 'add',
@@ -12,27 +12,28 @@ let aliases = {
   disassociate: 'unlink',
   unalias: 'unlink',
 }
-let defaultCommand = 'list'
-let help = require('./help').bind({})
+const defaultCommand = 'list'
+const help = require('./help').bind({})
 
 async function action (params) {
-  let { args } = params
-  let { domain, env, verbose, _ } = args
+  const { args } = params
+  let { domain, env, verbose, yes, _ } = args
   let subcommand = _[1] || defaultCommand
-  let alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
+  const alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
   subcommand = alias || subcommand
   env = env || args.e
+  yes = yes || args.y
 
   if (subcommands.includes(subcommand)) {
-    let _inventory = require('@architect/inventory')
-    let { getConfig, getAppID } = require('../../lib')
-    let { action } = require(`./${subcommand}`)
+    const _inventory = require('@architect/inventory')
+    const { getConfig, getAppID } = require('../../lib')
+    const { action } = require(`./${subcommand}`)
 
-    let config = getConfig(params)
+    const config = getConfig(params)
     if (!config.access_token)
       return Error('You must be logged in, please run: begin login')
 
-    let inventory = await _inventory()
+    const inventory = await _inventory()
     let appID
     try {
       appID = getAppID(inventory, args)
@@ -41,7 +42,7 @@ async function action (params) {
       appID = null
     }
 
-    return action({ config, appID, env, domain, verbose, inventory, ...params })
+    return action({ config, appID, env, domain, verbose, yes, inventory, ...params })
   }
   else {
     let err = new Error('Please specify an domains subcommand')

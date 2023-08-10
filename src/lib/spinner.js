@@ -3,7 +3,7 @@ let resetCursor = (y) => {
   out.cursorTo(0)
   if (y) out.moveCursor(0, y)
 }
-let write = t => out.write(t + '\033[1A' + '\n')
+let write = t => out.write(`${t}\x1b[1A\n`)
 
 let frames = [ '   ', '.  ', '.. ', '...' ]
 let timing = 333
@@ -12,7 +12,7 @@ let interval, restore, lastLine
 function resetSpinner (output) {
   if (interval) clearInterval(interval)
   if (lastLine) {
-    out.clearLine()
+    out.clearLine(0)
     // Check to see if the line wrapped, otherwise we won't overwrite all old characters from the terminal buffer
     let trail = lastLine.length > process.stdout.columns ? '    ' : ''
     // Allow a custom ending message; if present, make sure to clear out any leftover lastline chars

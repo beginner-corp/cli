@@ -1,7 +1,7 @@
 /**
  * @typedef {Object} HelpContents
  * @property {string} header
- * @property {{name: string, description: string}[]} items
+ * @property {{name: string, description: string, optional?: boolean}[]} items
  */
 /**
  * @typedef {Object} HelpExample
@@ -84,9 +84,10 @@ const HELP = {
       contents: {
         header: 'Link parameters',
         items: [
-          { name: '-a, --app', description: 'App ID, if not in Begin project working dir' },
-          { name: '--domain', description: 'Domain name to link' },
-          { name: '-e, --env', description: 'Environment name or ID to link to' },
+          { name: '-a, --app', description: 'App ID, if not in Begin project working dir', optional: true },
+          { name: '--domain', description: 'Domain name to link', optional: true },
+          { name: '-e, --env', description: 'Environment name or ID to link to', optional: true },
+          { name: '-y, --yes', description: 'Skip confirmation prompt', optional: true },
         ],
       },
       examples: [
@@ -135,7 +136,8 @@ const HELP = {
       contents: {
         header: 'Unlink parameters',
         items: [
-          { name: '--domain', description: 'Domain name to unlink' },
+          { name: '--domain', description: 'Domain name to unlink', optional: true },
+          { name: '-y, --yes', description: 'Skip confirmation prompt', optional: true }
         ],
       },
       examples: [
@@ -156,10 +158,10 @@ const HELP = {
           { name: '--domain', description: 'Domain name to list records for' },
           { name: '-a, --add', description: 'Add a record' },
           { name: '-r, --remove', description: 'Remove a record' },
-          { name: '-t, --type', description: 'Record type; currently only TXT is supported' },
-          { name: '-n --name', description: 'Record name, ie. example.com' },
-          { name: '--ttl', description: 'Record TTL; defaults to 300' },
-          { name: '--value', description: 'Record value' },
+          { name: '-t, --type', description: 'Record type; currently only TXT is supported', optional: true },
+          { name: '-n --name', description: 'Record name, ie. example.com', optional: true },
+          { name: '--ttl', description: 'Record TTL; defaults to 300', optional: true },
+          { name: '--value', description: 'Record value', optional: true },
         ],
       },
       examples: [

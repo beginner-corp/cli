@@ -31,7 +31,7 @@
     "@enhance/starter-project": "5.1.5",
     "adm-zip": "0.5.10",
     "cli-table3": "0.6.3",
-    "enquirer": "2.3.6",
+    "enquirer": "2.4.1",
     "escodegen": "2.0.0",
     "esprima": "4.0.1",
     "is-potential-custom-element-name": "1.0.1",
