@@ -11,7 +11,7 @@ let isWin = process.platform.startsWith('win')
 let binPath = join(cwd, 'build', `begin${isWin ? '.exe' : ''}`)
 let bin = join(binPath)
 
-let ready = /Begin dev server \(.*\) ready!/
+let ready = /.* dev server \(.*\) ready!/
 
 async function startDev (type, t, dir, reuse, options = {}) {
   let port = await getPort()

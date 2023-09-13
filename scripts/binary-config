@@ -24,6 +24,8 @@ let config = {
       // Begin stuff
       // Some commands have dynamically required subcommands, so just grab everything
       '../src/commands/**/*.js',
+      // Enhance CLI
+      '../node_modules/@enhance/cli/**/*.js',
       // Arc stuff
       '../node_modules/@architect/inventory/**/*.js',
       '../node_modules/dynalite/**/*.js',

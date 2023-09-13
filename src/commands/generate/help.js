@@ -26,7 +26,7 @@ module.exports = async function generateHelp (subcommands, params) {
   }
 
   for (let subcommand of subcommands) {
-    let generator = require(`./generators/${subcommand}`)
+    let generator = require(`@enhance/cli/src/commands/generate/generators/${subcommand}`)
     let { name, description, help: genHelp } = generator
     if (typeof genHelp === 'function') {
       genHelp = await genHelp(params, lib)
