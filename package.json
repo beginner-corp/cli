@@ -28,7 +28,7 @@
     "@begin/api": "1.9.1",
     "@colors/colors": "1.6.0",
     "@enhance/cli": "1.0.5",
-    "@enhance/starter-project": "5.1.6",
+    "@enhance/starter-project": "5.1.7",
     "adm-zip": "0.5.10",
     "cli-table3": "0.6.3",
     "enquirer": "2.4.1",
