@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'auth',
   description: 'Add authentication and example usage',
-  action,
   help: () => {
     return {
       en: {

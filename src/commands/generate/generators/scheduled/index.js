@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'scheduled',
   description: 'Create a new scheduled event',
-  action,
   help: {
     en: {
       contents: {

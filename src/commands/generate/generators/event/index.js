@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'event',
   description: 'Create a new async event',
-  action,
   help: () => {
     return {
       en: {

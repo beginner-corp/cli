@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'api',
   description: 'Create a new API route',
-  action,
   help: () => {
     return {
       en: {

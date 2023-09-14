@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'page',
   description: 'Create a new page',
-  action,
   help: () => {
     return {
       en: {

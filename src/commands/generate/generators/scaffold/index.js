@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'scaffold',
   description: 'Create MVC code for CRUD apps',
-  action,
   help: () => {
     return {
       en: {

@@ -1,9 +1,6 @@
-let action = require('./action')
-
 module.exports = {
   name: 'http',
   description: 'Create a new HTTP route',
-  action,
   help: () => {
     let { backtickify, httpMethods } = require('../../../../lib')
     return {
