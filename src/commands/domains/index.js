@@ -17,7 +17,7 @@ const help = require('./help').bind({})
 
 async function action (params) {
   const { args } = params
-  let { domain, env, verbose, yes, _ } = args
+  let { domain, env, external, verbose, yes, _ } = args
   let subcommand = _[1] || defaultCommand
   const alias = Object.keys(aliases).includes(subcommand) && aliases[subcommand]
   subcommand = alias || subcommand
@@ -42,7 +42,17 @@ async function action (params) {
       appID = null
     }
 
-    return action({ config, appID, env, domain, verbose, yes, inventory, ...params })
+    return action({
+      appID,
+      config,
+      domain,
+      env,
+      external,
+      inventory,
+      verbose,
+      yes,
+      ...params,
+    })
   }
   else {
     let err = new Error('Please specify an domains subcommand')

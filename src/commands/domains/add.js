@@ -9,11 +9,17 @@ async function checkDomain ({ domain, token, _staging }) {
 
 async function action (params) {
   let c = require('@colors/colors/safe')
-  let { config, domain, verbose } = params
+  let { config, domain, verbose, external } = params
   let { access_token: token, stagingAPI: _staging } = config
 
   if (!domain)
     return Error('Please specify a domain name like: begin domains add --domain begin.com')
+
+  if (external) {
+    let client = require('@begin/api')
+    let { domain: externalDomain } = await client.domains.add({ token, domain, _staging })
+    return `External domain ${c.green(c.bold(externalDomain))} added!`
+  }
 
   let check
   let available
@@ -33,7 +39,10 @@ async function action (params) {
   if (available) { // domain is definitely available
     output.push(`${c.green(c.bold(domain))} is available!`)
     output.push(`Subscribe here: ${c.bold(c.cyan(check.purchaseLink))}`)
-    output.push(`Learn more about domain subscriptions: ${c.cyan('https://begin.com/docs/cli/commands/domain-subscriptions')}.`)
+    output.push([
+      `Learn more about domain subscriptions:`,
+      c.cyan('https://begin.com/docs/cli/commands/domain-subscriptions'),
+    ].join(' '))
   }
   else if (availability === 'PENDING' || availability === 'DONT_KNOW') {
     output.push(`${c.cyan(c.bold(domain))} availability is unknown, please try again.`)

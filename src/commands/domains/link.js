@@ -22,7 +22,7 @@ async function action (params) {
   if (!theDomain)
     return Error([
       `You do not subscribe to the domain "${domain}".`,
-      `To subscribe, run: begin domains check ${domain}`,
+      `To subscribe, run: begin domains add ${domain}`,
     ].join('\n'))
 
   if (!appID || (typeof appID === 'string' && appID.length === 0)){
