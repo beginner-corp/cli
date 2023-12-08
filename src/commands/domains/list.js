@@ -18,13 +18,14 @@ async function action (params) {
     head: [ 'Domain', 'Status', 'Updated' ],
     ...tableStyle,
   })
-  for (const { domain, domainID, status, appLink, r53LastStatus, updatedAt } of domains) {
+  for (const { domain, domainID, managed, status, appLink, r53LastStatus, updatedAt } of domains) {
     if (status === states.PURCHASING) continue
     /** @type {import('cli-table3').HorizontalTableRow} */
     let row = []
 
-    if (verbose) row.push(`${c.bold(domain)} <${domainID}>`)
-    else row.push(c.bold(domain))
+    const firstCell = `${c.bold(domain)}${managed ? '' : ' (external)'}`
+    if (verbose) row.push(`${firstCell} <${domainID}>`)
+    else row.push(firstCell)
 
     if (status === states.LINKED && appLink) {
       let { appID, envID } = appLink

@@ -52,7 +52,7 @@
     "@aws-sdk/lib-dynamodb": "3.410.0",
     "aws-sdk": "2.1457.0",
     "cross-env": "~7.0.3",
-    "eslint": "~8.54.0",
+    "eslint": "~8.55.0",
     "fs-extra": "11.2.0",
     "nyc": "~15.1.0",
     "pkg": "5.8.1",
