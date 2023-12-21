@@ -1,8 +1,9 @@
 module.exports = async function action (params, utils) {
-  let { appID, config, envName } = params
+  let { appID, args, config, envName } = params
+  let { region } = args
   let { access_token: token, stagingAPI: _staging } = config
   let { createApp, promptOptions, validateEnvName } = require('../../lib/app')
-  let { prompt } = require('enquirer')
+  let { prompt, Select } = require('enquirer')
   let client = require('@begin/api')
   let deploy = require('../deploy')
 
@@ -59,8 +60,33 @@ module.exports = async function action (params, utils) {
       return ReferenceError(msg)
     }
 
+    let regions
+    if (!region) {
+      let { selectRegion } = await prompt({
+        type: 'confirm',
+        name: 'selectRegion',
+        message: `Would you like to specify the geographical region your project will be deployed to? (This cannot be changed)`,
+        initial: 'n',
+      }, promptOptions)
+
+      if (selectRegion) {
+        // Get available regions
+        regions = await client.regions({ token, _staging })
+        let regionsByLocation = Object.fromEntries(Object.entries(regions).map(([ k, v ]) => ([ v, k ])))
+
+        let prompt = new Select({
+          name: 'build',
+          message: 'Select from these regions',
+          choices: Object.values(regions)
+        }, promptOptions)
+
+        let result = await prompt.run()
+        region = regionsByLocation[result]
+      }
+    }
+
     // Create the app environment
-    app = await client.env.add({ token, appID, envName, _staging })
+    app = await client.env.add({ token, appID, envName, region, _staging })
     let env = app.environments.find(({ name }) => name === envName)
     console.error(`App environment '${envName}' created at ${env.url}`)
 
