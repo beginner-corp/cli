@@ -23,22 +23,22 @@ async function action (params) {
       `<${appID}>`,
     ].join(' '))
 
-    for (const { name: envName, envID, url, location } of environments) {
-      const envRow = [
+    for (let { name: envName, envID, url, location } of environments) {
+      let envRow = [
         ' ',
-        envName,
-        c.dim(`<${envID}>`),
-        location,
+        c.bold(envName),
+        `<${envID}>`,
+        c.dim(location),
       ]
       let linkedDomain = domains.find(({ appLink }) =>
         appLink?.appID === appID && appLink?.envID === envID
       )
 
-      const appUrl = c.green(url)
+      let appUrl = c.green(url)
       envRow.push(
         linkedDomain
-          ? `\n    ├ ${c.cyan(`https://${linkedDomain.domain}`)}\n    └ ${appUrl}`
-          : `\n    └ ${appUrl}`
+          ? `\n    ├─ ${c.cyan(`https://${linkedDomain.domain}`)}\n    └─ ${appUrl}`
+          : `\n    └─ ${appUrl}`
       )
 
       rows.push(envRow.join(' '))

@@ -9,34 +9,42 @@ async function action (params) {
   if (!domains.length)
     return Error('No domains found. Start by running: begin domains add --domain <domain>')
 
-  let apps = await client.list({ token, _staging })
+  let apps
 
-  let presentDate = (date) => (new Date(date)).toLocaleString()
-  let { tableStyle } = require('../../lib')
-  let Table = require('cli-table3')
-  let table = new Table({
-    head: [ 'Domain', 'Status', 'Updated' ],
-    ...tableStyle,
-  })
-  for (const { domain, domainID, managed, status, appLink, r53LastStatus, updatedAt } of domains) {
+  const rows = []
+  for (const domain of domains) {
+    const { domain: domainName, domainID, managed, status, appLink, r53LastStatus, updatedAt } = domain
+
     if (status === states.PURCHASING) continue
-    /** @type {import('cli-table3').HorizontalTableRow} */
     let row = []
 
-    const firstCell = `${c.bold(domain)}${managed ? '' : ' (external)'}`
-    if (verbose) row.push(`${firstCell} <${domainID}>`)
-    else row.push(firstCell)
+    const domainTitle = [
+      c.cyan.bold(domainName),
+      managed ? '' : c.dim(' (external)'),
+    ].join('')
+
+    if (verbose) row.push(`${domainTitle} <${domainID}>`)
+    else row.push(domainTitle)
+
+    if (verbose)
+      row.push(` Updated: ${new Date(updatedAt).toLocaleString()}`)
+
+    row.push('\n  ')
 
     if (status === states.LINKED && appLink) {
+      if (!apps) apps = await client.list({ token, _staging })
       let { appID, envID } = appLink
       let theApp = apps.find(a => a.appID === appID)
       let theEnv = theApp.environments.find(e => e.envID === envID)
 
       let linkedStatus = c.green(theApp.name)
       if (verbose) linkedStatus += ` <${appID}>`
-      linkedStatus += `: "${theEnv.name}"`
+      linkedStatus += ` ${theEnv.name}`
       if (verbose) linkedStatus += ` <${envID}>`
       row.push(linkedStatus)
+    }
+    else if (status === states.LINKED) {
+      row.push('Linked to an unknown app')
     }
     else if (status === states.REGISTERING) {
       row.push(`${c.italic(`Registration: ${r53LastStatus}`)}`)
@@ -60,10 +68,11 @@ async function action (params) {
       row.push(`Unknown (status: ${status})`)
     }
 
-    table.push(row.concat([ presentDate(updatedAt) ]))
+    rows.push(row.join(''))
+    rows.push('')
   }
 
-  return `\n${table.toString()}`
+  return `\n${rows.join('\n')}`
 }
 
 module.exports = {
