@@ -34,10 +34,10 @@ async function action (params) {
         appLink?.appID === appID && appLink?.envID === envID
       )
 
-      let appUrl = c.green(url)
+      let appUrl = c.green.underline(url)
       envRow.push(
         linkedDomain
-          ? `\n    ├─ ${c.cyan(`https://${linkedDomain.domain}`)}\n    └─ ${appUrl}`
+          ? `\n    ├─ ${c.cyan.underline(`https://${linkedDomain.domain}`)}\n    └─ ${appUrl}`
           : `\n    └─ ${appUrl}`
       )
 

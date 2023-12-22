@@ -115,6 +115,7 @@ async function action (params) {
       token,
       domainID: theDomain.domainID,
     })
+
     let outputRecords = verbose
       ? records
       : records.filter((r) => visibleTypes.includes(r.type))
@@ -124,21 +125,22 @@ async function action (params) {
       return c.red(`No records found for ${c.underline(c.cyan(domain))}`)
     }
     else {
-      const { tableStyle } = require('../../lib')
-      const Table = require('cli-table3')
-      const table = new Table({
-        head: [ 'Type', 'Name', 'TTL', 'Value' ],
-        ...tableStyle,
-      })
-      for (const r of outputRecords)
-        table.push([
+      const rows = [ `Records for ${c.underline(c.cyan(domain))}`, '' ]
+      for (const r of outputRecords){
+        const row = [
+          '  ',
           c.bold(r.type),
+          ' ',
           c.cyan(r.name),
-          r.ttl,
+          '\n    ',
           r.values?.join('\n'),
-        ])
+        ]
+        if (verbose) row.push('\n    ', 'TTL: ', r.ttl,)
 
-      return `\n${table.toString()}`
+        rows.push(row.join(''))
+      }
+
+      return `\n${rows.join('\n')}`
     }
   }
 }

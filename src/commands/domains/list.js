@@ -19,7 +19,7 @@ async function action (params) {
     let row = []
 
     const domainTitle = [
-      c.cyan.bold(domainName),
+      c.cyan.bold.underline(domainName),
       managed ? '' : c.dim(' (external)'),
     ].join('')
 
