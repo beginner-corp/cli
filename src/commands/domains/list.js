@@ -26,8 +26,10 @@ async function action (params) {
     if (verbose) row.push(`${domainTitle} <${domainID}>`)
     else row.push(domainTitle)
 
-    if (verbose)
-      row.push(` Updated: ${new Date(updatedAt).toLocaleString()}`)
+    if (verbose ){
+      row.push(`\n  Updated: ${new Date(updatedAt).toLocaleString()}`)
+      row.push(c.dim(`\n  Status: ${c.bold(status)} `))
+    }
 
     row.push('\n  ')
 
@@ -62,10 +64,10 @@ async function action (params) {
       row.push('Unlinking DNS and SSL certificates')
     }
     else if ([ states.LAPSED, states.CANCELLED, states.DELETED ].includes(status)) {
-      row.push(`Inactive (status: ${status})`)
+      row.push(`Inactive (${status})`)
     }
     else {
-      row.push(`Unknown (status: ${status})`)
+      row.push(`Unknown (${status})`)
     }
 
     rows.push(row.join(''))
