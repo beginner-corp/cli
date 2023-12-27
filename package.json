@@ -25,7 +25,7 @@
     "@architect/inventory": "3.6.5",
     "@architect/parser": "6.0.3",
     "@architect/utils": "3.1.9",
-    "@begin/api": "1.9.3",
+    "@begin/api": "1.9.4",
     "@colors/colors": "1.6.0",
     "@enhance/cli": "1.0.8",
     "@enhance/starter-project": "6.1.3",
