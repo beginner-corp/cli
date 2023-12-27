@@ -8,6 +8,8 @@ async function action (params) {
   const { access_token: token, stagingAPI: _staging } = params.config
 
   const domains = await client.domains.list({ _staging, token })
+  if (!domains.length)
+    return Error('No domains found. Start by running: begin domains add --domain <domain>')
 
   if (!domain || (typeof domain === 'string' && domain.length === 0)){
     const prompt = new Select({

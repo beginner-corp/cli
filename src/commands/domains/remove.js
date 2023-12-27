@@ -4,6 +4,9 @@ async function action (params) {
   let { config, domain } = params
   let { access_token: token, stagingAPI: _staging } = config
 
+  if (!domain)
+    return Error('Please specify a domain name like: begin domains remove --domain example.com')
+
   const domains = await client.domains.list({ _staging, token })
   const theDomain = domains.find(d => d.domain === domain)
 
