@@ -1,5 +1,5 @@
 async function action (params) {
-  let c = require('@colors/colors/safe')
+  let f = require('../../lib/format')()
   let client = require('@begin/api')
   let states = require('./_states')
   let { config, verbose } = params
@@ -19,16 +19,16 @@ async function action (params) {
     let row = []
 
     const domainTitle = [
-      c.cyan.bold.underline(domainName),
-      managed ? '' : c.dim(' (external)'),
+      f.domain[managed ? 'managed' : 'external'](domainName),
+      managed ? '' : f.dim(' (external)'),
     ].join('')
 
-    if (verbose) row.push(`${domainTitle} <${domainID}>`)
+    if (verbose) row.push(`${domainTitle} ${f.ID(domainID)}`)
     else row.push(domainTitle)
 
     if (verbose ){
-      row.push(`\n  Updated: ${new Date(updatedAt).toLocaleString()}`)
-      row.push(c.dim(`\n  Status: ${c.bold(status)} `))
+      row.push(`\n  Updated: ${f.date(updatedAt)}`)
+      row.push(f.dim(`\n  Status: ${f.bold(status)} `))
     }
 
     row.push('\n  ')
@@ -39,25 +39,25 @@ async function action (params) {
       let theApp = apps.find(a => a.appID === appID)
       let theEnv = theApp.environments.find(e => e.envID === envID)
 
-      let linkedStatus = c.green(theApp.name)
-      if (verbose) linkedStatus += ` <${appID}>`
+      let linkedStatus = f.app.name(theApp.name)
+      if (verbose) linkedStatus += ` ${f.ID(appID)}`
       linkedStatus += ` ${theEnv.name}`
-      if (verbose) linkedStatus += ` <${envID}>`
+      if (verbose) linkedStatus += ` ${f.ID(envID)}`
       row.push(linkedStatus)
     }
     else if (status === states.LINKED) {
       row.push('Linked to an unknown app')
     }
-    else if (status === states.REGISTERING) {
-      row.push(`${c.italic(`Registration: ${r53LastStatus}`)}`)
+    else if (status === states.REGISTERING && r53LastStatus) {
+      row.push(`${f.italic(`Registration: ${r53LastStatus}`)}`)
     }
     else if (status === states.ACTIVE) {
       row.push('Available to link')
     }
     else if (status === states.LINKING) {
       let linkingStatus = 'Linking to an app environment'
-      if (verbose)
-        linkingStatus += ` Last DNS check: ${c.italic(r53LastStatus)}`
+      if (verbose && r53LastStatus)
+        linkingStatus += ` Last DNS check: ${f.italic(r53LastStatus)}`
       row.push(linkingStatus)
     }
     else if (status === states.UNLINKING) {

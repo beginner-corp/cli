@@ -5,6 +5,9 @@ module.exports = function () {
 
   const formatter = {
     name,
+    dim: c.dim,
+    bold: c.bold,
+    italic: c.italic,
     ID: (id) => `<${id}>`,
     date: (date) => new Date(date).toLocaleString(),
     app: {
