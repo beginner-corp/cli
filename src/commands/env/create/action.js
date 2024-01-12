@@ -3,6 +3,7 @@ module.exports = async function action (params) {
   let { access_token: token, stagingAPI: _staging } = config
   let client = require('@begin/api')
   let error = require('../errors')(params)
+  let looseName = /^[a-zA-Z_][a-zA-Z0-9_]+$/
 
   // Environment (required)
   let env = args.env || args.e
@@ -20,6 +21,9 @@ module.exports = async function action (params) {
   let name = args.name || args.n || args.key || args.k
   if (!name || name === true) {
     return error('no_name')
+  }
+  if (!looseName.test(name) || name.length > 64) {
+    return error('invalid_varname')
   }
   name = name.toUpperCase()
 
