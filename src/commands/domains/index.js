@@ -1,4 +1,4 @@
-const names = { en: [ 'domains' ] }
+const names = { en: [ 'domains', 'domain' ] }
 const subcommands = [ 'list', 'add', 'remove', 'link', 'unlink', 'records', 'validate' ]
 const aliases = {
   ls: 'list',
