@@ -37,13 +37,22 @@ async function action (params) {
       if (!apps) apps = await client.list({ token, _staging })
       let { appID, envID } = appLink
       let theApp = apps.find(a => a.appID === appID)
-      let theEnv = theApp.environments.find(e => e.envID === envID)
 
-      let linkedStatus = f.app.name(theApp.name)
-      if (verbose) linkedStatus += ` ${f.ID(appID)}`
-      linkedStatus += ` ${theEnv.name}`
-      if (verbose) linkedStatus += ` ${f.ID(envID)}`
-      row.push(linkedStatus)
+      if (theApp) {
+        let theEnv = theApp.environments.find(e => e.envID === envID)
+        let linkedStatus = f.app.name(theApp.name)
+
+        if (verbose) linkedStatus += ` ${f.ID(appID)}`
+        linkedStatus += ` ${theEnv.name}`
+        if (verbose) linkedStatus += ` ${f.ID(envID)}`
+        row.push(linkedStatus)
+      }
+      else {
+        row.push('Linked to an unknown app')
+        rows.push(row.join(''))
+        rows.push('')
+        continue
+      }
     }
     else if (status === states.LINKED) {
       row.push('Linked to an unknown app')
