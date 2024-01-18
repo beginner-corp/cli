@@ -16,7 +16,14 @@ module.exports = async function action (params, utils) {
 
   // Go get the app (if we didn't just create one)
   if (!app) {
-    app = await client.find({ token, appID, _staging })
+    try {
+      app = await client.find({ token, appID, _staging })
+    }
+    catch (err) {
+      if (err.message === 'app_not_found') return Error(`No app found with app ID '${appID}'`)
+      if (err.message === 'unknown_error') return Error(`No app found with app ID '${appID}' or the user does not have permission to access the app.`)
+      return
+    }
   }
 
   let envs = app.environments
