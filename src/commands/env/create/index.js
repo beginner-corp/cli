@@ -19,14 +19,22 @@ module.exports = {
           },
           {
             name: '-v, --value',
-            description: `Env variable value`,
+            description: 'Env variable value',
           },
         ],
       },
       examples: [
         {
-          name: `Create a variable named 'FOO' in 'staging'`,
-          example: 'begin env create --env staging --name FOO --value bar',
+          name: "Create a variable named 'FOO' in 'staging'",
+          example: 'begin env create --env staging --name FOO --value "bar"',
+        },
+        {
+          name: "Create a variable named 'FOO' in 'staging' with escaped special characters (Mac/Linux)",
+          example: 'begin env create --env staging --name FOO --value "bar\\!"',
+        },
+        {
+          name: "Create a variable named 'FOO' in 'staging' with special characters (Windows)",
+          example: 'begin env create --env staging --name FOO --value "bar!"',
         },
       ]
     }
