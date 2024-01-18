@@ -6,7 +6,7 @@
   },
   "main": "src/index.js",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "scripts": {
     "test": "npm run lint && npm run coverage && npm run test:integration && npm run test:integration:slow",
