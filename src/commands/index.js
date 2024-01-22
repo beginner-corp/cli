@@ -12,6 +12,7 @@ let list = require('./list')
 let login = require('./login')
 let logout = require('./logout')
 let newProj = require('./new')
+let regions = require('./regions')
 let tail = require('./tail')
 let team = require('./team')
 let telemetry = require('./telemetry')
@@ -20,7 +21,8 @@ let update = require('./update')
 let version = require('./version')
 let commands = [
   builds, create, deploy, destroy, dev, domains, envVar, generate, help,
-  list, login, logout, logs, newProj, tail, team, tokens, telemetry, update, version,
+  list, login, logout, logs, newProj, regions, tail, team, tokens, telemetry,
+  update, version,
 ]
 
 let helper = require('../helper')
