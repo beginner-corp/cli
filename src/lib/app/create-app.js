@@ -4,10 +4,12 @@ module.exports = async function createApp (params, utils) {
   let { env, region } = args
   let { access_token: token, stagingAPI: _staging } = config
   let { mutateArc, writeFile } = utils
-  let { prompt, Select } = require('enquirer')
-  let client = require('@begin/api')
-  let { promptOptions } = require('.')
-  let { validateEnvName } = require('./validate')
+
+  const { prompt, Select } = require('enquirer')
+  const client = require('@begin/api')
+  const { promptOptions } = require('.')
+  const { validateEnvName } = require('./validate')
+  const columns = require('../../lib/columns')
 
   console.error(`This project doesn't appear to be associated with a Begin app`)
   let { create } = await prompt({
@@ -45,27 +47,32 @@ module.exports = async function createApp (params, utils) {
     }, promptOptions)
   }
 
-  let regions
   if (!region) {
-    let { selectRegion } = await prompt({
+    let { willSelectRegion } = await prompt({
       type: 'confirm',
-      name: 'selectRegion',
+      name: 'willSelectRegion',
       message: `Would you like to specify the geographical region your project will be deployed to? (This cannot be changed)`,
       initial: 'n',
     }, promptOptions)
 
-    if (selectRegion) {
+    if (willSelectRegion) {
       // Get available regions
-      regions = await client.regions({ token, _staging })
-      let regionsByLocation = Object.fromEntries(Object.entries(regions).map(([ k, v ]) => ([ v, k ])))
+      let regions = await client.regions({ token, _staging })
+      let regionEntries = Object.entries(regions)
+      let choiceNames = columns(regionEntries.map(([ k, v ]) => [ v, k ]), 2)
+      let choices = choiceNames.map((c, i) => ({
+        message: c, // displayed in list
+        name: regionEntries[i][1], // displayed on selection and returned as result
+        // value: regionEntries[i][0], // ! is not returned as result
+      }))
+      let regionsByLocation = Object.fromEntries(regionEntries.map(([ k, v ]) => ([ v, k ])))
 
-      let prompt = new Select({
-        name: 'build',
+      let regionSelect = new Select({
         message: 'Select from these regions',
-        choices: Object.values(regions)
+        choices,
       }, promptOptions)
 
-      let result = await prompt.run()
+      let result = await regionSelect.run()
       region = regionsByLocation[result]
     }
   }
@@ -76,7 +83,7 @@ module.exports = async function createApp (params, utils) {
   }
   catch (err) {
     if (err.message === 'profile_max_env_capacity') {
-      let selected = region ? `the specified region (${regions?.[region] || region})` : 'Begin'
+      let selected = region ? `the specified region (${region})` : 'Begin'
       let instruction = region ? 'please try another region' : 'please try again'
       let msg = `Sorry, ${selected} does not currently have capacity for a new app, ${instruction}`
       throw Error(msg)

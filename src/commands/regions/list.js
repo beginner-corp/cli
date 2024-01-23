@@ -1,7 +1,7 @@
 async function action (params) {
   let client = require('@begin/api')
   let f = require('../../lib/format')()
-  let collumns = require('../../lib/columns')
+  let columns = require('../../lib/columns')
   let { config } = params
   let { access_token: token, stagingAPI: _staging } = config
 
@@ -11,7 +11,7 @@ async function action (params) {
 
   return [
     f.bold('Available regions:'),
-    collumns(Object.entries(regions).map(([ k, v ]) => [ v, k ]), 2)
+    columns(Object.entries(regions).map(([ k, v ]) => [ v, k ]), 2).join('\n'),
   ].join('\n')
 }
 

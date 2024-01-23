@@ -1,11 +1,13 @@
 module.exports = async function action (params, utils) {
   let { appID, args, config, envName } = params
-  let { region } = args
   let { access_token: token, stagingAPI: _staging } = config
-  let { createApp, promptOptions, validateEnvName } = require('../../lib/app')
-  let { prompt, Select } = require('enquirer')
-  let client = require('@begin/api')
-  let deploy = require('../deploy')
+  let { region } = args
+
+  const { prompt, Select } = require('enquirer')
+  const client = require('@begin/api')
+  const { createApp, promptOptions, validateEnvName } = require('../../lib/app')
+  const columns = require('../../lib/columns')
+  const deploy = require('../deploy')
 
   // Create a new app and associate it with this project
   if (!appID) {
@@ -21,7 +23,7 @@ module.exports = async function action (params, utils) {
       initial: 'y',
     }, promptOptions)
     if (deployIt) {
-      return deploy.action({ ...params, appID: app.appID, envName }, utils)
+      return deploy.action({ ...params, appID: app.appID, envName })
     }
     else {
       console.error(`You can deploy at any time by running: \`begin deploy\``)
@@ -33,8 +35,10 @@ module.exports = async function action (params, utils) {
       var app = await client.find({ token, appID, _staging })
     }
     catch (err) {
-      if (err.message === 'app_not_found') return Error(`No app found with app ID '${appID}'`)
-      if (err.message === 'unknown_error') return Error(`No app found with app ID '${appID}' or the user does not have permission to access the app.`)
+      if (err.message === 'app_not_found')
+        return Error(`No app found with app ID '${appID}'`)
+      if (err.message === 'unknown_error')
+        return Error(`No app found with app ID '${appID}' or the user does not have permission to access the app.`)
       return
     }
     let envs = app.environments
@@ -61,27 +65,32 @@ module.exports = async function action (params, utils) {
       return ReferenceError(msg)
     }
 
-    let regions
     if (!region) {
-      let { selectRegion } = await prompt({
+      let { willSelectRegion } = await prompt({
         type: 'confirm',
-        name: 'selectRegion',
+        name: 'willSelectRegion',
         message: `Would you like to specify the geographical region your project will be deployed to? (This cannot be changed)`,
         initial: 'n',
       }, promptOptions)
 
-      if (selectRegion) {
+      if (willSelectRegion) {
         // Get available regions
-        regions = await client.regions({ token, _staging })
-        let regionsByLocation = Object.fromEntries(Object.entries(regions).map(([ k, v ]) => ([ v, k ])))
+        let regions = await client.regions({ token, _staging })
+        let regionEntries = Object.entries(regions)
+        let choiceNames = columns(regionEntries.map(([ k, v ]) => [ v, k ]), 2)
+        let choices = choiceNames.map((c, i) => ({
+          message: c, // displayed in list
+          name: regionEntries[i][1], // displayed on selection and returned as result
+          // value: regionEntries[i][0], // ! is not returned as result
+        }))
+        let regionsByLocation = Object.fromEntries(regionEntries.map(([ k, v ]) => ([ v, k ])))
 
-        let prompt = new Select({
-          name: 'build',
+        let regionSelect = new Select({
           message: 'Select from these regions',
-          choices: Object.values(regions)
+          choices,
         }, promptOptions)
 
-        let result = await prompt.run()
+        let result = await regionSelect.run()
         region = regionsByLocation[result]
       }
     }
@@ -101,7 +110,7 @@ module.exports = async function action (params, utils) {
       initial: 'y',
     }, promptOptions)
     if (deployIt) {
-      return deploy.action({ ...params, appID: app.appID, envName }, utils)
+      return deploy.action({ ...params, appID: app.appID, envName })
     }
     else {
       console.error(`You can deploy this environment by running: \`begin deploy --env ${envName}\``)

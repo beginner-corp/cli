@@ -2,7 +2,7 @@
  *
  * @param {Array<Array<string>>} arrays
  * @param {Number} padding
- * @returns {string} mluti-line string
+ * @returns {Array<string>} mluti-line string
  */
 function columns (arrays, padding = 1) {
   const colLengths = []
@@ -21,7 +21,7 @@ function columns (arrays, padding = 1) {
     lines.push(line)
   })
 
-  return lines.join('\n')
+  return lines
 }
 
 module.exports = columns
