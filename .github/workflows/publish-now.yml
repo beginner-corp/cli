@@ -3,7 +3,7 @@ name: npm publish
 on: [ push, pull_request]
 
 jobs:
-  test:
+  publish-now:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,8 +25,8 @@ jobs:
 
       - run: npm i
 
-      - run: npm test:module
+      - run: npm run test:module
 
-      - run: npm publish --tag RC --access public
+      - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
