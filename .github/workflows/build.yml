@@ -20,44 +20,33 @@ jobs:
 
     # Go
     steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
 
-    - name: Check out repo
-      uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Env
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Git ref:    ${{ github.ref }}"
+          echo "GH actor:   ${{ github.actor }}"
+          echo "SHA:        ${{ github.sha }}"
+          VER=`node --version`; echo "Node ver:   $VER"
+          VER=`npm --version`; echo "npm ver:    $VER"
 
-    - name: Env
-      run: |
-        echo "Event name: ${{ github.event_name }}"
-        echo "Git ref:    ${{ github.ref }}"
-        echo "GH actor:   ${{ github.actor }}"
-        echo "SHA:        ${{ github.sha }}"
-        VER=`node --version`; echo "Node ver:   $VER"
-        VER=`npm --version`; echo "npm ver:    $VER"
+      - name: Install Globals
+        run: npm install -g @enhance/arc-plugin-enhance
 
-    - name: Install Globals
-      run: npm install -g @enhance/arc-plugin-enhance
+      - name: Install
+        run: npm install
 
-    - name: Install
-      run: npm install
-
-    - name: Test
-      run: npm test
-      env:
-        CI: true
-
-    - name: Notify
-      uses: homoluctus/slatify@master
-      if: github.ref == 'refs/heads/main' && failure()
-      with:
-        type: ${{ job.status }}
-        job_name: '*Test*'
-        url: ${{ secrets.SLACK_WEBHOOK }}
-        commit: true
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test
+        run: npm test
+        env:
+          CI: true
 
   # ----- Only git tag testing + release deployment beyond this point ----- #
 
@@ -87,7 +76,7 @@ jobs:
 
       - name: Publish 'latest' (aka production) build
         if: startsWith(github.ref, 'refs/tags/v')
-        run: npm run publish
+        run: npm run publish-binary
         env:
           DEPLOY: prod
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -98,7 +87,7 @@ jobs:
 
       - name: Publish 'main' (aka canary) build
         if: github.ref == 'refs/heads/main'
-        run: npm run publish
+        run: npm run publish-binary
         env:
           DEPLOY: main
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -147,12 +136,3 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           CF_DISTRO: ${{ secrets.CF_DISTRO }}
           LATEST_API: ${{ secrets.LATEST_API }}
-
-      - name: Notify
-        uses: homoluctus/slatify@master
-        with:
-          type: ${{ job.status }}
-          job_name: '*Deploy*'
-          url: ${{ secrets.SLACK_WEBHOOK }}
-          commit: true
-          token: ${{ secrets.GITHUB_TOKEN }}
