@@ -1,9 +1,9 @@
-name: npm publish
+name: npm publish now
 
 on: [push, pull_request]
 
 jobs:
-  npm-publish:
+  npm-publish-now:
     runs-on: ubuntu-latest
 
     steps:
