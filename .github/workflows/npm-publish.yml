@@ -1,14 +1,14 @@
 name: Publish to NPM
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [ 16, 18, 20 ]
-        os: [ windows-latest, ubuntu-latest, macOS-latest ]
+        node-version: [16, 18, 20]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -22,10 +22,10 @@ jobs:
       - name: test
         run: npm run test:module
 
-  publish:
+  npm-publish:
     needs: test
     if: startsWith(github.ref, 'refs/tags/v') ||
-        github.ref == 'refs/heads/main'
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:

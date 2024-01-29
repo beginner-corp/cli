@@ -1,5 +1,5 @@
 {
-  "name": "@begin/cli",
+  "name": "@begin/deploy",
   "version": "0.19.0",
   "bin": {
     "begin": "src/index.js"
@@ -65,9 +65,6 @@
     "rules": {
       "global-require": "off"
     },
-    "ignorePatterns": [
-      "scratch/",
-      "test/tmp/"
-    ]
+    "ignorePatterns": ["scratch/", "test/tmp/"]
   }
 }
