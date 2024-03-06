@@ -19,7 +19,7 @@ let run = async (runTests, t) => {
   }
 }
 
-let defaultNumberOfLambdas = 5
+let defaultNumberOfLambdas = 3
 
 async function getInv (t, cwd) {
   try {
