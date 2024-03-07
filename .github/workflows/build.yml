@@ -97,6 +97,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install aws-sdk
+        run: npm i aws-sdk
+
       - name: Install
         run: npm i
 
