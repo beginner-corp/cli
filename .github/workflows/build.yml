@@ -50,10 +50,10 @@ jobs:
 
   # ----- Only git tag testing + release deployment beyond this point ----- #
 
+  # Publish to npm as @begin/deploy
   npm-publish:
     needs: test
-    if: startsWith(github.ref, 'refs/tags/v') ||
-      github.ref == 'refs/heads/main'
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
     steps:
