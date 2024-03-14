@@ -1,10 +1,10 @@
 async function action (params) {
-  let client = require('@begin/api')
-  let states = require('./_states')
-  let f = require('../../lib/format')()
-  // const spinner = require('../../lib/spinner')
-  let { config, domain } = params
-  let { access_token: token, stagingAPI: _staging } = config
+  const client = require('@begin/api')
+  const states = require('./_states')
+  const f = require('../../lib/format')()
+  const spinner = require('../../lib/spinner')
+  const { config, domain } = params
+  const { access_token: token, stagingAPI: _staging } = config
 
   if (!domain || (typeof domain === 'string' && domain.length === 0))
     return Error('Please specify a domain to validate.')
@@ -26,7 +26,7 @@ async function action (params) {
     return Error(`Domain ${f.d.external(domain)} is already validated.`)
 
   const { domainID } = theDomain
-  // spinner(`Requesting validation for ${f.d.external(domain)} ${f.ID(domainID)}`)
+  spinner(`Requesting validation for ${f.d.external(domain)} ${f.ID(domainID)}`)
   let validated
   let validationRecord
   try {
@@ -37,11 +37,11 @@ async function action (params) {
   catch (error) {
     return error
   }
-  // spinner.done()
+  spinner.done()
   if (validated)
     return [
       `Domain ${f.d.external(domain)} is validated!`,
-      'You can now use "begin link" to link your app to this domain.',
+      'You can now use "begin domains link" to link your app to this domain.',
     ].join('\n')
   return [
     `Add a CNAME record to ${f.d.external(domain)} with the following name and value:`,
