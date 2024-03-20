@@ -28,54 +28,78 @@ async function action (params) {
 
     if (verbose ){
       row.push(`\n  Updated: ${f.date(updatedAt)}`)
-      row.push(f.dim(`\n  Status: ${f.bold(status)} `))
+      row.push(`\n  Status: ${status} `)
     }
 
     row.push('\n  ')
 
-    if (status === states.LINKED && appLink) {
-      if (!apps) apps = await client.list({ token, _staging })
-      let { appID, envID } = appLink
-      let theApp = apps.find(a => a.appID === appID)
-
-      if (theApp) {
-        let theEnv = theApp.environments.find(e => e.envID === envID)
-        let linkedStatus = f.app.name(theApp.name)
-
-        if (verbose) linkedStatus += ` ${f.ID(appID)}`
-        linkedStatus += ` ${theEnv.name}`
-        if (verbose) linkedStatus += ` ${f.ID(envID)}`
-        row.push(linkedStatus)
-      }
-      else {
-        row.push('Linked to an unknown app')
-        rows.push(row.join(''))
-        rows.push('')
-        continue
-      }
-    }
-    else if (status === states.LINKED) {
-      row.push('Linked to an unknown app')
-    }
-    else if (status === states.REGISTERING && r53LastStatus) {
-      row.push(`${f.italic(`Registration: ${r53LastStatus}`)}`)
-    }
-    else if (status === states.ACTIVE) {
-      row.push('Available to link')
-    }
-    else if (status === states.LINKING) {
-      let linkingStatus = 'Linking to an app environment'
+    switch (status) {
+    case states.PURCHASING:
+      // already handled
+      break
+    case states.REGISTERING:
+      row.push('Registering...')
+      if (verbose && r53LastStatus) row.push(`${f.italic(`Registration: ${r53LastStatus}`)}`)
+      break
+    case states.UNVALIDATED:
+      row.push(`Unvalidated. To start validation, run: ${f.italic(`begin domains validate --domain ${domainName}`)}`)
+      if (verbose) row.push('')
+      break
+    case states.VALIDATING:
+      row.push(`Validating. To continue validation, run: ${f.italic(`begin domains validate --domain ${domainName}`)}`)
+      if (verbose) row.push('')
+      break
+    case states.ACTIVE:
+      row.push(`Available to link. Use: ${f.italic(`begin domains link --domain ${domainName}`)}`)
+      if (verbose) row.push('')
+      break
+    case states.LINKING: {
+      let linkingStatus = 'Linking to an app environment...'
       if (verbose && r53LastStatus)
         linkingStatus += ` Last DNS check: ${f.italic(r53LastStatus)}`
       row.push(linkingStatus)
+      break
     }
-    else if (status === states.UNLINKING) {
+    case states.LINKED: {
+      if (appLink) {
+        if (!apps) apps = await client.list({ token, _staging })
+        let { appID, envID } = appLink
+        let theApp = apps.find(a => a.appID === appID)
+
+        if (theApp) {
+          let theEnv = theApp.environments.find(e => e.envID === envID)
+          let linkedStatus = f.a.name(theApp.name)
+
+          if (verbose) linkedStatus += ` ${f.ID(appID)}`
+          linkedStatus += ` ${f.e.name(theEnv.name)}`
+          if (verbose) linkedStatus += ` ${f.ID(envID)}`
+          row.push(linkedStatus)
+        }
+        else {
+          row.push('Linked to an unknown app')
+        }
+      }
+      else {
+        row.push('Linked to an unknown app')
+      }
+      break
+    }
+    case states.UNLINKING:
       row.push('Unlinking DNS and SSL certificates')
-    }
-    else if ([ states.LAPSED, states.CANCELLED, states.DELETED ].includes(status)) {
-      row.push(`Inactive (${status})`)
-    }
-    else {
+      break
+    case states.UNKNOWN:
+      row.push('Unknown')
+      break
+    case states.LAPSED:
+      row.push('Lapsed')
+      break
+    case states.CANCELLED:
+      row.push('Cancelled')
+      break
+    case states.DELETED:
+      row.push('Deleted')
+      break
+    default:
       row.push(`Unknown (${status})`)
     }
 

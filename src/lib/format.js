@@ -8,13 +8,17 @@ module.exports = function () {
     dim: c.dim,
     bold: c.bold,
     italic: c.italic,
-    ID: (id) => `<${id}>`,
+    underline: c.underline,
+    link: c.underline.blue,
+    ID: (id) => c.dim(`<${id}>`),
     date: (date) => new Date(date).toLocaleString(),
     app: {
       name: name.green,
     },
     env: {
-      name,
+      name: (n) => {
+        return `"${n === 'production' ? name(n) : n}"`
+      },
       location: c.dim,
     },
     domain: {
