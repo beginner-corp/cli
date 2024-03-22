@@ -1,5 +1,5 @@
 const names = { en: [ 'domains', 'domain' ] }
-const subcommands = [ 'list', 'add', 'remove', 'link', 'unlink', 'records', 'validate' ]
+const subcommands = [ 'list', 'info', 'add', 'remove', 'link', 'unlink', 'records', 'validate' ]
 const aliases = {
   ls: 'list',
   buy: 'add',
@@ -12,7 +12,6 @@ const aliases = {
   disassociate: 'unlink',
   unalias: 'unlink',
   verify: 'validate',
-
 }
 const defaultCommand = 'list'
 const help = require('./help').bind({})

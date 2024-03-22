@@ -5,6 +5,9 @@ module.exports = function () {
 
   const formatter = {
     name,
+    green: c.green,
+    red: c.red,
+    // blue: c.blue,
     dim: c.dim,
     bold: c.bold,
     italic: c.italic,

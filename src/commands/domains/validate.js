@@ -9,7 +9,7 @@ async function action (params) {
   if (!domain || (typeof domain === 'string' && domain.length === 0))
     return Error('Please specify a domain to validate.')
 
-  let domains = await client.domains.list({ token, _staging })
+  const domains = await client.domains.list({ token, _staging })
   if (!domains.length)
     return Error('No domains found. Start by running: begin domains add --domain <domain>')
 
