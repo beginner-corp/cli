@@ -47,7 +47,6 @@ async function action (params) {
       send = true
       break
     case states.LINKING:
-      console.log(appLink)
       // created API Gateway, waiting on DNS. provide CNAME record
       message.push(`${fDomain} is currently being linked to an app`)
       if (appLink) {
@@ -69,7 +68,6 @@ async function action (params) {
           appID: appLink.appID,
           envID: appLink.envID,
         })
-        console.log(result)
         return message.join('\n')
       }
       break
