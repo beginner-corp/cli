@@ -61,7 +61,7 @@ async function action (params) {
             `begin domains link --domain ${domainName}`,
           ])
         }
-        const result = await client.domains.link({
+        await client.domains.link({
           _staging,
           token,
           domainID: theDomain.domainID,
