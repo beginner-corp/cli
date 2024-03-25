@@ -16,7 +16,7 @@
     "test:module": "cross-env MODULE_ONLY=true npm run test",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix",
-    "build": "cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
+    "build": "node vendor/vendor.js && cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
     "publish-binary": "BUILD_ALL=true npm run build && scripts/publish",
     "deploy": "scripts/deploy"
   },

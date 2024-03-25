@@ -32,6 +32,7 @@ let config = {
     ],
     assets: [
       '../node_modules/@architect/sandbox/src/invoke-lambda/exec/runtimes/*',
+      '../node_modules/@architect/sandbox/src/tables/_aws-lite-dynamodb-vendor.js',
       '../package.json',
       // Enhance stuff
       '../node_modules/@enhance/starter-project/**/*',
