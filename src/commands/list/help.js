@@ -7,6 +7,6 @@ module.exports = {
         name: `List all apps and environments`,
         example: 'begin list',
       },
-    ]
-  }
+    ],
+  },
 }

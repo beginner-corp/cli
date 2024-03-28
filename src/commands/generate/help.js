@@ -9,7 +9,7 @@ let newHelp = () => ({
       },
     ],
     examples: [],
-  }
+  },
 })
 
 module.exports = async function generateHelp (subcommands, params) {

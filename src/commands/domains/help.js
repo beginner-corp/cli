@@ -137,7 +137,7 @@ const HELP = {
         header: 'Unlink parameters',
         items: [
           { name: '--domain', description: 'Domain name to unlink', optional: true },
-          { name: '-y, --yes', description: 'Skip confirmation prompt', optional: true }
+          { name: '-y, --yes', description: 'Skip confirmation prompt', optional: true },
         ],
       },
       examples: [
@@ -179,5 +179,5 @@ const HELP = {
         },
       ],
     },
-  }
+  },
 }

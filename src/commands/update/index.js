@@ -6,9 +6,9 @@ async function action (params) {
   let { use } = args
 
   let { arch, platform: plat } = process
-  let platform = plat === 'darwin' && 'darwin' ||
-                 plat === 'linux' && 'linux' ||
-                 plat === 'win32' && 'win32'
+  let platform = (plat === 'darwin' && 'darwin') ||
+                 (plat === 'linux' && 'linux') ||
+                 (plat === 'win32' && 'win32')
   let isMac = platform === 'darwin'
   let isWin = plat.startsWith('win')
   // macOS is the only platform with arm64 releases (for now)

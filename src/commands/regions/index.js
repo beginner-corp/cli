@@ -19,7 +19,7 @@ async function action (params) {
     const config = getConfig(params)
     return action({
       config,
-      ...params
+      ...params,
     })
   }
   else {

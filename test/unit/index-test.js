@@ -11,7 +11,7 @@ function commands (p) {
   if (error) throw error
 }
 let begin = proxyquire(sut, {
-  './commands': commands
+  './commands': commands,
 })
 
 let argv = process.argv

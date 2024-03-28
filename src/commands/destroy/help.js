@@ -7,7 +7,7 @@ module.exports = {
       items: [
         {
           name: '-a, --app <ID>',
-          description: `If used without the \`env\` flag: destroy an app and all its environments. If used with the \`env\` flag: destroy a single app environment`
+          description: `If used without the \`env\` flag: destroy an app and all its environments. If used with the \`env\` flag: destroy a single app environment`,
         },
         {
           name: '-e, --env [name|ID]',
@@ -30,6 +30,6 @@ module.exports = {
         name: `Destroy the app environment named 'staging'`,
         example: 'begin destroy --env staging',
       },
-    ]
-  }
+    ],
+  },
 }

@@ -13,7 +13,7 @@ async function action (params) {
   if (!domains.length)
     return Error('No domains found. Start by running: begin domains add --domain <domain>')
 
-  if (!domainName || (typeof domainName === 'string' && domainName.length === 0)){
+  if (!domainName || (typeof domainName === 'string' && domainName.length === 0)) {
     const prompt = new Select({
       name: 'domain',
       message: 'Select a domain',
@@ -94,7 +94,7 @@ async function action (params) {
     else return message.join('\n')
   }
 
-  if (!appID || (typeof appID === 'string' && appID.length === 0)){
+  if (!appID || (typeof appID === 'string' && appID.length === 0)) {
     spinner('Fetching apps')
     const apps = await client.list({ _staging, token })
     spinner.done()
@@ -113,7 +113,7 @@ async function action (params) {
   if (!theApp)
     return Error(`Unable to find App with id <${appID}>`)
 
-  if (!env || (typeof env === 'string' && env.length === 0)){
+  if (!env || (typeof env === 'string' && env.length === 0)) {
     const prompt = new Select({
       name: 'env',
       message: 'Select an environment',
@@ -127,7 +127,7 @@ async function action (params) {
   if (!theEnv)
     return Error(`App <${appID}> does not have an environment "${env}"`)
 
-  if (!yes){
+  if (!yes) {
     const prompt = new Confirm({
       name: 'confirm',
       message: `Link ${fDomain} to ${f.app.name(theApp.name)}'s "${f.env.name(theEnv.name)}" env?`,

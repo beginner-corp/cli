@@ -21,6 +21,6 @@ module.exports = {
         name: 'List builds',
         example: 'begin builds --env <env-id>',
       },
-    ]
-  }
+    ],
+  },
 }

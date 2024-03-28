@@ -30,7 +30,7 @@ module.exports = async function createApp (params, utils) {
     validate: (value) => {
       if (!value) return 'A name is required to create a new app'
       return true
-    }
+    },
   }, promptOptions)
 
   if (env) {
@@ -43,7 +43,7 @@ module.exports = async function createApp (params, utils) {
       name: 'envName',
       message: 'What would you like to name your first environment?',
       initial: 'staging',
-      validate: validateEnvName.prompt
+      validate: validateEnvName.prompt,
     }, promptOptions)
   }
 
@@ -103,7 +103,7 @@ module.exports = async function createApp (params, utils) {
   let updatedArc = mutateArc.upsert({
     item: `appID ${appID}`,
     pragma: 'begin',
-    raw: inventory.inv._project.raw
+    raw: inventory.inv._project.raw,
   })
   writeFile(inventory.inv._project.manifest, updatedArc)
   console.error(`Added appID '${appID}' to project, be sure to commit this change!`)

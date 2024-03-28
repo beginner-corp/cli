@@ -36,7 +36,7 @@
     "ws": "8.16.0"
   },
   "devDependencies": {
-    "@architect/eslint-config": "~2.1.2",
+    "@architect/eslint-config": "3.0.0-RC.0",
     "@architect/plugin-node-prune": "2.1.0-RC.0",
     "cross-env": "~7.0.3",
     "eslint": "~8.57.0",

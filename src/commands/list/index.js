@@ -31,14 +31,14 @@ async function action (params) {
         c.dim(location),
       ]
       let linkedDomain = domains.find(({ appLink }) =>
-        appLink?.appID === appID && appLink?.envID === envID
+        appLink?.appID === appID && appLink?.envID === envID,
       )
 
       let appUrl = c.green.underline(url)
       envRow.push(
         linkedDomain
           ? `\n    ├─ ${c.cyan.underline(`https://${linkedDomain.domain}`)}\n    └─ ${appUrl}`
-          : `\n    └─ ${appUrl}`
+          : `\n    └─ ${appUrl}`,
       )
 
       rows.push(envRow.join(' '))

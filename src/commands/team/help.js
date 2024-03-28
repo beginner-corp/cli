@@ -56,6 +56,6 @@ module.exports = {
         name: `Remove a teammate from an app`,
         example: 'begin team remove $username',
       },
-    ]
-  }
+    ],
+  },
 }

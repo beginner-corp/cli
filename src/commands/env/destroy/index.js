@@ -24,7 +24,7 @@ module.exports = {
           name: `Delete a variable named 'foo' in 'staging'`,
           example: 'begin env destroy --env staging --name foo',
         },
-      ]
-    }
-  }
+      ],
+    },
+  },
 }

@@ -114,7 +114,7 @@ let help = {
         example: 'begin help generate',
       },
     ],
-  }
+  },
 }
 
 module.exports = {

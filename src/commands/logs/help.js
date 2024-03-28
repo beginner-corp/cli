@@ -38,6 +38,6 @@ module.exports = {
         name: 'List logs with filter',
         example: 'begin logs --env staging --filter "GOT HERE"',
       },
-    ]
-  }
+    ],
+  },
 }

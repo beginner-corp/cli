@@ -36,7 +36,7 @@ module.exports = {
           name: "Create a variable named 'FOO' in 'staging' with special characters (Windows)",
           example: 'begin env create --env staging --name FOO --value "bar!"',
         },
-      ]
-    }
-  }
+      ],
+    },
+  },
 }

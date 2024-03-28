@@ -1,7 +1,7 @@
 module.exports = {
   names: { en: [ 'telemetry' ] },
   action: (params) => {
-    let { appVersion, args, cliDir, } = params
+    let { appVersion, args, cliDir } = params
     let { disable, enable, staging } = args
 
     let lib = require('../../lib')
@@ -51,7 +51,7 @@ module.exports = {
     }
     return {
       string: message,
-      json: { message }
+      json: { message },
     }
   },
   help: {
@@ -86,7 +86,7 @@ module.exports = {
           name: 'Disable CLI telemetry',
           example: 'begin telemetry --disable',
         },
-      ]
-    }
-  }
+      ],
+    },
+  },
 }

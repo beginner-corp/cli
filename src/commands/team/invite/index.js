@@ -17,7 +17,7 @@ module.exports = async function action (params) {
 
     return {
       string: message,
-      json: invite
+      json: invite,
     }
   }
   catch (err) {

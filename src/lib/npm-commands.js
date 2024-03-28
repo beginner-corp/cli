@@ -64,5 +64,5 @@ async function initialInstall (params, cwd) {
 module.exports = {
   installAwsSdk,
   installDependencies,
-  initialInstall
+  initialInstall,
 }

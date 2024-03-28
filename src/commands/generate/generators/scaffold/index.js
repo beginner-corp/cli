@@ -34,9 +34,9 @@ module.exports = {
           {
             name: 'Scaffold a CRUD app from JSON Schema file',
             example: 'begin generate scaffold --file person.schema.json',
-          }
-        ]
+          },
+        ],
       },
     }
-  }
+  },
 }

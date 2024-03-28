@@ -1,5 +1,5 @@
 let names = { en: [ 'tokens', 'token' ] }
-let subcommands = [ 'list', 'create', 'revoke', ]
+let subcommands = [ 'list', 'create', 'revoke' ]
 let aliases = {
   ls: 'list',
 }
@@ -27,7 +27,7 @@ async function action (params) {
     let utils = { ...lib }
     return appAction({
       config,
-      ...params
+      ...params,
     }, utils)
   }
   else {

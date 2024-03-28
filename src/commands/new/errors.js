@@ -8,7 +8,7 @@ module.exports = function error (params, utils) {
         project_found: 'Existing Begin app already found in this directory',
         invalid_appname: `Invalid app name`,
         invalid_runtime: `Function runtime must be one of: ${backtickify(runtimes)}`,
-      }
+      },
     }
     return Error(errors[lang][err])
   }

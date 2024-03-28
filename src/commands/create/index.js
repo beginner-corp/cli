@@ -28,7 +28,7 @@ async function action (params) {
 
   // Pass along any specified environment IDs
   let env = args.env || args.e
-  let envName = env !== true && env || undefined
+  let envName = (env !== true && env) || undefined
 
   let utils = {
     ...lib,
@@ -38,7 +38,7 @@ async function action (params) {
     appID,
     envName,
     config,
-    ...params
+    ...params,
   }, utils)
 }
 

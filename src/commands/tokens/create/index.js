@@ -1,4 +1,4 @@
-module.exports = async function action (params, /* utils */) {
+module.exports = async function action (params /* utils */) {
   let { args, config } = params
   let { access_token: token, stagingAPI: _staging } = config
   let c = require('@colors/colors/safe')
@@ -14,6 +14,6 @@ module.exports = async function action (params, /* utils */) {
                 `Treat this token as a secret; ${c.bold('do not share or publish it publicly')}`
   return {
     string,
-    json: { tokenID, expires }
+    json: { tokenID, expires },
   }
 }

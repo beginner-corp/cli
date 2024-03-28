@@ -41,7 +41,7 @@ module.exports = {
       type: 'module',
       stdout: stdout.trim(),
       stderr: stderr.trim(),
-      code: process.exitCode
+      code: process.exitCode,
     }
   },
   binary: async (t, args, dir) => {

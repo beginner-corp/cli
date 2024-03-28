@@ -21,9 +21,9 @@ module.exports = {
           {
             name: 'Basic Usage',
             example: 'begin generate auth',
-          }
-        ]
+          },
+        ],
       },
     }
-  }
+  },
 }

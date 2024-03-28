@@ -32,6 +32,6 @@ module.exports = {
         name: `Revoke a token`,
         example: 'begin tokens revoke $token',
       },
-    ]
-  }
+    ],
+  },
 }

@@ -53,7 +53,7 @@ module.exports = async function action (params, utils) {
         name: 'name',
         message: 'What would you like to name your new environment?',
         initial,
-        validate: validateEnvName.prompt
+        validate: validateEnvName.prompt,
       }, promptOptions)
       envName = name
     }

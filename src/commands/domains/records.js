@@ -126,7 +126,7 @@ async function action (params) {
     }
     else {
       const rows = [ `Records for ${c.underline(c.cyan(domain))}`, '' ]
-      for (const r of outputRecords){
+      for (const r of outputRecords) {
         const row = [
           '  ',
           c.bold(r.type),
@@ -135,7 +135,7 @@ async function action (params) {
           '\n    ',
           r.values?.join('\n'),
         ]
-        if (verbose) row.push('\n    ', 'TTL: ', r.ttl,)
+        if (verbose) row.push('\n    ', 'TTL: ', r.ttl)
 
         rows.push(row.join(''))
       }
