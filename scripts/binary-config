@@ -16,7 +16,7 @@ console.log(`Building Begin... (DEPLOY: ${DEPLOY}, BUILD_ALL: ${BUILD_ALL})`)
 let config = {
   name: 'begin',
   bin: {
-    cli: '../src/pkg-index.js'
+    cli: '../src/index.js'
   },
   pkg: {
     // Don't manually include runtimes/deno.js in scripts, as it fails on pkg#997
