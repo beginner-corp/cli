@@ -1,13 +1,6 @@
-
-function shortenPath (filePath) {
-  let { sep } = require('path')
-  let packageName = `@enhance${sep}starter-project${sep}`
-  return filePath.substring(filePath.lastIndexOf(packageName) + packageName.length)
-}
-
 module.exports = async function (params) {
-  let { existsSync, mkdirSync, readFileSync } = require('fs')
-  let { isAbsolute, join, normalize, sep } = require('path')
+  let { cpSync, existsSync, mkdirSync, readFileSync } = require('fs')
+  let { isAbsolute, join, normalize } = require('path')
 
   let { args } = params
   let utils = require('../../lib')
@@ -66,22 +59,12 @@ module.exports = async function (params) {
   // Write the new Arc project manifest
   writeFile(p('.arc'), arc)
 
-  // Create starter app folders
-  mkdirSync(p(`app${sep}pages`), { recursive: true })
-  mkdirSync(p('public'), { recursive: true })
-
   // Starter project files
-  // when you install @enhance/starter-project the manifest.json file is created
-  // so we can read it instead of having to maintain a file list here.
-  let manifestPath = join(nodeModules, '@enhance', 'starter-project', 'manifest.json')
-  let starterProjectManifest = JSON.parse(readFileSync(manifestPath))
-
-  // Create starter files
-  starterProjectManifest.fileList.forEach(file => {
-    let input = join(nodeModules, file)
-    let data = readFileSync(input)
-    writeFile(p(shortenPath(input)), data)
-  })
+  let appPath = join(nodeModules, '@enhance', 'starter-project', 'app')
+  let publicPath = join(nodeModules, '@enhance', 'starter-project', 'public')
+  // Copy app dirs
+  cpSync(appPath, p('app'), { recursive: true })
+  cpSync(publicPath, p('public'), { recursive: true })
 
   // Write .gitignore
   let gitIgnoreTemplate = join(nodeModules, '@enhance', 'starter-project', 'template.gitignore')
