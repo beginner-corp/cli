@@ -12,11 +12,10 @@ jobs:
   # Test the build
   build:
     # Setup
-    runs-on: ubuntu-latest
-    # runs-on: ${{ matrix.os }}
-    # strategy:
-    #   matrix:
-    #     os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macOS-latest, self-hosted ]
 
     # Go
     steps:

@@ -1,5 +1,5 @@
 module.exports = async function (params) {
-  let { cpSync, existsSync, mkdirSync, readFileSync } = require('fs')
+  let { lstatSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync } = require('fs')
   let { isAbsolute, join, normalize } = require('path')
 
   let { args } = params
@@ -31,7 +31,7 @@ module.exports = async function (params) {
   }
 
   // App name (optional)
-  let appName = args.name || args.n ? args.name || args.n  : 'begin-app'
+  let appName = args.name || args.n ? args.name || args.n : 'begin-app'
   if (!looseName.test(appName)) {
     return error('invalid_appname')
   }
@@ -62,9 +62,30 @@ module.exports = async function (params) {
   // Starter project files
   let appPath = join(nodeModules, '@enhance', 'starter-project', 'app')
   let publicPath = join(nodeModules, '@enhance', 'starter-project', 'public')
+
+  /* pkg workaround */
+  function copyFolderSync (from, to) {
+    mkdirSync(to)
+    readdirSync(from).forEach(element => {
+      const sourcePath = join(from, element)
+      const destinationPath = join(to, element)
+      if (lstatSync(sourcePath).isFile()) {
+        copyFileSync(sourcePath, destinationPath)
+      }
+      else {
+        copyFolderSync(sourcePath, destinationPath)
+      }
+    })
+  }
+
   // Copy app dirs
-  cpSync(appPath, p('app'), { recursive: true })
-  cpSync(publicPath, p('public'), { recursive: true })
+  copyFolderSync(appPath, p('app'))
+  copyFolderSync(publicPath, p('public'))
+  /* end pkg workaround */
+
+  // Use this when pkg is no longer used:
+  // fs.cpSync(appPath, p('app'), { recursive: true })
+  // fs.cpSync(publicPath, p('public'), { recursive: true })
 
   // Write .gitignore
   let gitIgnoreTemplate = join(nodeModules, '@enhance', 'starter-project', 'template.gitignore')
