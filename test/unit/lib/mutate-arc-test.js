@@ -1,7 +1,5 @@
-let { join } = require('path')
 let test = require('tape')
-let sut = join(process.cwd(), 'src', 'lib', 'mutate-arc')
-let mutateArc = require(sut)
+let mutateArc = require('../../../src/lib/mutate-arc')
 
 test('Set up env', t => {
   t.plan(1)

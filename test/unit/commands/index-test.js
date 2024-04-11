@@ -1,8 +1,7 @@
 let test = require('tape')
-let { join } = require('path')
 let minimist = require('minimist')
-let sut = join(process.cwd(), 'src', 'commands')
-let commands = require(sut)
+
+let commands = require('../../../src/commands')
 
 let lang = 'en'
 let printed = []

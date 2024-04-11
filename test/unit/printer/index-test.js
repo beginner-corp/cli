@@ -1,9 +1,6 @@
-let { join } = require('path')
 let test = require('tape')
-let lib = join(process.cwd(), 'test', 'lib')
-let { capture } = require(lib)
-let sut = join(process.cwd(), 'src', 'printer')
-let printer = require(sut)
+let { capture } = require('../../lib')
+let printer = require('../../../src/printer')
 
 let isTTY = process.stdout.isTTY
 let { env } = process
