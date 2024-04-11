@@ -1,19 +1,15 @@
-let { spawn } = require('child_process')
-let { join } = require('path')
-let net = require('net')
+let { spawn } = require('node:child_process')
+let net = require('node:net')
 let tiny = require('tiny-json-http')
 
 let child
 let url
 
 let cwd = process.cwd()
-let isWin = process.platform.startsWith('win')
-let binPath = join(cwd, 'build', `begin${isWin ? '.exe' : ''}`)
-let bin = join(binPath)
 
 let ready = /.* dev server \(.*\) ready!/
 
-async function startDev (type, t, dir, reuse, options = {}) {
+async function startDev (t, dir, reuse, options = {}) {
   let port = await getPort()
   // TODO: fix Sandbox (and this) to accept a ports property at some point?
   let _arc = port + 100 // Yeah, this magic number can definitely break, but it's pretty unlikely in a CI context
@@ -26,8 +22,8 @@ async function startDev (type, t, dir, reuse, options = {}) {
     let { confirmStarted, print } = options
     if (child) throw Error('Unclean test env, found hanging child process!')
     // Quiet overrides are a bit more abstracted here bc we have to print from a child
-    let cmd = type === 'module' ? 'node' : bin
-    let args = type === 'module' ? [ cwd ] : []
+    let cmd = 'node'
+    let args = [ cwd ]
     args.push('dev', '--port', `${port}`, '--disable-telemetry')
     child = spawn(cmd, args, {
       cwd: dir,
@@ -39,7 +35,7 @@ async function startDev (type, t, dir, reuse, options = {}) {
       if (print && started) { console.log(chunk.toString()) }
       if ((data.match(ready) || data.includes(confirmStarted)) && !started) {
         started = true
-        t.pass(`Begin dev server started (${type}, http: ${port}, _arc: ${port})`)
+        t.pass(`Begin dev server started (http: ${port}, _arc: ${port})`)
         resolve(port)
       }
     }
@@ -92,15 +88,6 @@ async function verifyShutdown (t) {
   }
 }
 
-module.exports = {
-  start: {
-    module: startDev.bind({}, 'module'),
-    binary: startDev.bind({}, 'binary'),
-  },
-  shutdown,
-  getPort,
-}
-
 /**
  * Ensure we have access to the desired HTTP port!
  * Ported (ahem) from @architect/sandbox
@@ -144,4 +131,10 @@ function getPort () {
     }
     check()
   })
+}
+
+module.exports = {
+  start: startDev,
+  shutdown,
+  getPort,
 }

@@ -1,21 +1,17 @@
+let { existsSync, mkdirSync, writeFileSync } = require('node:fs')
+let { readFile } = require('node:fs/promises')
+let { join } = require('node:path')
 let test = require('tape')
-let { existsSync, mkdirSync, writeFileSync } = require('fs')
-let { readFile } = require('fs/promises')
-let { join } = require('path')
+let { begin: _begin, newTmpFolder, start, shutdown } = require('../../lib')
+
 let cwd = process.cwd()
-let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
+
 let filePath = folder => join(folder, 'config.json')
 
 test('Run logout tests', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Logout / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Logout]`
+  let begin = _begin.bind({}, t)
 
   let logoutDir = 'logout'
   let loggedOut = 'Successfully logged out!'
@@ -28,7 +24,7 @@ async function runTests (runType, t) {
   }, null, 2)
 
   t.test(`${mode} Start dev server`, async t => {
-    port = await start[runType](t, mock)
+    port = await start(t, mock)
   })
 
   t.test(`${mode} Normal`, async t => {
@@ -43,7 +39,7 @@ async function runTests (runType, t) {
     process.env.__BEGIN_TEST_URL__ = `http://localhost:${port}`
     r = await begin('logout')
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
-    file = JSON.parse(await readFile(path))
+    file = JSON.parse((await readFile(path)).toString())
     t.notOk(file.access_token, 'config.access_token property no longer found')
     t.notOk(file.device_code, 'config.device_code property no longer found')
     t.equal(r.stdout, loggedOut, 'Got logout confirmation')
@@ -68,7 +64,7 @@ async function runTests (runType, t) {
     r = await begin('logout --json')
     json = JSON.parse(r.stdout)
     if (!existsSync(path)) t.fail(`Did not find config.json at ${path}`)
-    file = JSON.parse(await readFile(path))
+    file = JSON.parse((await readFile(path)).toString())
     t.notOk(file.access_token, 'config.access_token property no longer found')
     t.notOk(file.device_code, 'config.device_code property no longer found')
     t.equal(json.ok, true, 'Got ok: true for logout confirmation')
@@ -96,4 +92,6 @@ async function runTests (runType, t) {
     delete process.env.BEGIN_INSTALL
     delete process.env.__BEGIN_TEST_URL__
   })
-}
+  t.end()
+})
+

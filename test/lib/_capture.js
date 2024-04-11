@@ -1,5 +1,5 @@
 let log = console.log
-let err = console.err
+let err = console.error
 
 let capture = {
   start: () => {
@@ -9,7 +9,7 @@ let capture = {
   },
   stop: () => {
     console.log = log
-    console.err = err
+    console.error = err
   },
   stdout: '',
   stderr: '',

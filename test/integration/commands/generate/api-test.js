@@ -1,17 +1,11 @@
+let { existsSync } = require('node:fs')
+let { join } = require('node:path')
 let test = require('tape')
-let { existsSync } = require('fs')
-let { join } = require('path')
-let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, defaultNumberOfLambdas, getInv, newTmpFolder, run } = require(lib)
+let { begin: _begin, defaultNumberOfLambdas, getInv, newTmpFolder } = require('../../../lib')
 
 test('Run generate tests (API)', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Generate / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Generat]`
+  let begin = _begin.bind({}, t)
 
   let pathNotFound = /API path not found/
   let pathInvalid = /Invalid API path/
@@ -120,4 +114,6 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
   })
-}
+  t.end()
+})
+

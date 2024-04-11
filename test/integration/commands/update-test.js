@@ -1,21 +1,17 @@
+let { constants: fsConstants, existsSync } = require('node:fs')
+let { access, readFile } = require('node:fs/promises')
+let { join } = require('node:path')
 let test = require('tape')
-let { constants: fsConstants, existsSync } = require('fs')
-let { access, readFile } = require('fs/promises')
-let { join } = require('path')
+let { begin: _begin, newTmpFolder, start, shutdown } = require('../../lib')
+
 let cwd = process.cwd()
-let lib = join(cwd, 'test', 'lib')
 let mock = join(cwd, 'test', 'mock')
-let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
+
 let filePath = folder => join(folder, 'hi.txt')
 
 test('Run update tests', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Update / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Update]`
+  let begin = _begin.bind({}, t)
 
   let upgraded = 'Successfully upgraded Begin!'
   let x64Release = /file-x64.zip/
@@ -27,7 +23,7 @@ async function runTests (runType, t) {
   let port
 
   t.test(`${mode} Start dev server`, async t => {
-    port = await start[runType](t, mock)
+    port = await start(t, mock)
   })
 
   if (process.arch === 'x64') {
@@ -163,7 +159,8 @@ async function runTests (runType, t) {
     delete process.env.BEGIN_INSTALL
     delete process.env.__BEGIN_TEST_URL__
   })
-}
+  t.end()
+})
 
 // Confirm the file written to the filesystem is chmod +x
 async function isExecutable (t, filePath) {

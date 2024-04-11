@@ -1,16 +1,9 @@
 let test = require('tape')
-let { join } = require('path')
-let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, run } = require(lib)
+let { begin: _begin } = require('../../../lib')
 
 test('Run generate tests (help)', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Generate / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Generate]`
+  let begin = _begin.bind({}, t)
 
   let globalOptions = /Global options\:/
   let noType = /Please specify a generator to run/
@@ -89,4 +82,6 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
   })
-}
+  t.end()
+})
+

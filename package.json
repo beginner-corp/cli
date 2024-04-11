@@ -11,9 +11,9 @@
   },
   "scripts": {
     "test": "npm run lint && npm run coverage && npm run test:integration && npm run test:integration:slow",
-    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc",
-    "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc",
-    "test:integration:slow": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test-slow.js' | tap-arc",
+    "test:unit": "cross-env tape 'test/unit/**/*-test.js' | tap-arc -v",
+    "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc -v",
+    "test:integration:slow": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test-slow.js' | tap-arc -v",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
     "lint": "eslint . --fix"
   },
