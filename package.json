@@ -1,6 +1,6 @@
 {
   "name": "@begin/deploy",
-  "version": "0.21.4",
+  "version": "0.21.5",
   "license": "Apache-2.0",
   "bin": {
     "begin": "src/index.js"
@@ -15,7 +15,10 @@
     "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc",
     "test:integration:slow": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test-slow.js' | tap-arc",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "build": "node vendor/vendor.js && cross-env scripts/binary-config && npx pkg scripts --compress GZip && rm -f commit",
+    "publish-binary": "BUILD_ALL=true npm run build && scripts/publish",
+    "deploy": "scripts/deploy"
   },
   "dependencies": {
     "@architect/inventory": "4.0.3",
