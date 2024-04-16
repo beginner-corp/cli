@@ -8,8 +8,6 @@ function printer (args) {
     let isError = out instanceof Error
     if (isError) {
       process.exitCode = 1
-      let errorCheck = require('./error-check')
-      out = errorCheck(out)
     }
     let errored = process.exitCode === 1
 

@@ -83,6 +83,6 @@ Similarly, to switch back to `latest` from `main`, run: `begin update --use late
 
 Wherever possible, the Begin CLI adheres to the [Command Line Interface Guidelines](https://clig.dev/).
 
-Begin is `async/await` / `Promises`-based, and uses `pkg` for binary compilation. It is currently CommonJS, with plans to [eventually refactor to ESM](https://github.com/vercel/pkg/issues/1291).
+Begin is `async/await` / `Promises`-based. It is currently CommonJS, with plans to eventually refactor to ESM.
 
 Begin is written in idiomatic JavaScript with a key exception: each command's specific `require()` statements are in local scope, not global. This is specifically and deliberately done to [reduce the coldstart time and ensure every execution runs as fast as possible](https://github.com/beginner-corp/cli/discussions/4).

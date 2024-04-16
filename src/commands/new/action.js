@@ -1,5 +1,5 @@
 module.exports = async function (params) {
-  let { lstatSync, copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync } = require('fs')
+  let { cpSync, existsSync, mkdirSync, readFileSync } = require('fs')
   let { isAbsolute, join, normalize } = require('path')
 
   let { args } = params
@@ -40,7 +40,7 @@ module.exports = async function (params) {
 
   // Read package.json from starter project
   let packagePath = join(nodeModules, '@enhance', 'starter-project', 'package.json')
-  let packageJson = JSON.parse(readFileSync(packagePath))
+  let packageJson = JSON.parse(readFileSync(packagePath).toString())
 
   // Tweak settings for new project
   packageJson.name = appName
@@ -63,29 +63,8 @@ module.exports = async function (params) {
   let appPath = join(nodeModules, '@enhance', 'starter-project', 'app')
   let publicPath = join(nodeModules, '@enhance', 'starter-project', 'public')
 
-  /* pkg workaround */
-  function copyFolderSync (from, to) {
-    mkdirSync(to)
-    readdirSync(from).forEach(element => {
-      const sourcePath = join(from, element)
-      const destinationPath = join(to, element)
-      if (lstatSync(sourcePath).isFile()) {
-        copyFileSync(sourcePath, destinationPath)
-      }
-      else {
-        copyFolderSync(sourcePath, destinationPath)
-      }
-    })
-  }
-
-  // Copy app dirs
-  copyFolderSync(appPath, p('app'))
-  copyFolderSync(publicPath, p('public'))
-  /* end pkg workaround */
-
-  // Use this when pkg is no longer used:
-  // fs.cpSync(appPath, p('app'), { recursive: true })
-  // fs.cpSync(publicPath, p('public'), { recursive: true })
+  cpSync(appPath, p('app'), { recursive: true })
+  cpSync(publicPath, p('public'), { recursive: true })
 
   // Write .gitignore
   let gitIgnoreTemplate = join(nodeModules, '@enhance', 'starter-project', 'template.gitignore')
