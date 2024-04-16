@@ -3,6 +3,7 @@ let { existsSync, readFileSync } = require('fs')
 let { join } = require('path')
 let { homedir } = require('os')
 let minimist = require('minimist')
+let update = require('update-notifier-cjs')
 let commands = require('./commands')
 let _printer = require('./printer')
 let telemetry = require('./lib/telemetry')
@@ -44,6 +45,10 @@ async function begin (params = {}) {
 
 // Invoke to start if not running in module (test) mode
 if (require.main === module) {
+  let pkg = require('../package.json')
+  let boxenOpts = { padding: 1, margin: 1, align: 'center', borderColor: 'green', borderStyle: 'round', dimBorder: true }
+  update({ pkg, shouldNotifyInNpmScript: true }).notify({ boxenOpts })
+
   begin()
 }
 

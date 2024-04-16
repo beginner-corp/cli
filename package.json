@@ -32,6 +32,7 @@
     "strip-ansi": "6.0.1",
     "tiny-json-http": "7.5.1",
     "tmp": "0.2.3",
+    "update-notifier-cjs": "5.1.6",
     "ws": "8.16.0"
   },
   "devDependencies": {
