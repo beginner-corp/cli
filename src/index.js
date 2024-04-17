@@ -35,6 +35,7 @@ async function begin (params = {}) {
     let isCI = args.input === false || (process.env.CI || !process.stdout.isTTY) || false
     let params = { args, appVersion: version, cliDir, clientIDs, isCI, lang, printer }
     if (!isCI && process.env.BEGIN_CLI_TYPE === 'BINARY') {
+      printer('IMPORTANT')
       printer('\x1b[41m\x1b[37m\x1b[1m DEPRECATION NOTICE: \x1b[0m \x1b[31m\x1b[1mThe Begin Deploy CLI is now updated via npm\x1b[0m')
       printer('\x1b[1mPlease run "npm install -g @begin/deploy" to install the latest version\x1b[0m\n')
     }
