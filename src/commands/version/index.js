@@ -1,7 +1,7 @@
 module.exports = {
   names: { en: [ 'version', 'ver', 'v' ] },
   action: ({ appVersion }) => {
-    let message = `Begin ${appVersion}`
+    let message = `Begin Deploy ${appVersion}`
     return {
       string: message,
       json: {
