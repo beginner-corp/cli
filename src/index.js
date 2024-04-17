@@ -35,10 +35,6 @@ async function begin (params = {}) {
     let cliDir = process.env.BEGIN_INSTALL || join(homedir(), '.begin')
     let isCI = args.input === false || (process.env.CI || !process.stdout.isTTY) || false
     let params = { args, appVersion: version, cliDir, clientIDs, isCI, lang, printer }
-
-    printer('\x1b[41m\x1b[37m\x1b[1m DEPRECATION NOTICE: \x1b[0m \x1b[31m\x1b[1mThe Begin Deploy CLI is now updated via npm\x1b[0m')
-    printer('\x1b[1mPlease run "npm install -g @begin/deploy" to install the latest version\x1b[0m\n')
-
     await commands(params)
     telemetry.end(params)
   }

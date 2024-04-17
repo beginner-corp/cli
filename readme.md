@@ -20,7 +20,7 @@ Alternatively, you can install Begin with npm: `npm i -g @begin/cli`.
 
 ## Running locally
 
-Before running `npm run build` to create a local binary be sure to set the following environment variables:
+Be sure to set the following environment variables:
 
 ```
 export DEPLOY=main
