@@ -24,7 +24,7 @@
     "@begin/api": "1.9.4",
     "@colors/colors": "1.6.0",
     "@enhance/cli": "1.2.0",
-    "@enhance/starter-project": "7.0.2",
+    "@enhance/starter-project": "8.0.0",
     "enquirer": "2.4.1",
     "minimist": "1.2.8",
     "node-machine-id": "1.1.12",
