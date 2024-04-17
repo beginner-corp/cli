@@ -4,7 +4,7 @@ let { begin: _begin } = require('../../lib')
 test('Run version tests', async t => {
   let mode = `[Version]`
   let begin = _begin.bind({}, t)
-  let fullVer = /^Begin \d+\.\d+\.\d+$/
+  let fullVer = /^Begin Deploy \d+\.\d+\.\d+$/
   let ver = /^\d+\.\d+\.\d+$/
 
   t.test(`${mode} Normal`, async t => {

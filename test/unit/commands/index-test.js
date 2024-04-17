@@ -45,7 +45,7 @@ test('Run a command alias (version: ver)', async t => {
   let appVersion = 'some-version'
   let args = getArgs('ver')
   await commands({ args, lang, printer, appVersion })
-  t.equal(printed[0].string, `Begin ${appVersion}`, 'Ran command from alias')
+  t.equal(printed[0].string, `Begin Deploy ${appVersion}`, 'Ran command from alias')
   t.teardown(reset)
 })
 
