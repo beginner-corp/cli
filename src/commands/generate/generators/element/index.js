@@ -17,9 +17,9 @@ module.exports = {
           {
             name: 'Create an element',
             example: 'begin gen element --name my-element',
-          }
-        ]
-      }
+          },
+        ],
+      },
     }
-  }
+  },
 }

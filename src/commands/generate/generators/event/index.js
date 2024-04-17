@@ -17,9 +17,9 @@ module.exports = {
           {
             name: 'Create a new async event',
             example: 'begin gen event --name my-event',
-          }
-        ]
-      }
+          },
+        ],
+      },
     }
-  }
+  },
 }

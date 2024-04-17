@@ -3,6 +3,7 @@ let { existsSync, readFileSync } = require('fs')
 let { join } = require('path')
 let { homedir } = require('os')
 let minimist = require('minimist')
+let update = require('update-notifier-cjs')
 let commands = require('./commands')
 let _printer = require('./printer')
 let telemetry = require('./lib/telemetry')
@@ -34,10 +35,6 @@ async function begin (params = {}) {
     let cliDir = process.env.BEGIN_INSTALL || join(homedir(), '.begin')
     let isCI = args.input === false || (process.env.CI || !process.stdout.isTTY) || false
     let params = { args, appVersion: version, cliDir, clientIDs, isCI, lang, printer }
-
-    printer('\x1b[41m\x1b[37m\x1b[1m DEPRECATION NOTICE: \x1b[0m \x1b[31m\x1b[1mThe Begin Deploy CLI is now updated via npm\x1b[0m')
-    printer('\x1b[1mPlease run "npm install -g @begin/deploy" to install the latest version\x1b[0m\n')
-
     await commands(params)
     telemetry.end(params)
   }
@@ -48,6 +45,10 @@ async function begin (params = {}) {
 
 // Invoke to start if not running in module (test) mode
 if (require.main === module) {
+  let pkg = require('../package.json')
+  let boxenOpts = { padding: 1, margin: 1, align: 'center', borderColor: 'green', borderStyle: 'round', dimBorder: true }
+  update({ pkg, shouldNotifyInNpmScript: true }).notify({ boxenOpts })
+
   begin()
 }
 

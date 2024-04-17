@@ -8,7 +8,7 @@ module.exports = async function action (params) {
     await client.tokens.revoke({ token, appID, tokenID, _staging })
     return {
       string: `Revoked token ${tokenID}`,
-      json: { tokenID }
+      json: { tokenID },
     }
   }
   catch (err) {

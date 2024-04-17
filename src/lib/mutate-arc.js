@@ -91,5 +91,5 @@ function upsert (params) {
 }
 
 module.exports = {
-  upsert
+  upsert,
 }

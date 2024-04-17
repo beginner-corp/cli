@@ -1,17 +1,10 @@
 let test = require('tape')
-let { join } = require('path')
 let tiny = require('tiny-json-http')
-let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, newTmpFolder, run, start, shutdown } = require(lib)
+let { begin: _begin, newTmpFolder, start, shutdown } = require('../../lib')
 
 test('Run new tests (slow)', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[New / ${runType} (slow)]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[New (slow)]`
+  let begin = _begin.bind({}, t)
 
   let newAppDir = 'new'
   let installing = /Installing dependencies/
@@ -29,7 +22,7 @@ async function runTests (runType, t) {
   })
 
   t.test(`${mode} Start Begin dev`, async t => {
-    let port = await start[runType](t, cwd)
+    let port = await start(t, cwd)
     url = `http://localhost:${port}`
   })
 
@@ -37,7 +30,7 @@ async function runTests (runType, t) {
     t.plan(1)
     tiny.get({ url }, function _got (err, result) {
       if (err) t.fail(err)
-      else t.ok(result.body.includes('https://enhance.dev'), 'Got valid Enhance starter project response')
+      else t.ok(result?.body.includes('https://enhance.dev'), 'Got valid Enhance starter project response')
     })
   })
 
@@ -45,4 +38,6 @@ async function runTests (runType, t) {
     delete process.env.__SLOW__
     shutdown(t)
   })
-}
+  t.end()
+})
+

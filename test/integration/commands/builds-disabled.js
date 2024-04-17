@@ -1,7 +1,6 @@
+let { join } = require('node:path')
 let test = require('tape')
-let { join } = require('path')
-let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, run, getInv, newFolder } = require(lib)
+let { begin: _begin, getInv, newTmpFolder } = require('../../lib')
 let { writeFileSync } = require('fs')
 
 function appendAppID (i) {
@@ -9,13 +8,8 @@ function appendAppID (i) {
 }
 
 test('Run builds tests', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Help / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Help]`
+  let begin = _begin.bind({}, t)
 
   let newAppDir = 'new-app'
 
@@ -31,7 +25,7 @@ async function runTests (runType, t) {
     t.match(r.stderr, noAppFound, 'No app ID')
 
     // Create project and check builds
-    cwd = newFolder(newAppDir)
+    cwd = newTmpFolder(newAppDir)
     r = await begin('new project -p .', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
@@ -56,7 +50,7 @@ async function runTests (runType, t) {
     t.equal(r.code, 1, 'Exited 1')
 
     // Create project and check builds
-    cwd = newFolder(newAppDir)
+    cwd = newTmpFolder(newAppDir)
     r = await begin('new project -p . --json', cwd)
     i = await getInv(t, cwd)
     t.pass('Project is valid')
@@ -71,4 +65,5 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 1, 'Exited 1')
   })
-}
+  t.end()
+})

@@ -32,8 +32,8 @@ module.exports = {
             name: 'Create a new project with the name my-app',
             example: 'begin new project -n my-app',
           },
-        ]
+        ],
       },
     }
-  }
+  },
 }

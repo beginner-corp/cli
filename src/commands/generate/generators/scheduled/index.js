@@ -41,8 +41,8 @@ module.exports = {
         {
           name: 'Create a new scheduled event that runs at 6:00 PM Monday through Friday',
           example: 'begin gen scheduled --name my-task --cron "0 18 ? * MON-FRI *"',
-        }
-      ]
-    }
-  }
+        },
+      ],
+    },
+  },
 }

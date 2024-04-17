@@ -5,8 +5,8 @@ module.exports = {
     en: {
       usage: [ 'login' ],
       description: 'Log into Begin to create and administer your apps',
-    }
-  }
+    },
+  },
 }
 
 async function action (params) {
@@ -62,7 +62,7 @@ async function action (params) {
       let { body } = await tiny.post({
         url,
         headers,
-        data: { client_id: clientID }
+        data: { client_id: clientID },
       })
 
       let expired = Date.now() + (30 * 1000) // 30 minute TTL
@@ -104,7 +104,7 @@ async function getAccessToken (params) {
           data: {
             client_id: clientID,
             device_code,
-          }
+          },
         })
         if (body.access_token) res(body.access_token)
         else throw ReferenceError('Expected access_token')

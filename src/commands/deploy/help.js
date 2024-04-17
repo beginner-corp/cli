@@ -26,6 +26,6 @@ module.exports = {
         name: `Deploy the app environment named 'staging'`,
         example: 'begin deploy --env staging',
       },
-    ]
-  }
+    ],
+  },
 }

@@ -1,12 +1,10 @@
-let { join, sep } = require('path')
+let { readFileSync, rmSync, writeFileSync } = require('node:fs')
+let { join, sep } = require('node:path')
 let test = require('tape')
 let { sync: rm } = require('rimraf')
-let { readFileSync, rmSync, writeFileSync } = require('fs')
-let cwd = process.cwd()
-let testLib = join(cwd, 'test', 'lib')
-let { newTmpFolder } = require(testLib)
-let sut = join(cwd, 'src', 'lib')
-let lib = require(sut)
+let { newTmpFolder } = require('../../lib')
+let lib = require('../../../src/lib')
+
 let reset = folder => rmSync(folder, { recursive: true, force: true })
 
 test('Set up env', t => {

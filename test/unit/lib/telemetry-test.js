@@ -1,12 +1,10 @@
-let { join } = require('path')
+let { join } = require('node:path')
+let http = require('node:http')
+let { readFileSync, rmSync, writeFileSync } = require('node:fs')
 let test = require('tape')
-let http = require('http')
-let { readFileSync, rmSync, writeFileSync } = require('fs')
-let cwd = process.cwd()
-let testLib = join(cwd, 'test', 'lib')
-let { newTmpFolder, getPort } = require(testLib)
-let sut = join(cwd, 'src', 'lib', 'telemetry')
-let telemetry = require(sut)
+let { newTmpFolder, getPort } = require('../../lib')
+let telemetry = require('../../../src/lib/telemetry')
+
 let reset = folder => rmSync(folder, { recursive: true, force: true })
 
 let server = http.createServer()

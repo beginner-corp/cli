@@ -1,8 +1,8 @@
+let { join } = require('node:path')
 let test = require('tape')
-let { join } = require('path')
 let proxyquire = require('proxyquire')
-let lib = join(process.cwd(), 'test', 'lib')
-let { capture } = require(lib)
+let { capture } = require('../lib')
+
 let sut = join(process.cwd())
 
 let error = false
@@ -11,7 +11,7 @@ function commands (p) {
   if (error) throw error
 }
 let begin = proxyquire(sut, {
-  './commands': commands
+  './commands': commands,
 })
 
 let argv = process.argv

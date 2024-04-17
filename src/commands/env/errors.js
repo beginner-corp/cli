@@ -11,7 +11,7 @@ module.exports = function error (params) {
         no_value: 'Variable value not found, please run with -v or --value',
         create_fail: 'Failed to create environment variable',
         destroy_fail: 'Failed to destroy environment variable',
-      }
+      },
     }
     return Error(errors[lang][err])
   }

@@ -9,7 +9,7 @@ async function action (params) {
 
   const domains = await client.domains.list({ _staging, token })
 
-  if (!domain || (typeof domain === 'string' && domain.length === 0)){
+  if (!domain || (typeof domain === 'string' && domain.length === 0)) {
     const prompt = new Select({
       name: 'domain',
       message: 'Select a domain to unlink',
@@ -36,7 +36,7 @@ async function action (params) {
   if (!theEnv)
     return Error(`App <${appLink.appID}> does not have an environment "${appLink.envID}"`)
 
-  if (!yes){
+  if (!yes) {
     const prompt = new Confirm({
       name: 'confirm',
       message: `Unlink ${c.underline(c.cyan(domain))} from ${c.bold(theApp.name)}'s "${theEnv.name}" env?`,

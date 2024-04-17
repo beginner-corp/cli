@@ -28,9 +28,9 @@ module.exports = {
           {
             name: 'Create a new HTTP route',
             example: 'begin gen http --method get --path /',
-          }
-        ]
+          },
+        ],
       },
     }
-  }
+  },
 }

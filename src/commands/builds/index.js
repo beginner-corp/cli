@@ -81,7 +81,7 @@ async function action (params) {
   let prompt = new Select({
     name: 'build',
     message: 'View detailed build logs? (ctrl-c to skip)',
-    choices
+    choices,
   }, promptOptions)
 
   let answer = await prompt.run()

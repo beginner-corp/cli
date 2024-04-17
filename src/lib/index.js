@@ -24,7 +24,7 @@ function getAppID (inventory, args) {
     appID = begin?.find(i => i[0] === 'appID' && typeof i[1] === 'string')?.[1]
   }
   // Account for possible unintended minimist arg errata
-  appID = appID !== true && appID || undefined
+  appID = (appID !== true && appID) || undefined
   if (!appID) {
     throw Error(`Please specify an appID or run this command from within your app's folder`)
   }
@@ -100,7 +100,7 @@ function writeFile (params) {
     en: {
       created_file: str => `Created file: ${str}`,
       updated_file: str => `Updated file: ${str}`,
-    }
+    },
   }
 
   return function (path, contents) {

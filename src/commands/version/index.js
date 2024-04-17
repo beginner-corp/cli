@@ -8,7 +8,7 @@ module.exports = {
         begin: process.argv[0],
         version: appVersion,
         message,
-      }
+      },
     }
-  }
+  },
 }

@@ -17,7 +17,7 @@ let validateEnvName = {
     if (name === 'testing') return cannotBeTesting
     if (!name) return envRequired
     return looseName.test(name)
-  }
+  },
 }
 
 module.exports = {

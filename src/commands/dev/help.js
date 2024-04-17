@@ -37,5 +37,5 @@ module.exports = {
         example: 'begin dev --port 6666',
       },
     ],
-  }
+  },
 }

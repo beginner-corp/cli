@@ -46,7 +46,7 @@ module.exports = async function runCommand (params) {
     `  args: ${JSON.stringify(args)}\n` +
     `  cmd: ${cmd}\n` +
     `  vers: node: ${vers.node}, v8: ${vers.v8}\n` +
-    `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows, ci: ${isCI}`
+    `  term: tty: ${!!(isTTY)}, ${columns} cols, ${rows} rows, ci: ${isCI}`,
   )
 
   let getHelp = async help => typeof help === 'function' ? help(params) : help

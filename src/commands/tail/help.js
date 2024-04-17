@@ -39,6 +39,6 @@ module.exports = {
         name: 'Tail logs with grep',
         example: 'begin tail | grep "GOT HERE"',
       },
-    ]
-  }
+    ],
+  },
 }

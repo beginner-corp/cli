@@ -1,9 +1,8 @@
+let { writeFileSync } = require('node:fs')
+let { join } = require('node:path')
 let test = require('tape')
-let { writeFileSync } = require('fs')
-let { join } = require('path')
 let tiny = require('tiny-json-http')
-let lib = join(process.cwd(), 'test', 'lib')
-let { newTmpFolder, run, start, shutdown } = require(lib)
+let { newTmpFolder, start, shutdown } = require('../../lib')
 
 let arc = `@app
 hi
@@ -16,12 +15,7 @@ hi
 let url
 
 test('Run dev tests', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Dev / ${runType}]`
+  let mode = '[Dev]'
 
   let newDevDir = 'dev'
 
@@ -34,7 +28,7 @@ async function runTests (runType, t) {
     let handler = `exports.handler = async req => req`
     writeFileSync(handlerFile, handler)
 
-    let port = await start[runType](t, cwd)
+    let port = await start(t, cwd)
     url = `http://localhost:${port}`
   })
 
@@ -57,4 +51,7 @@ async function runTests (runType, t) {
   t.test(`${mode} Shut down Sandbox`, t => {
     shutdown(t)
   })
-}
+
+  t.end()
+})
+

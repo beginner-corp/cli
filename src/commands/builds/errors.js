@@ -6,7 +6,7 @@ module.exports = function error (params) {
         app_not_found: 'No app found with that app ID',
         no_env: 'Environment ID not found, please run with -e or --env',
         invalid_env: 'Invalid or incorrect environment ID',
-      }
+      },
     }
     return Error(errors[lang][err])
   }

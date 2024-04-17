@@ -9,7 +9,7 @@ let newEnv = () => ({
       },
     ],
     examples: [],
-  }
+  },
 })
 
 module.exports = async function generateHelp (subcommands, aliases, params) {

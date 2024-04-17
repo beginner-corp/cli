@@ -47,7 +47,7 @@ async function action (params) {
       app,
       appID,
       config,
-      ...params
+      ...params,
     }, utils)
   }
   else {

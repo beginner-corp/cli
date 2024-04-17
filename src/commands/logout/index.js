@@ -5,8 +5,8 @@ module.exports = {
     en: {
       usage: [ 'logout' ],
       description: 'Log out of Begin and destroy the current access token',
-    }
-  }
+    },
+  },
 }
 
 async function action (params) {

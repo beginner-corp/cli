@@ -26,7 +26,7 @@ async function action (params) {
     if (verbose) row.push(`${domainTitle} ${f.ID(domainID)}`)
     else row.push(domainTitle)
 
-    if (verbose ){
+    if (verbose ) {
       row.push(`\n  Updated: ${f.date(updatedAt)}`)
       row.push(`\n  Status: ${status} `)
     }

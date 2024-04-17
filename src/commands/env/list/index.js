@@ -20,7 +20,7 @@ module.exports = {
           name: 'List variables',
           example: 'begin env list',
         },
-      ]
-    }
-  }
+      ],
+    },
+  },
 }

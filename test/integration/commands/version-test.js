@@ -1,16 +1,9 @@
 let test = require('tape')
-let { join } = require('path')
-let lib = join(process.cwd(), 'test', 'lib')
-let { begin: _begin, run } = require(lib)
+let { begin: _begin } = require('../../lib')
 
 test('Run version tests', async t => {
-  await run(runTests, t)
-  t.end()
-})
-
-async function runTests (runType, t) {
-  let mode = `[Version / ${runType}]`
-  let begin = _begin[runType].bind({}, t)
+  let mode = `[Version]`
+  let begin = _begin.bind({}, t)
   let fullVer = /^Begin \d+\.\d+\.\d+$/
   let ver = /^\d+\.\d+\.\d+$/
 
@@ -62,4 +55,6 @@ async function runTests (runType, t) {
     t.notOk(r.stderr, 'Did not print to stderr')
     t.equal(r.code, 0, 'Exited 0')
   })
-}
+  t.end()
+})
+

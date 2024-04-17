@@ -28,7 +28,7 @@ async function action (params) {
     appID,
     env,
     config,
-    ...params
+    ...params,
   }, utils)
 }
 
