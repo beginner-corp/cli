@@ -22,7 +22,7 @@ module.exports = async function action (params, utils) {
     catch (err) {
       if (err.message === 'app_not_found') return Error(`No app found with app ID '${appID}'`)
       if (err.message === 'unknown_error') return Error(`No app found with app ID '${appID}' or the user does not have permission to access the app.`)
-      return
+      return err
     }
   }
 
