@@ -64,6 +64,9 @@ jobs:
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
 
+      - name: Create client-ids.json
+        run: node scripts/create-client-ids.js
+
       - name: Publish @RC to npm
         if: contains(github.ref, 'RC')
         run: npm publish --tag RC

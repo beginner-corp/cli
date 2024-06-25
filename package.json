@@ -15,12 +15,13 @@
     "test:integration": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test.js' | tap-arc -v",
     "test:integration:slow": "cross-env NODE_ENV=testing tape 'test/integration/**/*-test-slow.js' | tap-arc -v",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test:unit",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "create:client-ids": "node --env-file .env scripts/create-client-ids.js"
   },
   "dependencies": {
-    "@architect/inventory": "4.0.4",
-    "@architect/parser": "6.0.3",
-    "@architect/utils": "4.0.4",
+    "@architect/inventory": "4.0.5",
+    "@architect/parser": "7.0.1",
+    "@architect/utils": "4.0.6",
     "@begin/api": "1.9.4",
     "@colors/colors": "1.6.0",
     "@enhance/cli": "1.2.0",
@@ -33,7 +34,7 @@
     "tiny-json-http": "7.5.1",
     "tmp": "0.2.3",
     "update-notifier-cjs": "5.1.6",
-    "ws": "8.16.0"
+    "ws": "8.17.1"
   },
   "devDependencies": {
     "@architect/eslint-config": "3.0.0-RC.0",
@@ -41,11 +42,11 @@
     "cross-env": "~7.0.3",
     "eslint": "~8.57.0",
     "fs-extra": "~11.2.0",
-    "nyc": "~15.1.0",
+    "nyc": "~17.0.0",
     "proxyquire": "~2.1.3",
     "string-argv": "~0.3.2",
     "tap-arc": "~1.2.2",
-    "tape": "~5.7.5"
+    "tape": "~5.8.1"
   },
   "eslintConfig": {
     "extends": "@architect/eslint-config",
