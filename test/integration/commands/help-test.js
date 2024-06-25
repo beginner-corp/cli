@@ -8,12 +8,11 @@ test('Run help tests', async t => {
   let errCmd = /ohnoes/
   let globalOptions = /Global options\:/
   let stack = /src[\/\\]{1,2}index.js/
-  let ver = /Begin version: \d+\.\d+\.\d+/
+  let ver = /Begin version: (\d+\.\d+\.\d+)(-[a-zA-Z]+(\.\d+)?)?$/
 
   t.test(`${mode} Normal`, async t => {
     t.plan(36)
     let help = /^begin help/
-    let ver = /Begin version: \d+\.\d+\.\d+/
     let r
 
     r = await begin('help')
