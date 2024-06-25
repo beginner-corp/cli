@@ -1,7 +1,7 @@
 {
   "name": "@begin/deploy",
   "license": "Apache-2.0",
-  "version": "0.22.5-RC.1",
+  "version": "0.22.5-RC.2",
   "bin": {
     "begin": "src/index.js"
   },
