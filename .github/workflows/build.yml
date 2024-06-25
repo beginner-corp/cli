@@ -66,6 +66,9 @@ jobs:
 
       - name: Create client-ids.json
         run: node scripts/create-client-ids.js
+        env:
+          BEGIN_CLI_CLIENT_ID_STAGING: ${{ secrets.BEGIN_CLI_CLIENT_ID_STAGING }}
+          BEGIN_CLI_CLIENT_ID_PRODUCTION: ${{ secrets.BEGIN_CLI_CLIENT_ID_PRODUCTION }}
 
       - name: Publish @RC to npm
         if: contains(github.ref, 'RC')
