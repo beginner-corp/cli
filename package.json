@@ -6,6 +6,10 @@
     "begin": "src/index.js"
   },
   "main": "src/index.js",
+  "files": [
+    "src",
+    "client-ids.json"
+  ],
   "engines": {
     "node": ">=16"
   },
